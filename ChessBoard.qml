@@ -72,4 +72,23 @@ Item {
             }
         }
     }
+
+    // 绘制楚河汉界文字
+    Rectangle {
+        id: _riverArea
+        anchors.centerIn: parent
+        width: parent.width - 2 *  _board.width/8
+        height:  _board.width/8
+        color: "transparent"
+
+        Text {
+            anchors.fill: parent
+            text: " 楚 河        汉 界 "
+            font.family: "楷体"
+            font.pixelSize: height * 0.8
+            color: "#8b4513"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+        }
+    }
 }
