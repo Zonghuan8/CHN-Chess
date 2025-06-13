@@ -1,0 +1,75 @@
+import QtQuick
+
+Item {
+    id: _board
+    width: parent.width*0.8
+    height: parent.height*0.9
+    anchors.centerIn: parent
+
+    // 棋盘背景
+    Rectangle {
+        id: boardBackground
+        anchors.fill: parent
+        color: "#e6c99c"
+        border.width: 4
+        border.color: "#8b4513"
+        radius: 4
+    }
+
+    // 绘制网格线
+    // 水平线,10线9行
+    Repeater {
+        model: 10
+        Canvas {
+            id: horizontalLine
+            y: index*_board.height/9    //平均分成9份
+            width: parent.width
+            height: 8
+            onPaint: {
+                var ctx = getContext("2d");
+                ctx.clearRect(0, 0, width, height);
+                ctx.strokeStyle = "#000000";
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(width, 0);
+                ctx.stroke();
+            }
+        }
+    }
+
+    // 垂直线，9线8列
+    Repeater {
+        model: 9
+
+        Canvas {
+            id: verticalLine
+            x: index * _board.width/8    //平均分成8份
+            width: 8                     //像素宽度
+            height: parent.height
+            onPaint: {
+                var ctx = getContext("2d");
+                ctx.clearRect(0, 0, width, height);
+                ctx.strokeStyle = "#000000";
+                ctx.lineWidth = 2.5;
+
+                ctx.beginPath();
+
+                // 分两段绘制垂直线（绕过河界）
+                if (index > 0 && index < 8) {
+                    // 中间竖线在楚河汉界处断开（棋盘高度的4/9到5/9之间为河界）
+                    ctx.moveTo(0, 0);
+                    ctx.lineTo(0, _board.height * 4/9);  // 上半部分（河界以上）
+
+                    ctx.moveTo(0, _board.height * 5/9);
+                    ctx.lineTo(0, _board.height);        // 下半部分（河界以下）
+                } else {
+                    // 边缘竖线（第一条和最后一条）绘制完整
+                    ctx.moveTo(0, 0);
+                    ctx.lineTo(0, _board.height);
+                }
+                ctx.stroke();
+            }
+        }
+    }
+}
