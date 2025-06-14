@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Window
+import QtQuick.Controls
 import "initial.js" as Init
 
 Window {
@@ -12,15 +13,11 @@ Window {
 
     ChessBoard{
         id: board
-
         // 创建棋子
         Component.onCompleted: {
             var cw = window.width*0.1
             var ch = window.height*0.1
-            //console.log("直接计算尺寸:", cw, ch)
             Init.initializeBoard(board, cw, ch)
         }
     }
-
-
 }

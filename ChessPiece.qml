@@ -3,6 +3,9 @@ import QtQuick
 Item {
     id:root
 
+    property bool selected: false//是否选中
+
+    signal clickPiece(var text,var centerX,var centerY);
     // 基本属性
     property string text: "兵"   // 棋子文字
     property bool isRed: true   // 是否红方
@@ -27,8 +30,9 @@ Item {
         height: width
         radius: width / 2
         color: root.isRed ? "#FFC0C0" : "#E0E0E0"
-        border.color: root.isRed ? "#B22222" : "#333333"
-        border.width: 2
+
+        border.color: selected ? "gold" : (root.isRed ? "#B22222" : "#333333")
+        border.width: selected ? 4 : 2
 
         // 棋子文字
         Text {
@@ -43,7 +47,11 @@ Item {
             color: root.isRed ? "#B22222" : "#000000"
         }
         TapHandler{
-            onTapped: console.log(text+"  centerX:"+centerX+";  "+"centerX:"+centerY)
+            onTapped:{
+                root.selected = !root.selected  // 切换选中状态
+                root.clickPiece(text,centerX,centerY)
+                console.log(root.text+"  centerX:"+root.centerX+";  "+"centerX:"+root.centerY)
+            }
         }
     }
 }

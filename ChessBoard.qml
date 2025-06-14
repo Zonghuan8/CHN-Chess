@@ -5,8 +5,7 @@ Item {
     width: parent.width*0.8
     height: parent.height*0.9
     anchors.centerIn: parent
-    // property alias wx: _board.width//暴露给外部，方便棋子的初始化
-    // property alias wy: _board.height//暴露给外部，方便棋子的初始化
+
     // 棋盘背景
     Rectangle {
         id: boardBackground

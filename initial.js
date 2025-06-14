@@ -10,7 +10,6 @@ function addPiece(size, centerX, centerY,text,isRed) {
             "text": text,
             "isRed": isRed
         });
-
         if (piece === null) {
             console.error("创建棋子失败");
         } else {
