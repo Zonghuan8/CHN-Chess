@@ -91,4 +91,37 @@ Item {
             verticalAlignment: Text.AlignVCenter
         }
     }
+
+    // // 绘制九宫斜线
+    Canvas {
+        id: _palaceCanvas
+        anchors.fill: parent
+        onPaint: {
+            var ctx = getContext("2d");
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 2.5;
+
+            // 黑方九宫（上）
+            ctx.beginPath();
+            ctx.moveTo(_board.width/8 * 3, 0);//移动画笔
+            ctx.lineTo(_board.width/8 * 5, _board.height/9 * 2);//从当前画笔位置到(_board.width/8 * 5, _board.height/9 * 2)
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(_board.width/8 * 5, 0);
+            ctx.lineTo(_board.width/8 * 3, _board.height/9 * 2);
+            ctx.stroke();
+
+            // 红方九宫（下）
+            ctx.beginPath();
+            ctx.moveTo(_board.width/8 * 3, _board.height);
+            ctx.lineTo(_board.width/8 * 5, _board.height - _board.height/9 * 2);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(_board.width/8 * 5, _board.height);
+            ctx.lineTo(_board.width/8 * 3, _board.height - _board.height/9 * 2);
+            ctx.stroke();
+        }
+    }
 }
