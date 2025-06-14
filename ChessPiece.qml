@@ -42,5 +42,8 @@ Item {
             }
             color: root.isRed ? "#B22222" : "#000000"
         }
+        TapHandler{
+            onTapped: console.log(text+"  centerX:"+centerX+";  "+"centerX:"+centerY)
+        }
     }
 }

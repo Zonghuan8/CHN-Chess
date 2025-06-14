@@ -41,11 +41,11 @@ function initializeBoard(board,cw,ch) {
     // 红方棋子
     addPiece(cw, 0*cw, 9*ch, "車",true);
     addPiece(cw, 1*cw, 9*ch, "马",true);
-    addPiece(cw, 2*cw, 9*ch, "象",true);
-    addPiece(cw, 3*cw, 9*ch, "士",true);
+    addPiece(cw, 2*cw, 9*ch, "相",true);
+    addPiece(cw, 3*cw, 9*ch, "仕",true);
     addPiece(cw, 4*cw, 9*ch, "帥",true);
     addPiece(cw, 5*cw, 9*ch, "仕",true);
-    addPiece(cw, 6*cw, 9*ch, "象",true);
+    addPiece(cw, 6*cw, 9*ch, "相",true);
     addPiece(cw, 7*cw, 9*ch, "马",true);
     addPiece(cw, 8*cw, 9*ch, "車",true);
     addPiece(cw, 1*cw, 7*ch, "炮",true);
