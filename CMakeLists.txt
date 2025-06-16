@@ -8,6 +8,9 @@ find_package(Qt6 REQUIRED COMPONENTS Quick)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
+#添加下面一行解决图片资源无法找到的问题
+set(CMAKE_AUTORCC ON)
+
 qt_add_executable(appCHN-Chess
     main.cpp
     chess.qrc
