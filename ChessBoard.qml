@@ -6,7 +6,7 @@ Item {
     height: parent.height*0.9
     anchors.centerIn: parent
 
-    // 棋盘背景
+    //棋盘背景
     Rectangle {
         id: boardBackground
         anchors.fill: parent
@@ -16,13 +16,13 @@ Item {
         radius: 4
     }
 
-    // 绘制网格线
-    // 水平线,10线9行
+    //绘制网格线
+    //水平线,10线9行
     Repeater {
         model: 10
         Canvas {
             id: horizontalLine
-            y: index*_board.height/9    //平均分成9份
+            y: index*parent.height/9//平均分成9份
             width: parent.width
             height: 8
             onPaint: {
@@ -33,57 +33,53 @@ Item {
                 ctx.beginPath();
                 ctx.moveTo(0, 0);
                 ctx.lineTo(width, 0);
-                ctx.stroke();
+                ctx.stroke();//绘制图形轮廓
             }
         }
     }
 
-    // 垂直线，9线8列
+    //垂直线，9线8列
     Repeater {
         model: 9
-
         Canvas {
             id: verticalLine
-            x: index * _board.width/8    //平均分成8份
-            width: 8                     //像素宽度
+            x: index * _board.width/8//平均分成8份
+            width: 8
             height: parent.height
             onPaint: {
                 var ctx = getContext("2d");
                 ctx.clearRect(0, 0, width, height);
                 ctx.strokeStyle = "#000000";
                 ctx.lineWidth = 2.5;
-
                 ctx.beginPath();
 
-                // 分两段绘制垂直线（绕过河界）
+                //分两段绘制垂直线（绕过河界）
                 if (index > 0 && index < 8) {
-                    // 中间竖线在楚河汉界处断开（棋盘高度的4/9到5/9之间为河界）
+                    //中间竖线在楚河汉界处断开（棋盘高度的4/9到5/9之间为河界）
                     ctx.moveTo(0, 0);
-                    ctx.lineTo(0, _board.height * 4/9);  // 上半部分（河界以上）
-
+                    ctx.lineTo(0, _board.height * 4/9);//上半部分（河界以上）
                     ctx.moveTo(0, _board.height * 5/9);
-                    ctx.lineTo(0, _board.height);        // 下半部分（河界以下）
+                    ctx.lineTo(0, _board.height);//下半部分（河界以下）
                 } else {
-                    // 边缘竖线（第一条和最后一条）绘制完整
                     ctx.moveTo(0, 0);
                     ctx.lineTo(0, _board.height);
                 }
-                ctx.stroke();
+                ctx.stroke();//绘制图形轮廓
             }
         }
     }
 
-    // 绘制楚河汉界文字
+    //绘制楚河汉界文字
     Rectangle {
         id: _riverArea
         anchors.centerIn: parent
-        width: parent.width - 2 *  _board.width/8
-        height:  _board.width/8
+        width: parent.width - 2 * parent.width/8
+        height: parent.width/8
         color: "transparent"
 
         Text {
             anchors.fill: parent
-            text: " 楚 河        汉 界 "
+            text:qsTr(" 楚 河        汉 界 ")
             font.family: "楷体"
             font.pixelSize: height * 0.8
             color: "#8b4513"
@@ -92,7 +88,7 @@ Item {
         }
     }
 
-    // // 绘制九宫斜线
+    //绘制九宫斜线
     Canvas {
         id: _palaceCanvas
         anchors.fill: parent
@@ -101,10 +97,10 @@ Item {
             ctx.strokeStyle = "#000000";
             ctx.lineWidth = 2.5;
 
-            // 黑方九宫（上）
+            //黑方九宫（上）
             ctx.beginPath();
-            ctx.moveTo(_board.width/8 * 3, 0);//移动画笔
-            ctx.lineTo(_board.width/8 * 5, _board.height/9 * 2);//从当前画笔位置到(_board.width/8 * 5, _board.height/9 * 2)
+            ctx.moveTo(_board.width/8 * 3, 0);
+            ctx.lineTo(_board.width/8 * 5, _board.height/9 * 2);
             ctx.stroke();
 
             ctx.beginPath();
@@ -112,7 +108,7 @@ Item {
             ctx.lineTo(_board.width/8 * 3, _board.height/9 * 2);
             ctx.stroke();
 
-            // 红方九宫（下）
+            //红方九宫（下）
             ctx.beginPath();
             ctx.moveTo(_board.width/8 * 3, _board.height);
             ctx.lineTo(_board.width/8 * 5, _board.height - _board.height/9 * 2);

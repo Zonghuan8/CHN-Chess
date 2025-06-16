@@ -1,10 +1,10 @@
 function addPiece(size, centerX, centerY,text,isRed) {
-    var component = Qt.createComponent("ChessPiece.qml");
+    let component = Qt.createComponent("ChessPiece.qml");
 
     if (component.status === Component.Ready) {
-        // 创建棋子对象
-        var piece = component.createObject(board, {
-            "size": size,  // 使用传入的cellWidth
+        //创建棋子对象
+        let piece = component.createObject(board, {
+            "size": size,  //使用传入的cellWidth
             "centerX": centerX,
             "centerY": centerY,
             "text": text,
@@ -23,7 +23,7 @@ function addPiece(size, centerX, centerY,text,isRed) {
 }
 
 function initializeBoard(board,cw,ch) {
-// 黑方棋子
+    //黑方棋子
     addPiece(cw, 0*cw, 0*ch, "車",false);
     addPiece(cw, 1*cw, 0*ch, "马",false);
     addPiece(cw, 2*cw, 0*ch, "象",false);
@@ -35,9 +35,9 @@ function initializeBoard(board,cw,ch) {
     addPiece(cw, 8*cw, 0*ch, "車",false);
     addPiece(cw, 1*cw, 2*ch, "炮",false);
     addPiece(cw, 7*cw, 2*ch, "炮",false);
-    for (var i = 0; i <= 8; i += 2) addPiece(cw, i*cw, 3*ch, "卒",false);;
+    for (let i = 0; i <= 8; i += 2) addPiece(cw, i*cw, 3*ch, "卒",false);;
 
-    // 红方棋子
+    //红方棋子
     addPiece(cw, 0*cw, 9*ch, "車",true);
     addPiece(cw, 1*cw, 9*ch, "马",true);
     addPiece(cw, 2*cw, 9*ch, "相",true);
@@ -49,6 +49,6 @@ function initializeBoard(board,cw,ch) {
     addPiece(cw, 8*cw, 9*ch, "車",true);
     addPiece(cw, 1*cw, 7*ch, "炮",true);
     addPiece(cw, 7*cw, 7*ch, "炮",true);
-    for (var i = 0; i <= 8; i += 2) addPiece(cw, i*cw, 6*ch, "兵",true);;
+    for (let j = 0; j <= 8; j += 2) addPiece(cw, j*cw, 6*ch, "兵",true);;
 }
 

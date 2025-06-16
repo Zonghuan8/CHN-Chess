@@ -10,6 +10,7 @@ qt_standard_project_setup(REQUIRES 6.8)
 
 qt_add_executable(appCHN-Chess
     main.cpp
+    chess.qrc
 )
 
 qt_add_qml_module(appCHN-Chess
@@ -21,7 +22,8 @@ qt_add_qml_module(appCHN-Chess
         QML_FILES ChessBoard.qml
         QML_FILES ChessPiece.qml
         QML_FILES initial.js
-        QML_FILES move.js
+        QML_FILES
+        RESOURCES chess.qrc
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

@@ -1,0 +1,7 @@
+module CHN-Chess
+typeinfo appCHN-Chess.qmltypes
+prefer :/qt/qml/CHN-Chess/
+Main 1.0 Main.qml
+ChessBoard 1.0 ChessBoard.qml
+ChessPiece 1.0 ChessPiece.qml
+
