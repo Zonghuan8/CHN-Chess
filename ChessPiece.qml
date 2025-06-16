@@ -10,6 +10,7 @@ Item {
     //property bool selected: false//是否选中
     property string text: "兵"//棋子文字
     property bool isRed: true//是否红方
+    property int size: 56
 
     signal clickPiece(var text,var centerX,var centerY);
 
