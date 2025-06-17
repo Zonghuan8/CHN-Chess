@@ -1,10 +1,10 @@
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
-import "initial.js" as Init
+
 ApplicationWindow{
     id:root
-    width: 700
+    width: 600
     height: 800
     minimumWidth: 640
     minimumHeight: 800

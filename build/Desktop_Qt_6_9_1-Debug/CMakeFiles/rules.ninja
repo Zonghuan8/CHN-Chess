@@ -44,7 +44,7 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /usr/bin/cmake --regenerate-during-build -S/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e4561/qt/CHN-Chess -B/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e4561/qt/CHN-Chess/build/Desktop_Qt_6_9_1-Debug
+  command = /usr/bin/cmake --regenerate-during-build -S/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e456/qt/CHN-Chess -B/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e456/qt/CHN-Chess/build/Desktop_Qt_6_9_1-Debug
   description = Re-running CMake...
   generator = 1
 

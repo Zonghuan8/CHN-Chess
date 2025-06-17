@@ -54,11 +54,4 @@ ApplicationWindow{
         visible: currentPage === "game" && currentGameMode === "pvp"
     }
     */
-    ChessBoard{
-        id: board
-        width: 560
-        height: 630
-        anchors.centerIn: parent
-    }
-
 }

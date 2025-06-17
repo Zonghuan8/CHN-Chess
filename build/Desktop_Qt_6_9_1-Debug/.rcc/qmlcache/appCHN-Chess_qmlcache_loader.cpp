@@ -5,28 +5,42 @@
 #include <QtCore/qstring.h>
 
 namespace QmlCacheGeneratedCode {
-namespace _qt_qml_CHN_0x2d_Chess_Main_qml { 
+namespace _qt_qml_Chess_Main_qml { 
     extern const unsigned char qmlData[];
     extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
     const QQmlPrivate::CachedQmlUnit unit = {
         reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
     };
 }
-namespace _qt_qml_CHN_0x2d_Chess_ChessBoard_qml { 
+namespace _qt_qml_Chess_ChessBoard_qml { 
     extern const unsigned char qmlData[];
     extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
     const QQmlPrivate::CachedQmlUnit unit = {
         reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
     };
 }
-namespace _qt_qml_CHN_0x2d_Chess_ChessPiece_qml { 
+namespace _qt_qml_Chess_ChessPiece_qml { 
     extern const unsigned char qmlData[];
     extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
     const QQmlPrivate::CachedQmlUnit unit = {
         reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
     };
 }
-namespace _qt_qml_CHN_0x2d_Chess_initial_js { 
+namespace _qt_qml_Chess_HomePage_qml { 
+    extern const unsigned char qmlData[];
+    extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
+    const QQmlPrivate::CachedQmlUnit unit = {
+        reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
+    };
+}
+namespace _qt_qml_Chess_PvpGamePage_qml { 
+    extern const unsigned char qmlData[];
+    extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
+    const QQmlPrivate::CachedQmlUnit unit = {
+        reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
+    };
+}
+namespace _qt_qml_Chess_PveGamePage_qml { 
     extern const unsigned char qmlData[];
     extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
     const QQmlPrivate::CachedQmlUnit unit = {
@@ -47,10 +61,12 @@ Q_GLOBAL_STATIC(Registry, unitRegistry)
 
 
 Registry::Registry() {
-    resourcePathToCachedUnit.insert(QStringLiteral("/qt/qml/CHN-Chess/Main.qml"), &QmlCacheGeneratedCode::_qt_qml_CHN_0x2d_Chess_Main_qml::unit);
-    resourcePathToCachedUnit.insert(QStringLiteral("/qt/qml/CHN-Chess/ChessBoard.qml"), &QmlCacheGeneratedCode::_qt_qml_CHN_0x2d_Chess_ChessBoard_qml::unit);
-    resourcePathToCachedUnit.insert(QStringLiteral("/qt/qml/CHN-Chess/ChessPiece.qml"), &QmlCacheGeneratedCode::_qt_qml_CHN_0x2d_Chess_ChessPiece_qml::unit);
-    resourcePathToCachedUnit.insert(QStringLiteral("/qt/qml/CHN-Chess/initial.js"), &QmlCacheGeneratedCode::_qt_qml_CHN_0x2d_Chess_initial_js::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/qt/qml/Chess/Main.qml"), &QmlCacheGeneratedCode::_qt_qml_Chess_Main_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/qt/qml/Chess/ChessBoard.qml"), &QmlCacheGeneratedCode::_qt_qml_Chess_ChessBoard_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/qt/qml/Chess/ChessPiece.qml"), &QmlCacheGeneratedCode::_qt_qml_Chess_ChessPiece_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/qt/qml/Chess/HomePage.qml"), &QmlCacheGeneratedCode::_qt_qml_Chess_HomePage_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/qt/qml/Chess/PvpGamePage.qml"), &QmlCacheGeneratedCode::_qt_qml_Chess_PvpGamePage_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/qt/qml/Chess/PveGamePage.qml"), &QmlCacheGeneratedCode::_qt_qml_Chess_PveGamePage_qml::unit);
     QQmlPrivate::RegisterQmlUnitCacheHook registration;
     registration.structVersion = 0;
     registration.lookupCachedQmlUnit = &lookupCachedUnit;

@@ -1,6 +1,5 @@
 //双人对战
 import QtQuick
-import "initial.js" as Init
 import QtQuick.Controls
 
 Item {
