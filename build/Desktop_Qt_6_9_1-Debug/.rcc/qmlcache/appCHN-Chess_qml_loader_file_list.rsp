@@ -1,0 +1,11 @@
+--resource
+/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e4561/qt/CHN-Chess/build/Desktop_Qt_6_9_1-Debug/.qt/rcc/qmake_CHN-Chess.qrc
+--resource
+/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e4561/qt/CHN-Chess/build/Desktop_Qt_6_9_1-Debug/.qt/rcc/appCHN-Chess_raw_qml_0.qrc
+/qt/qml/CHN-Chess/Main.qml
+/qt/qml/CHN-Chess/ChessBoard.qml
+/qt/qml/CHN-Chess/ChessPiece.qml
+/qt/qml/CHN-Chess/initial.js
+/qt/qml/CHN-Chess/HomePage.qml
+/qt/qml/CHN-Chess/PvpGamePage.qml
+/qt/qml/CHN-Chess/PveGamePage.qml

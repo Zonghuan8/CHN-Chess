@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
-import "initial.js" as Init
+
 ApplicationWindow{
     id:root
     width: 600
@@ -54,4 +54,11 @@ ApplicationWindow{
         visible: currentPage === "game" && currentGameMode === "pvp"
     }
     */
+    ChessBoard{
+        id: board
+        width: 560
+        height: 630
+        anchors.centerIn: parent
+    }
+
 }

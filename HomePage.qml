@@ -2,7 +2,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "initial.js" as Init
 
 Item {
     id: _home

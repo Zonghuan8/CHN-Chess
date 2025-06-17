@@ -1,0 +1,196 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-72641300f7d923e420a2.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "CHN-Chess",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "all_aotstats::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_aotstats-Debug-0f7f4f19c41482be1eb2.json",
+					"name" : "all_aotstats",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "all_qmllint::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_qmllint-Debug-0f68d3aaecd58a172097.json",
+					"name" : "all_qmllint",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "all_qmllint_json::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_qmllint_json-Debug-30af0a660a245b4efa1e.json",
+					"name" : "all_qmllint_json",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "all_qmllint_module::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_qmllint_module-Debug-059bf0b07c563e48ea87.json",
+					"name" : "all_qmllint_module",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "all_qmltyperegistrations::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_qmltyperegistrations-Debug-76a0d91d045a24a172fe.json",
+					"name" : "all_qmltyperegistrations",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appCHN-Chess::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appCHN-Chess-Debug-9b60fa5943b4c492d270.json",
+					"name" : "appCHN-Chess",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appCHN-Chess_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appCHN-Chess_autogen-Debug-7fecaf46e189bc9707b0.json",
+					"name" : "appCHN-Chess_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appCHN-Chess_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appCHN-Chess_autogen_timestamp_deps-Debug-324492020b25f09f5bd1.json",
+					"name" : "appCHN-Chess_autogen_timestamp_deps",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appCHN-Chess_copy_qml::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appCHN-Chess_copy_qml-Debug-587dc191e9cf2f352830.json",
+					"name" : "appCHN-Chess_copy_qml",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appCHN-Chess_copy_res::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appCHN-Chess_copy_res-Debug-738989b158d24a06b15a.json",
+					"name" : "appCHN-Chess_copy_res",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appCHN-Chess_qmlimportscan::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appCHN-Chess_qmlimportscan-Debug-d9f87ced1b1af9a532f4.json",
+					"name" : "appCHN-Chess_qmlimportscan",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appCHN-Chess_qmllint::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appCHN-Chess_qmllint-Debug-e6b9e9dc0157b883078f.json",
+					"name" : "appCHN-Chess_qmllint",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appCHN-Chess_qmllint_json::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appCHN-Chess_qmllint_json-Debug-6ffc04daca80c9ec3b4b.json",
+					"name" : "appCHN-Chess_qmllint_json",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appCHN-Chess_qmllint_module::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appCHN-Chess_qmllint_module-Debug-98854dc20413121232e7.json",
+					"name" : "appCHN-Chess_qmllint_module",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appCHN-Chess_qmltyperegistration::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appCHN-Chess_qmltyperegistration-Debug-abbc76d8c695e9fd7e74.json",
+					"name" : "appCHN-Chess_qmltyperegistration",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "module_appCHN-Chess_aotstats_target::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-module_appCHN-Chess_aotstats_target-Debug-309d8555148efc050901.json",
+					"name" : "module_appCHN-Chess_aotstats_target",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e4561/qt/CHN-Chess/build/Desktop_Qt_6_9_1-Debug",
+		"source" : "/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e4561/qt/CHN-Chess"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}
