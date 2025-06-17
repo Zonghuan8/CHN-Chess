@@ -1,12 +1,21 @@
 //人机对战
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
 Item {
     id: _pve
     width: 700
     height: 800
     anchors.fill: parent
+
+    property var buttonStyle: QtObject {
+        property int width: 200
+        property int height: 50
+        property int radius: 5
+        property int fontSize:28
+        property string fontFamily: "FZKai\-Z03"
+    }
 
     //窗口过大时填充背景
     Rectangle {
@@ -60,4 +69,45 @@ Item {
         }
         color: "#696969"
     }
+
+    RowLayout{
+        anchors {
+                bottom: parent.bottom
+                horizontalCenter: parent.horizontalCenter
+                margins: 12
+            }
+            spacing: 50
+            RoundButton {
+                text: qsTr("重开")
+                radius: buttonStyle.radius
+                anchors {
+                    bottom: parent.bottom
+                    //horizontalCenter: parent.horizontalCenter
+                    margins: 12
+                }
+                font{
+                    pixelSize: buttonStyle.fontSize
+                    family: buttonStyle.fontFamily
+                }
+                onClicked: {
+                    stackView.pop(stackView.currentItem)//先清除上一级界面
+                    stackView.push("PveGamePage.qml")
+                }
+            }
+            RoundButton {
+                text: qsTr("悔棋")
+                radius: buttonStyle.radius
+                anchors {
+                    bottom: parent.bottom
+                   // leftMargin:parent.leftMargin
+                    margins: 12
+                }
+                font{
+                    pixelSize: buttonStyle.fontSize
+                    family: buttonStyle.fontFamily
+                }
+                onClicked: {
+                }
+            }
+        }
 }

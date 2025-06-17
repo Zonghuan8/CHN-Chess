@@ -17,7 +17,7 @@ qt_add_executable(appCHN-Chess
 )
 
 qt_add_qml_module(appCHN-Chess
-    URI CHN-Chess
+    URI Chess
     VERSION 1.0
     QML_FILES
         Main.qml

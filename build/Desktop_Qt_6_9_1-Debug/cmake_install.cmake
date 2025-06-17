@@ -1,4 +1,4 @@
-# Install script for directory: /run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e4561/qt/CHN-Chess
+# Install script for directory: /run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e456/qt/CHN-Chess
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -49,7 +49,7 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/appCHN-Chess"
          RPATH "\$ORIGIN:\$ORIGIN/../lib")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e4561/qt/CHN-Chess/build/Desktop_Qt_6_9_1-Debug/appCHN-Chess")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e456/qt/CHN-Chess/build/Desktop_Qt_6_9_1-Debug/appCHN-Chess")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/appCHN-Chess" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/appCHN-Chess")
     file(RPATH_CHANGE
@@ -65,7 +65,7 @@ endif()
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
 if(CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e4561/qt/CHN-Chess/build/Desktop_Qt_6_9_1-Debug/install_local_manifest.txt"
+  file(WRITE "/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e456/qt/CHN-Chess/build/Desktop_Qt_6_9_1-Debug/install_local_manifest.txt"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()
 if(CMAKE_INSTALL_COMPONENT)
@@ -81,6 +81,6 @@ else()
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e4561/qt/CHN-Chess/build/Desktop_Qt_6_9_1-Debug/${CMAKE_INSTALL_MANIFEST}"
+  file(WRITE "/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e456/qt/CHN-Chess/build/Desktop_Qt_6_9_1-Debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()

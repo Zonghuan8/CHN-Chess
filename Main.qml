@@ -5,9 +5,9 @@ import QtQuick.Controls
 ApplicationWindow{
     id:root
     width: 600
-    height: 800
-    minimumWidth: 640
-    minimumHeight: 800
+    height: 830
+    minimumWidth: 600
+    minimumHeight: 830
     visible: true
     title: qsTr("中国象棋")
     //icon.source:"qrc:/images/icon.png"
@@ -54,11 +54,4 @@ ApplicationWindow{
         visible: currentPage === "game" && currentGameMode === "pvp"
     }
     */
-    ChessBoard{
-        id: board
-        width: 560
-        height: 630
-        anchors.centerIn: parent
-    }
-
 }
