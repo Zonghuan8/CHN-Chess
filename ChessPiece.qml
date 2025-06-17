@@ -1,3 +1,4 @@
+//棋子
 import QtQuick
 
 Item {

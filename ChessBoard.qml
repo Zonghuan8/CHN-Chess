@@ -1,5 +1,7 @@
+//棋盘
 import QtQuick
 import Chess 1.0
+
 Item {
     id: _board
     width: parent.width
@@ -36,34 +38,34 @@ Item {
                         // 横线
                         for (var row = 1; row <= 10; row++) {
                             ctx.beginPath()
-                            ctx.moveTo(_board.square, _board.square*(row+1))
-                            ctx.lineTo(width-_board.square,_board.square*(1+row))
+                            ctx.moveTo(_board.square, _board.square*(row))
+                            ctx.lineTo(width-_board.square,_board.square*(row))
                             ctx.stroke()
                         }
 
                         // 竖线
                         for (var col = 1; col <= 9; col++) {
                             ctx.beginPath()
-                            ctx.moveTo(col * _board.square, 2*_board.square)
-                            ctx.lineTo(col * _board.square, _board.square * 6) // 上半部分
+                            ctx.moveTo(col * _board.square, _board.square)
+                            ctx.lineTo(col * _board.square, _board.square * 5) // 上半部分
                             ctx.stroke()
                         }
 
                         for (var col = 1; col <= 9; col++) {
                             ctx.beginPath()
-                            ctx.moveTo(col * _board.square, 7*_board.square)
-                            ctx.lineTo(col * _board.square, 11*_board.square)
+                            ctx.moveTo(col * _board.square, 6*_board.square)
+                            ctx.lineTo(col * _board.square, 10*_board.square)
                             ctx.stroke()
                         }
 
                         ctx.beginPath()
-                        ctx.moveTo( _board.square, _board.square * 6)
-                        ctx.lineTo( _board.square, 7*_board.square)
+                        ctx.moveTo( _board.square, _board.square * 5)
+                        ctx.lineTo( _board.square, 6*_board.square)
                         ctx.stroke()
 
                         ctx.beginPath()
-                        ctx.moveTo( 9*_board.square, _board.square * 6)
-                        ctx.lineTo( 9*_board.square, 7*_board.square)
+                        ctx.moveTo( 9*_board.square, _board.square * 5)
+                        ctx.lineTo( 9*_board.square, 6*_board.square)
                         ctx.stroke()
                     }
             }
@@ -79,24 +81,24 @@ Item {
 
                 //黑方九宫（上）
                 ctx.beginPath();
-                ctx.moveTo(_board.square*4, _board.square*2);
-                ctx.lineTo(_board.square* 6, _board.square * 4);
+                ctx.moveTo(_board.square*4, _board.square);
+                ctx.lineTo(_board.square* 6, _board.square * 3);
                 ctx.stroke();
 
                 ctx.beginPath();
-                ctx.moveTo(_board.square* 6, _board.square*2);
-                ctx.lineTo(_board.square* 4, _board.square*4);
+                ctx.moveTo(_board.square* 6, _board.square);
+                ctx.lineTo(_board.square* 4, _board.square*3);
                 ctx.stroke();
 
                 //红方九宫（下）
                 ctx.beginPath();
-                ctx.moveTo(_board.square*4, _board.square*11);
-                ctx.lineTo(_board.square*6, _board.square*9);
+                ctx.moveTo(_board.square*4, _board.square*10);
+                ctx.lineTo(_board.square*6, _board.square*8);
                 ctx.stroke();
 
                 ctx.beginPath();
-                ctx.moveTo(_board.square* 6, _board.square*11);
-                ctx.lineTo(_board.square* 4, _board.square*9);
+                ctx.moveTo(_board.square* 6, _board.square*10);
+                ctx.lineTo(_board.square* 4, _board.square*8);
                 ctx.stroke();
             }
         }
@@ -104,13 +106,13 @@ Item {
         Text {
             id: riverText
             x:4*_board.square
-            y:6*_board.square
+            y:5*_board.square
 
             anchors.horizontalCenter: parent.horizontalCenter
 
             font.family: "SimHei"
             font.bold: true
-            font.pixelSize: Math.max(_board.square * 0.8, 20) // 80%的方格大小
+            font.pixelSize: Math.max(_board.square * 0.8, 20)
             text: "楚 河        汉 界"
             color: "#8B4513"
 
@@ -124,7 +126,7 @@ Item {
             model: chess.stones
             delegate: ChessPiece {
                 centerX: (modelData.col +1)* _board.square
-                centerY: (modelData.row +2)*  _board.square
+                centerY: (modelData.row +1)*  _board.square
                 size: _board.square
                 text: {
                           switch(modelData.type) {

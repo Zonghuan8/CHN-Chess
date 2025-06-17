@@ -5,7 +5,7 @@ Board::Board(QObject *parent) : QObject(parent)
 {
     // 创建32个棋子对象
     for (int i = 0; i < 32; i++) {
-        qDebug("qqq");
+        //qDebug("qqq");
         Stone *stone = new Stone(this);
         stone->init(i);
         m_stones.append(stone);

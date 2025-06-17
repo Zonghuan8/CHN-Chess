@@ -24,6 +24,9 @@ qt_add_qml_module(appCHN-Chess
         QML_FILES ChessBoard.qml
         QML_FILES ChessPiece.qml
         RESOURCES chess.qrc
+        QML_FILES HomePage.qml
+        QML_FILES PvpGamePage.qml
+        QML_FILES PveGamePage.qml
         SOURCES stone.h stone.cpp
         SOURCES board.h board.cpp
 )
