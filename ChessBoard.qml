@@ -1,5 +1,5 @@
+//棋盘
 import QtQuick
-//import Qt5Compat.GraphicalEffects
 
 Item {
     id: _board

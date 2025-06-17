@@ -2,34 +2,56 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 import "initial.js" as Init
-
 ApplicationWindow{
     id:root
-    width: 700
+    width: 600
     height: 800
     minimumWidth: 640
     minimumHeight: 800
     visible: true
     title: qsTr("中国象棋")
+    //icon.source:"qrc:/images/icon.png"
     color: "#f0e0d0"
 
-    //窗口过大时填充背景
-    Rectangle {
-           anchors.fill: parent
-           color: "#f0e0d0"
+    //property string currentPage: "home"//当前页面
+    //property string currentGameMode: "pvp"//当前游戏模式
+
+    StackView {
+        id: stackView
+        initialItem: "HomePage.qml"
+        anchors.fill: parent
     }
 
-    ChessBoard{
-        id: board
-        width: 540
-        height: 600
-        anchors.centerIn: parent
-
-        //创建棋子
-        Component.onCompleted: {
-            var cw = board.width/8
-            var ch = board.height/9
-            Init.initializeBoard(board, cw, ch)
+    /*
+    // 首页
+    HomePage {
+        id: _home
+        width: 700
+        height: 800
+        anchors.fill: parent
+        visible: currentPage === "home"
+        onGameModeSelected: function(mode) {
+            root.currentPage = "game"
+            root.currentGameMode = mode
         }
     }
+
+    //人机对战页面
+    PveGamePage{
+        id:_pve
+        width:700
+        height: 800
+        anchors.fill: parent
+        visible: currentPage === "game" && currentGameMode === "pve"
+    }
+
+    //双人对战页面
+    PvpGamePage{
+        id:_pvp
+        width:700
+        height: 800
+        anchors.fill: parent
+        visible: currentPage === "game" && currentGameMode === "pvp"
+    }
+    */
 }

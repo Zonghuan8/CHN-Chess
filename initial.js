@@ -3,8 +3,8 @@ function addPiece(size, centerX, centerY,text,isRed) {
 
     if (component.status === Component.Ready) {
         //创建棋子对象
-        let piece = component.createObject(board, {
-            "size": size,  //使用传入的cellWidth
+        let piece = component.createObject(_board, {
+            "size": size,
             "centerX": centerX,
             "centerY": centerY,
             "text": text,
@@ -22,7 +22,7 @@ function addPiece(size, centerX, centerY,text,isRed) {
     }
 }
 
-function initializeBoard(board,cw,ch) {
+function initializeBoard(_board,cw,ch) {
     //黑方棋子
     addPiece(cw, 0*cw, 0*ch, "車",false);
     addPiece(cw, 1*cw, 0*ch, "马",false);
@@ -51,4 +51,3 @@ function initializeBoard(board,cw,ch) {
     addPiece(cw, 7*cw, 7*ch, "炮",true);
     for (let j = 0; j <= 8; j += 2) addPiece(cw, j*cw, 6*ch, "兵",true);;
 }
-
