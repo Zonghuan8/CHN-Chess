@@ -53,9 +53,6 @@ void Stone::init(int id)
     this->_isSelected = false;
 }
 
-// stone.cpp
-#include "stone.h"
-
 void Stone::setRow(int row)
 {
     if (_row != row) {

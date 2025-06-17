@@ -2,97 +2,71 @@ import QtQuick
 import Chess 1.0
 Item {
     id: _board
-    width: 640
-    height: 720
+    width: parent.width
+    height: parent.height
     anchors.centerIn: parent
-    property int wx: width/8
-    property int wy: height/9
+    property int square: width/10
 
-    signal click(var text,var centerX,var centerY);
     //棋盘背景
     Rectangle {
         id: boardBackground
+        height: parent.height
+        width:parent.width
         anchors.fill: parent
         color: "#f0e0d0"
         border.width:4
         border.color: "#DCB35C"
         radius: 4
-        Image {
-            anchors.fill: parent
-            source: "qrc:/images/background.png"
-            opacity: 0.3
-        }
-        //绘制网格线
-        //水平线,10线9行
-        Repeater {
-            model: 10
-            Canvas {
-                id: horizontalLine
-                y: index*parent.height/9//平均分成9份
-                width: parent.width
-                height: 8
-                onPaint: {
-                    var ctx = getContext("2d");
-                    ctx.clearRect(0, 0, width, height);
-                    ctx.strokeStyle = "#000000";
-                    ctx.lineWidth = 2.5;
-                    ctx.beginPath();
-                    ctx.moveTo(0, 0);
-                    ctx.lineTo(width, 0);
-                    ctx.stroke();//绘制图形轮廓
-                }
-            }
-        }
 
-        //垂直线，9线8列
-        Repeater {
-            model: 9
-            Canvas {
-                id: verticalLine
-                x: index * _board.width/8//平均分成8份
-                width: 8
-                height: parent.height
-                onPaint: {
-                    var ctx = getContext("2d");
-                    ctx.clearRect(0, 0, width, height);
-                    ctx.strokeStyle = "#000000";
-                    ctx.lineWidth = 2.5;
-                    ctx.beginPath();
+        Canvas {
+            id: boardCanvas
+            width: parent.width
+            height:parent.height
+            onPaint: {
+                        var ctx = getContext("2d")
+                        var cellSize = width / 9
 
-                    //分两段绘制垂直线（绕过河界）
-                    if (index > 0 && index < 8) {
-                        //中间竖线在楚河汉界处断开（棋盘高度的4/9到5/9之间为河界）
-                        ctx.moveTo(0, 0);
-                        ctx.lineTo(0, _board.height * 4/9);//上半部分（河界以上）
-                        ctx.moveTo(0, _board.height * 5/9);
-                        ctx.lineTo(0, _board.height);//下半部分（河界以下）
-                    } else {
-                        ctx.moveTo(0, 0);
-                        ctx.lineTo(0, _board.height);
+                        // // 清空画布
+                        ctx.clearRect(0, 0, width, height)
+
+                        // 绘制网格线
+                        ctx.strokeStyle = "#000000"
+                        ctx.lineWidth = 1
+
+                        // 横线
+                        for (var row = 1; row <= 10; row++) {
+                            ctx.beginPath()
+                            ctx.moveTo(_board.square, _board.square*(row+1))
+                            ctx.lineTo(width-_board.square,_board.square*(1+row))
+                            ctx.stroke()
+                        }
+
+                        // 竖线
+                        for (var col = 1; col <= 9; col++) {
+                            ctx.beginPath()
+                            ctx.moveTo(col * _board.square, 2*_board.square)
+                            ctx.lineTo(col * _board.square, _board.square * 6) // 上半部分
+                            ctx.stroke()
+                        }
+
+                        for (var col = 1; col <= 9; col++) {
+                            ctx.beginPath()
+                            ctx.moveTo(col * _board.square, 7*_board.square)
+                            ctx.lineTo(col * _board.square, 11*_board.square)
+                            ctx.stroke()
+                        }
+
+                        ctx.beginPath()
+                        ctx.moveTo( _board.square, _board.square * 6)
+                        ctx.lineTo( _board.square, 7*_board.square)
+                        ctx.stroke()
+
+                        ctx.beginPath()
+                        ctx.moveTo( 9*_board.square, _board.square * 6)
+                        ctx.lineTo( 9*_board.square, 7*_board.square)
+                        ctx.stroke()
                     }
-                    ctx.stroke();//绘制图形轮廓
-                }
             }
-        }
-
-        //绘制楚河汉界文字
-        Rectangle {
-            id: _riverArea
-            anchors.centerIn: parent
-            width: parent.width - 2 * parent.width/8
-            height: parent.width/8
-            color: "transparent"
-
-            Text {
-                anchors.fill: parent
-                text:qsTr(" 楚 河        汉 界 ")
-                font.family: "Source Han Sans CN"//终端输入：fc-list : family查看可用字体
-                font.pixelSize: height * 0.8
-                color: "#8b4513"
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
 
         //绘制九宫斜线
         Canvas {
@@ -105,26 +79,43 @@ Item {
 
                 //黑方九宫（上）
                 ctx.beginPath();
-                ctx.moveTo(_board.width/8 * 3, 0);
-                ctx.lineTo(_board.width/8 * 5, _board.height/9 * 2);
+                ctx.moveTo(_board.square*4, _board.square*2);
+                ctx.lineTo(_board.square* 6, _board.square * 4);
                 ctx.stroke();
 
                 ctx.beginPath();
-                ctx.moveTo(_board.width/8 * 5, 0);
-                ctx.lineTo(_board.width/8 * 3, _board.height/9 * 2);
+                ctx.moveTo(_board.square* 6, _board.square*2);
+                ctx.lineTo(_board.square* 4, _board.square*4);
                 ctx.stroke();
 
                 //红方九宫（下）
                 ctx.beginPath();
-                ctx.moveTo(_board.width/8 * 3, _board.height);
-                ctx.lineTo(_board.width/8 * 5, _board.height - _board.height/9 * 2);
+                ctx.moveTo(_board.square*4, _board.square*11);
+                ctx.lineTo(_board.square*6, _board.square*9);
                 ctx.stroke();
 
                 ctx.beginPath();
-                ctx.moveTo(_board.width/8 * 5, _board.height);
-                ctx.lineTo(_board.width/8 * 3, _board.height - _board.height/9 * 2);
+                ctx.moveTo(_board.square* 6, _board.square*11);
+                ctx.lineTo(_board.square* 4, _board.square*9);
                 ctx.stroke();
             }
+        }
+
+        Text {
+            id: riverText
+            x:4*_board.square
+            y:6*_board.square
+
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            font.family: "SimHei"
+            font.bold: true
+            font.pixelSize: Math.max(_board.square * 0.8, 20) // 80%的方格大小
+            text: "楚 河        汉 界"
+            color: "#8B4513"
+
+            style: Text.Outline
+            styleColor: "#00000011"
         }
         Board{
             id:chess
@@ -132,9 +123,9 @@ Item {
         Repeater {
             model: chess.stones
             delegate: ChessPiece {
-                centerX: modelData.col * wx
-                centerY: modelData.row *wy
-                size: _board.width/8
+                centerX: (modelData.col +1)* _board.square
+                centerY: (modelData.row +2)*  _board.square
+                size: _board.square
                 text: {
                           switch(modelData.type) {
                           case Stone.CHE: return "车"
@@ -151,15 +142,11 @@ Item {
                 }
             }
     }
-    TapHandler{
-        onTapped:{
-            _board.click(text,centerX,centerY)
+
+    TapHandler {
+        onTapped: (event) => {
+            var pos=chess.clickPosition(square, event.position.x, event.position.y);
+            console.log(pos.x);
         }
-    }
-    onClick: {
-       chess.handlePieceClick(text, centerX, centerY)
-    }
-    Component.onCompleted: {
-        chess.initGame();
     }
 }

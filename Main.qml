@@ -4,10 +4,10 @@ import QtQuick.Controls
 
 ApplicationWindow{
     id:root
-    width: 700
-    height: 800
-    minimumWidth: 640
-    minimumHeight: 800
+    width: 600
+    height: 660
+    minimumWidth: 600
+    minimumHeight: 880
     visible: true
     title: qsTr("中国象棋")
     color: "#f0e0d0"
@@ -20,10 +20,13 @@ ApplicationWindow{
 
     ChessBoard{
         id: board
-        width: 560
-        height: 630
+        // width: 560
+        // height: 630
         anchors.centerIn: parent
     }
-
-
+    Image {
+        anchors.fill: parent
+        source: "qrc:/images/background.png"
+        opacity: 0.3
+    }
 }
