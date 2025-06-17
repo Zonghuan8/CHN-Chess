@@ -7,12 +7,10 @@ Item {
 
     property real centerX: 0//设置棋子位置
     property real centerY: 0
-    //property bool selected: false//是否选中
+    property bool selected: false//是否选中
     property string text: "兵"//棋子文字
     property bool isRed: true//是否红方
     property int size: 56
-
-    signal clickPiece(var text,var centerX,var centerY);
 
     //计算位置（使中心点位于交叉线）
     x: centerX - width / 2
@@ -45,14 +43,13 @@ Item {
             }
             color: root.isRed ? "#B22222" : "#000000"
         }
-        /*
-        TapHandler{
-            onTapped:{
-                root.selected = !root.selected //切换选中状态
-                root.clickPiece(text,centerX,centerY)
-                console.log(root.text+"  centerX:"+root.centerX+";  "+"centerX:"+root.centerY)
-            }
-        }
-        */
+
+        // TapHandler{
+        //     onTapped:{
+        //         root.clickPiece(text,centerX,centerY)
+        //         console.log(root.text+"  centerX:"+root.centerX+";  "+"centerX:"+root.centerY)
+        //     }
+        // }
+
     }
 }

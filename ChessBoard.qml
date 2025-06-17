@@ -1,19 +1,21 @@
 import QtQuick
-//import Qt5Compat.GraphicalEffects
-
+import Chess 1.0
 Item {
     id: _board
     width: 640
     height: 720
     anchors.centerIn: parent
+    property int wx: width/8
+    property int wy: height/9
 
+    signal click(var text,var centerX,var centerY);
     //棋盘背景
     Rectangle {
         id: boardBackground
         anchors.fill: parent
         color: "#f0e0d0"
-        //border.width:4
-        //border.color: "#DCB35C"
+        border.width:4
+        border.color: "#DCB35C"
         radius: 4
         Image {
             anchors.fill: parent
@@ -124,5 +126,40 @@ Item {
                 ctx.stroke();
             }
         }
+        Board{
+            id:chess
+        }
+        Repeater {
+            model: chess.stones
+            delegate: ChessPiece {
+                centerX: modelData.col * wx
+                centerY: modelData.row *wy
+                size: _board.width/8
+                text: {
+                          switch(modelData.type) {
+                          case Stone.CHE: return "车"
+                          case Stone.MA: return "马"
+                          case Stone.XIANG: return modelData.red ? "相" : "象"
+                          case Stone.SHI: return modelData.red ? "仕" : "士"
+                          case Stone.JIANG: return modelData.red ? "帅" : "将"
+                          case Stone.PAO: return "炮"
+                          case Stone.BING: return modelData.red ? "兵" : "卒"
+                          default: return "?"
+                          }
+                      }
+                isRed: modelData.red
+                }
+            }
+    }
+    TapHandler{
+        onTapped:{
+            _board.click(text,centerX,centerY)
+        }
+    }
+    onClick: {
+       chess.handlePieceClick(text, centerX, centerY)
+    }
+    Component.onCompleted: {
+        chess.initGame();
     }
 }

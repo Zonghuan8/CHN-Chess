@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
-import "initial.js" as Init
 
 ApplicationWindow{
     id:root
@@ -21,15 +20,10 @@ ApplicationWindow{
 
     ChessBoard{
         id: board
-        width: 540
-        height: 600
+        width: 560
+        height: 630
         anchors.centerIn: parent
-
-        //创建棋子
-        Component.onCompleted: {
-            var cw = board.width/8
-            var ch = board.height/9
-            Init.initializeBoard(board, cw, ch)
-        }
     }
+
+
 }
