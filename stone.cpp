@@ -76,3 +76,11 @@ void Stone::setDead(bool dead)
         emit deadChanged();
     }
 }
+
+void Stone::setIsSelected(bool isSelected)
+{
+    if (_isSelected != isSelected) {
+        _col = isSelected;
+        emit isSelectedChanged();
+    }
+}

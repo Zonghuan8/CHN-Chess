@@ -146,9 +146,51 @@ Item {
     }
 
     TapHandler {
+        property int selectedPieceId: -1
         onTapped: (event) => {
-            var pos=chess.clickPosition(square, event.position.x, event.position.y);
-            console.log(pos.x);
+            var pos = chess.clickPosition(square, event.position.x, event.position.y);
+            var boardX = pos.x - 1;
+            var boardY = pos.y - 1;
+
+            //点击棋子
+            if (chess.isPiece(boardX, boardY)) {
+                var pieceId = chess.getPieceId(boardX, boardY);
+                //选中棋子
+                if (selectedPieceId == -1) {
+                    selectedPieceId = pieceId;          
+                    console.log("选中棋子:", pieceId);
+                }
+                //本身取消选中
+                else if (selectedPieceId == pieceId) {
+                    selectedPieceId = -1;
+                    console.log("取消选中");
+                }
+                //己方棋子
+                else if (selectedPieceId!=-1 && (selectedPieceId >= 0 && selectedPieceId <= 15 && pieceId >= 0 && pieceId <= 15) || (selectedPieceId >= 16 && selectedPieceId <= 31 && pieceId >= 16 && pieceId <= 31))
+                {
+                    selectedPieceId = pieceId;
+                    console.log("切换选中己方棋子："+selectedPieceId)
+                }
+                //敌方棋子
+                else{
+                    console.log("吃掉了"+pieceId);
+                    //调用吃棋方法
+                    selectedPieceId = -1
+                }
+            }
+            //点击棋盘
+            else{
+                //无选中棋子
+                if(selectedPieceId==-1){
+                    console.log("无选中棋子")
+                }
+                //选中棋子
+                else{
+                    //if(!canMove()),不做处理
+                    //if(canMove()),move()
+                    selectedPieceId = -1
+                }
+            }
         }
     }
 }

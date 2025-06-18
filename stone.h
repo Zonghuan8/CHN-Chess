@@ -37,6 +37,7 @@ public:
     void setRow(int row);
     void setCol(int col);
     void setDead(bool dead);
+    void setIsSelected(bool isSelected);
 
     TYPE name() const;
     void init(int id);
@@ -44,6 +45,7 @@ signals:
     void rowChanged();
     void colChanged();
     void deadChanged();
+    void isSelectedChanged();
 
 private:
     int _row;         //行
