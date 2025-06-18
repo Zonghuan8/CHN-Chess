@@ -26,10 +26,17 @@ Item {
         height: 56
 
         Rectangle {
+            id: glowEffect
+            anchors.fill: parent
             radius: width / 2
-            color: root.isRed ? "#FFC0C0" : "#E0E0E0"
-            //border.color: selected ? "gold" : (root.isRed ? "#B22222" : "#333333")
-            //border.width: selected ? 4 : 2
+            color: "transparent"
+            visible: root.selected
+
+            // 发光边框 - 使用径向渐变
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: root.isRed ? "#FFFF0080" : "#00FFFF80" }
+                GradientStop { position: 1.0; color: "transparent" }
+            }
         }
 
         //棋子文字
@@ -44,13 +51,11 @@ Item {
             }
             color: root.isRed ? "#B22222" : "#000000"
         }
-
-        // TapHandler{
-        //     onTapped:{
-        //         root.clickPiece(text,centerX,centerY)
-        //         console.log(root.text+"  centerX:"+root.centerX+";  "+"centerX:"+root.centerY)
-        //     }
-        // }
-
+    }
+    // 选中时的缩放效果
+    scale: selected ? 1.1 : 1.0
+        Behavior on scale {
+        NumberAnimation { duration: 200; easing.type: Easing.OutQuad }
     }
 }
+

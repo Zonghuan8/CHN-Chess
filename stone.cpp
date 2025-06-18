@@ -1,3 +1,4 @@
+// stone.cpp
 #include "stone.h"
 #include <QDebug>
 
@@ -5,82 +6,85 @@ Stone::Stone(QObject *parent) : QObject(parent) {}
 
 Stone::~Stone() {}
 
-Stone::TYPE Stone::name() const
+// bool Stone::selected() const
+// {
+//     return m_selected;
+// }
+
+void Stone::setSelected(bool selected)
 {
-    return _type;
+    if (m_selected != selected) {
+        m_selected = selected;
+        emit selectedChanged(); // 触发信号
+    }
 }
 
 void Stone::init(int id)
 {
-    struct
-    {
-        int row, col;
-        Stone::TYPE type;
-    } pos[16] = {
-        {0, 0, Stone::CHE},
-        {0, 1, Stone::MA},
-        {0, 2, Stone::XIANG},
-        {0, 3, Stone::SHI},
-        {0, 4, Stone::JIANG},
-        {0, 5, Stone::SHI},
-        {0, 6, Stone::XIANG},
-        {0, 7, Stone::MA},
-        {0, 8, Stone::CHE},
+    m_id = id;
 
-        {2, 1, Stone::PAO},
-        {2, 7, Stone::PAO},
-        {3, 0, Stone::BING},
-        {3, 2, Stone::BING},
-        {3, 4, Stone::BING},
-        {3, 6, Stone::BING},
-        {3, 8, Stone::BING},
+    struct Position
+    {
+        int row;
+        int col;
+        TYPE type;
     };
 
+    static const Position pos[16] = {{0, 0, CHE},
+                                     {0, 1, MA},
+                                     {0, 2, XIANG},
+                                     {0, 3, SHI},
+                                     {0, 4, JIANG},
+                                     {0, 5, SHI},
+                                     {0, 6, XIANG},
+                                     {0, 7, MA},
+                                     {0, 8, CHE},
+                                     {2, 1, PAO},
+                                     {2, 7, PAO},
+                                     {3, 0, BING},
+                                     {3, 2, BING},
+                                     {3, 4, BING},
+                                     {3, 6, BING},
+                                     {3, 8, BING}};
+
     if (id < 16) {
-        this->_col = pos[id].col;
-        this->_row = pos[id].row;
-        this->_type = pos[id].type;
+        m_row = pos[id].row;
+        m_col = pos[id].col;
+        m_type = pos[id].type;
     } else {
-        this->_col = 8 - pos[id - 16].col;
-        this->_row = 9 - pos[id - 16].row;
-        this->_type = pos[id - 16].type;
+        m_row = 9 - pos[id - 16].row;
+        m_col = 8 - pos[id - 16].col;
+        m_type = pos[id - 16].type;
     }
 
-    this->_dead = false;
-    this->_red = id < 16;
-    this->_id = id;
-    this->_isPiece = true;
-    this->_isSelected = false;
+    m_dead = false;
+    m_selected = false;
+    m_red = (id < 16);
+
+    // qDebug() << "初始化棋子 ID:" << m_id << "位置: (" << m_col << "," << m_row << ")"
+    //          << "类型:" << m_type << "颜色:" << (m_red ? "红" : "黑");
 }
 
 void Stone::setRow(int row)
 {
-    if (_row != row) {
-        _row = row;
+    if (m_row != row) {
+        m_row = row;
         emit rowChanged();
     }
 }
 
 void Stone::setCol(int col)
 {
-    if (_col != col) {
-        _col = col;
+    if (m_col != col) {
+        m_col = col;
         emit colChanged();
     }
 }
 
 void Stone::setDead(bool dead)
 {
-    if (_dead != dead) {
-        _dead = dead;
+    if (m_dead != dead) {
+        m_dead = dead;
         emit deadChanged();
-    }
-}
-
-void Stone::setIsSelected(bool isSelected)
-{
-    if (_isSelected != isSelected) {
-        _col = isSelected;
-        emit isSelectedChanged();
     }
 }
