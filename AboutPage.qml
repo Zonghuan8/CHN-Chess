@@ -7,7 +7,8 @@ import QtCore
 Item {
 
     id: _aboutPage
-    anchors.fill: parent
+    width: 600
+    height: 800
 
     Rectangle {
         anchors.fill: parent
@@ -81,7 +82,7 @@ Item {
             }
 
             Text {
-                text: "联系我们: chessgame@example.com"
+                text: "联系我们: open-src@qq.com"
                 font {
                     family: "FZKai-Z03"
                     pixelSize: 18

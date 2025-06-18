@@ -5,7 +5,8 @@ import QtQuick.Layouts
 
 Item {
     id: _rulesPage
-    anchors.fill: parent
+    width: 600
+    height: 800
 
     //窗口过大时填充背景
     Rectangle {
@@ -38,7 +39,7 @@ Item {
                     horizontalAlignment: Text.AlignHCenter
                 }
 
-                // 规则内容
+                //规则内容
                 Text {
                     text: "中国象棋是一种源于中国古代的传统棋类游戏，使用方形棋盘和红黑两色圆形棋子进行对弈。
                              以下是基本规则："
