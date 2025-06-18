@@ -8,14 +8,8 @@ ApplicationWindow{
     height: 800
     minimumWidth: 600
     minimumHeight: 800
-
-    // height: 800
-    // minimumWidth: 640
-    // minimumHeight: 800
-
     visible: true
     title: qsTr("中国象棋")
-    // icon.source:"qrc:/images/icon.png"
     color: "#f0e0d0"
 
     property string currentPage: "home"//当前页面
@@ -32,6 +26,4 @@ ApplicationWindow{
         source: "qrc:/images/background.png"
         opacity: 0.3
     }
-
-
 }

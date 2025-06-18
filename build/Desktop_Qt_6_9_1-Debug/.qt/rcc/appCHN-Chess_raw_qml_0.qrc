@@ -1,0 +1,12 @@
+<RCC>
+  <qresource prefix="/qt/qml/Chess/">
+    <file alias="Main.qml">/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e456/qt/CHN-Chess/Main.qml</file>
+    <file alias="ChessBoard.qml">/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e456/qt/CHN-Chess/ChessBoard.qml</file>
+    <file alias="ChessPiece.qml">/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e456/qt/CHN-Chess/ChessPiece.qml</file>
+    <file alias="HomePage.qml">/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e456/qt/CHN-Chess/HomePage.qml</file>
+    <file alias="PvpGamePage.qml">/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e456/qt/CHN-Chess/PvpGamePage.qml</file>
+    <file alias="PveGamePage.qml">/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e456/qt/CHN-Chess/PveGamePage.qml</file>
+    <file alias="chess.qrc">/run/media/root/f6ad52dd-6a3e-40b7-9a1f-8323c318e456/qt/CHN-Chess/chess.qrc</file>
+  </qresource>
+</RCC>
+
