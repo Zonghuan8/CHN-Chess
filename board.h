@@ -3,7 +3,7 @@
 #include <QVector>
 #include "stone.h"
 #include <QtQml/qqmlregistration.h>
-#include <QPoint> // 在头文件中包含
+#include <QPoint> //在头文件中包含
 class Board : public QObject
 {
     Q_OBJECT
@@ -14,7 +14,7 @@ public:
 
     QVector<Stone *> stones() const { return m_stones; }
 
-    // 初始化所有棋子
+    //初始化所有棋子
     Q_INVOKABLE void initGame();
 
     Q_INVOKABLE QPoint clickPosition(int cellSize, qreal x, qreal y);
@@ -23,5 +23,5 @@ signals:
 public slots:
 
 private:
-    QVector<Stone *> m_stones; // 存储所有棋子
+    QVector<Stone *> m_stones; //存储所有棋子
 };

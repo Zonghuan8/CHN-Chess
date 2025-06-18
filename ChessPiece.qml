@@ -28,8 +28,6 @@ Item {
         Rectangle {
             radius: width / 2
             color: root.isRed ? "#FFC0C0" : "#E0E0E0"
-            //border.color: selected ? "gold" : (root.isRed ? "#B22222" : "#333333")
-            //border.width: selected ? 4 : 2
         }
 
         //棋子文字
@@ -44,13 +42,5 @@ Item {
             }
             color: root.isRed ? "#B22222" : "#000000"
         }
-
-        // TapHandler{
-        //     onTapped:{
-        //         root.clickPiece(text,centerX,centerY)
-        //         console.log(root.text+"  centerX:"+root.centerX+";  "+"centerX:"+root.centerY)
-        //     }
-        // }
-
     }
 }

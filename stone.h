@@ -15,7 +15,7 @@ public:
     enum TYPE { CHE, MA, XIANG, SHI, JIANG, PAO, BING };
     Q_ENUM(TYPE)
 
-    // 暴露属性给QML
+    //暴露属性给QML
     Q_PROPERTY(int row READ row NOTIFY rowChanged)
     Q_PROPERTY(int col READ col NOTIFY colChanged)
     Q_PROPERTY(TYPE type READ type CONSTANT)
@@ -23,7 +23,7 @@ public:
     Q_PROPERTY(bool dead READ isDead WRITE setDead NOTIFY deadChanged)
     Q_PROPERTY(int id READ id CONSTANT)
 
-    // Getter方法
+    //Getter方法
     int row() const { return _row; }
     int col() const { return _col; }
     TYPE type() const { return _type; }
@@ -33,7 +33,7 @@ public:
     bool isPiece() { return _isPiece; }
     bool isSeleceted() { return _isSelected; }
 
-    // Setter方法
+    //Setter方法
     void setRow(int row);
     void setCol(int col);
     void setDead(bool dead);
