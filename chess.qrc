@@ -4,10 +4,14 @@
         <file>images/red_chess.png</file>
         <file>images/black_chess.png</file>
         <file>images/home_background.png</file>
+<<<<<<< HEAD
         <file>images/bamboo.png</file>
         <file>images/bamboo2.png</file>
         <file>images/bb3.png</file>
         <file>images/bb2.png</file>
         <file>images/bb1.png</file>
+=======
+
+>>>>>>> CHN-Chess/main
     </qresource>
 </RCC>
