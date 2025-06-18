@@ -94,27 +94,29 @@ bool Board::trySelectStone(int row, int col)
 bool Board::moveStone(int fromCol, int fromRow, int toCol, int toRow)
 {
     int moveid = getPieceId(fromCol, fromRow);
-
     int killid = getPieceId(toCol, toRow);
 
-    if (moveid == -1) {
-        return false;
-    }
+    if (moveid == -1) { return false; }
 
     // 检查是否可以走棋
-    if (!canMove(moveid, killid, toCol, toRow)) {
-        return false;
-    }
+    if (!canMove(moveid, killid, toCol, toRow)) { return false; }
 
-    // 执行走棋
+    // 保存原始位置
+    int originalCol = m_stones[moveid]->col();
+    int originalRow = m_stones[moveid]->row();
+
+    // 移动当前棋子到新位置
     m_stones[moveid]->setCol(toCol);
     m_stones[moveid]->setRow(toRow);
 
     // 处理吃棋
-    bool isCapture = false;
     if (killid != -1) {
+        // 标记被吃棋子为死亡状态
         m_stones[killid]->setDead(true);
-        isCapture = true;
+
+        // 将被吃棋子移出棋盘
+        m_stones[killid]->setRow(toRow);
+        m_stones[killid]->setCol(toCol);
     }
 
     // 切换回合
@@ -122,9 +124,7 @@ bool Board::moveStone(int fromCol, int fromRow, int toCol, int toRow)
     m_selectid = -1;
 
     // 发送信号通知移动完成
-    //emit moveMade(fromRow, fromCol, toRow, toCol, isCapture);
-    // emit redTurnChanged(); // 通知QML回合已变更
-    // emit stonesChanged();
+    emit stonesChanged();
     clearSelection();
     return true;
 }

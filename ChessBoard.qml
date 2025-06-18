@@ -20,6 +20,74 @@ Item {
         border.color: "#DCB35C"
         radius: 4
 
+        Component {
+            id: captureAnimation
+
+                    Rectangle {
+                        id: captureEffect
+                        property int targetId: -1
+                        property point startPos
+
+                        width: _board.square
+                        height: _board.square
+                        radius: width / 2
+                        color: "transparent"
+                        border.color: "#FF0000"
+                        border.width: 3
+                        opacity: 0.8
+
+                        SequentialAnimation {
+                            id: anim
+                            running: true
+
+                            ParallelAnimation {
+                                NumberAnimation {
+                                    target: captureEffect
+                                    property: "scale"
+                                    from: 1.0
+                                    to: 1.5
+                                    duration: 300
+                                }
+                                NumberAnimation {
+                                    target: captureEffect
+                                    property: "opacity"
+                                    from: 1.0
+                                    to: 0.0
+                                    duration: 300
+                                }
+                            }
+                            ScriptAction {
+                                script: captureEffect.destroy()
+                            }
+                        }
+
+                        Component.onCompleted: {
+                            x = startPos.x - width / 2
+                            y = startPos.y - height / 2
+                        }
+                    }
+                }
+        Board {
+                    id: chess
+
+                    onStonesChanged: {
+                        // 当棋子状态改变时，检查是否有棋子被吃
+                        for (var i = 0; i < chess.stones.length; i++) {
+                            var stone = chess.stones[i];
+                            if (stone.dead && !stone._handledDead) {
+                                stone._handledDead = true;
+
+                                // 创建吃子动画效果
+                                var startX = (stone.col + 1) * _board.square
+                                var startY = (stone.row + 1) * _board.square
+                                var anim = captureAnimation.createObject(boardBackground, {
+                                    startPos: Qt.point(startX, startY)
+                                });
+                            }
+                        }
+                    }
+                }
+
         Canvas {
             id: boardCanvas
             width: parent.width
@@ -120,9 +188,9 @@ Item {
             styleColor: "#00000011"
         }
 
-        Board{
-            id:chess
-        }
+        // Board{
+        //     id:chess
+        // }
 
         Repeater {
             model: chess.stones
@@ -144,6 +212,7 @@ Item {
                       }
                 isRed: modelData.isRed
                 selected: modelData.selected  // 绑定到Stone的selected属性
+                visible: !modelData.dead // 死亡棋子不可见
                 }
             }
         }
