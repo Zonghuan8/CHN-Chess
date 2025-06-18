@@ -29,12 +29,10 @@ qt_add_qml_module(appCHN-Chess
         QML_FILES PveGamePage.qml
         SOURCES stone.h stone.cpp
         SOURCES board.h board.cpp
-        QML_FILES   Window.qml
-        QML_FILES Actions.qml
-        QML_FILES setting.js
-        QML_FILES Dialogs.qml
-        QML_FILES Content.qml
-        RESOURCES backgroundmusic.qrc
+        QML_FILES RulesPage.qml
+        QML_FILES AboutPage.qml
+        RESOURCES music.qrc
+
 
 )
 

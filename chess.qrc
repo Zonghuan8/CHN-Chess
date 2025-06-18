@@ -4,5 +4,6 @@
         <file>images/red_chess.png</file>
         <file>images/black_chess.png</file>
         <file>images/home_background.png</file>
+
     </qresource>
 </RCC>

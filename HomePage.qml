@@ -71,7 +71,7 @@ Item {
                 }
                 onClicked: {
                     stackView.pop(stackView.currentItem)
-                    stackView.push("")
+                    stackView.push("RulesPage.qml")
                 }
             }
             RoundButton {
@@ -85,7 +85,7 @@ Item {
                 }
                 onClicked: {
                     stackView.pop(stackView.currentItem)
-                    stackView.push("")
+                    stackView.push("AboutPage.qml")
                 }
             }
         }

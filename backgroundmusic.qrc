@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>sound/bgm.mp3</file>
-        <file>sound/move.wav</file>
-        <file>sound/capture.wav</file>
-        <file>sound/check.wav</file>
-    </qresource>
-</RCC>
