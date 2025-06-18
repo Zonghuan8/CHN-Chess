@@ -25,49 +25,49 @@ Item {
             width: parent.width
             height:parent.height
             onPaint: {
-                        var ctx = getContext("2d")
-                        var cellSize = width / 9
+                var ctx = getContext("2d")
+                var cellSize = width / 9
 
-                        // // 清空画布
-                        ctx.clearRect(0, 0, width, height)
+                //清空画布
+                ctx.clearRect(0, 0, width, height)
 
-                        // 绘制网格线
-                        ctx.strokeStyle = "#000000"
-                        ctx.lineWidth = 1
+                //绘制网格线
+                ctx.strokeStyle = "#000000"
+                ctx.lineWidth = 1
 
-                        // 横线
-                        for (var row = 1; row <= 10; row++) {
-                            ctx.beginPath()
-                            ctx.moveTo(_board.square, _board.square*(row))
-                            ctx.lineTo(width-_board.square,_board.square*(row))
-                            ctx.stroke()
-                        }
+                //横线
+                for (var row = 1; row <= 10; row++) {
+                ctx.beginPath()
+                ctx.moveTo(_board.square, _board.square*(row))
+                ctx.lineTo(width-_board.square,_board.square*(row))
+                ctx.stroke()
+                }
 
-                        // 竖线
-                        for (var col = 1; col <= 9; col++) {
-                            ctx.beginPath()
-                            ctx.moveTo(col * _board.square, _board.square)
-                            ctx.lineTo(col * _board.square, _board.square * 5) // 上半部分
-                            ctx.stroke()
-                        }
+                // 竖线
+                for (var col = 1; col <= 9; col++) {
+                    ctx.beginPath()
+                    ctx.moveTo(col * _board.square, _board.square)
+                    ctx.lineTo(col * _board.square, _board.square * 5) // 上半部分
+                    ctx.stroke()
+                }
 
-                        for (var col = 1; col <= 9; col++) {
-                            ctx.beginPath()
-                            ctx.moveTo(col * _board.square, 6*_board.square)
-                            ctx.lineTo(col * _board.square, 10*_board.square)
-                            ctx.stroke()
-                        }
+                for (var col = 1; col <= 9; col++) {
+                    ctx.beginPath()
+                    ctx.moveTo(col * _board.square, 6*_board.square)
+                    ctx.lineTo(col * _board.square, 10*_board.square)
+                    ctx.stroke()
+                }
 
-                        ctx.beginPath()
-                        ctx.moveTo( _board.square, _board.square * 5)
-                        ctx.lineTo( _board.square, 6*_board.square)
-                        ctx.stroke()
+                ctx.beginPath()
+                ctx.moveTo( _board.square, _board.square * 5)
+                ctx.lineTo( _board.square, 6*_board.square)
+                ctx.stroke()
 
-                        ctx.beginPath()
-                        ctx.moveTo( 9*_board.square, _board.square * 5)
-                        ctx.lineTo( 9*_board.square, 6*_board.square)
-                        ctx.stroke()
-                    }
+                ctx.beginPath()
+                ctx.moveTo( 9*_board.square, _board.square * 5)
+                ctx.lineTo( 9*_board.square, 6*_board.square)
+                ctx.stroke()
+                }
             }
 
         //绘制九宫斜线
@@ -119,9 +119,11 @@ Item {
             style: Text.Outline
             styleColor: "#00000011"
         }
+
         Board{
             id:chess
         }
+
         Repeater {
             model: chess.stones
             delegate: ChessPiece {
@@ -144,7 +146,8 @@ Item {
                 selected: modelData.selected  // 绑定到Stone的selected属性
                 }
             }
-    }
+        }
+
 
     TapHandler {
         property int selectedPieceId: -1

@@ -4,7 +4,7 @@
 #include "stone.h"
 #include <QDebug>
 #include <QtQml/qqmlregistration.h>
-#include <QPoint> // 在头文件中包含
+#include <QPoint> //在头文件中包含
 class Board : public QObject
 {
     Q_OBJECT
@@ -15,7 +15,10 @@ public:
     explicit Board(QObject *parent = nullptr);
 
     QVector<Stone *> stones() const { return m_stones; }
+
     bool isRedTurn() const { return m_bRedTurn; }
+
+    //初始化所有棋子
     Q_INVOKABLE void initGame();
 
     Q_INVOKABLE Stone *getStoneById(int id);

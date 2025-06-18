@@ -3,7 +3,7 @@
 #include <QDebug>
 Board::Board(QObject *parent) : QObject(parent)
 {
-    // 创建32个棋子对象
+    //创建32个棋子对象
     for (int i = 0; i < 32; i++) {
         Stone *stone = new Stone(this);
         stone->init(i);
@@ -18,7 +18,7 @@ Board::Board(QObject *parent) : QObject(parent)
 
 void Board::initGame()
 {
-    // 重置所有棋子状态
+    //重置所有棋子状态
     for (Stone *stone : m_stones) {
         stone->init(stone->id());
     }

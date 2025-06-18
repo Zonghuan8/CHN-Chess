@@ -90,3 +90,7 @@ CMakeLists.txt.user*
 *vpp.lck
 
 build/
+<<<<<<< HEAD
+=======
+build/
+>>>>>>> CHN-Chess/main

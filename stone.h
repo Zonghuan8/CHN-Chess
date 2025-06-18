@@ -6,6 +6,17 @@
 class Stone : public QObject
 {
     Q_OBJECT
+
+    QML_ELEMENT
+public:
+    Stone(QObject *parent = nullptr);
+    ~Stone();
+
+    enum TYPE { CHE, MA, XIANG, SHI, JIANG, PAO, BING };
+    Q_ENUM(TYPE)
+
+    //暴露属性给QML
+
     Q_PROPERTY(int row READ row NOTIFY rowChanged)
     Q_PROPERTY(int col READ col NOTIFY colChanged)
     Q_PROPERTY(bool dead READ dead NOTIFY deadChanged)
@@ -16,12 +27,6 @@ class Stone : public QObject
     QML_ELEMENT
 
 public:
-    enum TYPE { JIANG, CHE, PAO, MA, BING, SHI, XIANG };
-    Q_ENUM(TYPE)
-
-    explicit Stone(QObject *parent = nullptr);
-    ~Stone();
-
     int id() const { return m_id; }
     int row() const { return m_row; }
     int col() const { return m_col; }
