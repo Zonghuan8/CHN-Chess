@@ -223,55 +223,27 @@ Item {
                 for (var i = 0; i < 3; i++) {
                     (function(index) {
                         var delay = index * 200;
-                        Qt.createQmlObject(`
-                            import QtQuick
 
-                            Rectangle {
-                                property real centerX: ${x}
-                                property real centerY: ${y}
-                                property color effectColor: "${isRed ? "#ff0000" : "#0000ff"}"
+                        // 创建AnimationEffect实例
+                        var effect = Qt.createComponent("AnimationEffect.qml");
+                        if (effect.status === Component.Ready) {
+                            var obj = effect.createObject(boardBackground, {
+                                centerX: x,
+                                centerY: y,
+                                effectColor: isRed ? "#ff0000" : "#0000ff",
+                                square: _board.square,
+                                delay: delay
+                            });
 
-                                width: ${_board.square}
-                                height: ${_board.square}
-                                radius: width / 2
-                                color: "transparent"
-                                border.color: effectColor
-                                border.width: 3
-                                opacity: 0.8
-
-                                x: centerX - width / 2
-                                y: centerY - height / 2
-
-                                ParallelAnimation {
-                                    running: true
-                                    NumberAnimation {
-                                        target: parent
-                                        property: "scale"
-                                        from: 1.0
-                                        to: 3.0
-                                        duration: 800
-                                        easing.type: Easing.OutQuad
-                                    }
-                                    NumberAnimation {
-                                        target: parent
-                                        property: "opacity"
-                                        from: 0.8
-                                        to: 0.0
-                                        duration: 800
-                                        easing.type: Easing.OutQuad
-                                    }
-                                    onFinished: parent.destroy()
-                                }
-
-                                Timer {
-                                    interval: ${delay}
-                                    running: true
-                                    onTriggered: parent.opacity = 0.8
-                                }
+                            if (!obj) {
+                                console.error("Failed to create AnimationEffect object");
                             }
-                        `, boardBackground);
+                        } else {
+                            console.error("Component not ready:", effect.errorString());
+                        }
                     })(i);
                 }
+
             }
         }
 
