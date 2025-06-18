@@ -114,9 +114,12 @@ bool Board::moveStone(int fromCol, int fromRow, int toCol, int toRow)
         // 标记被吃棋子为死亡状态
         m_stones[killid]->setDead(true);
 
-        // 将被吃棋子移出棋盘
-        m_stones[killid]->setRow(toRow);
-        m_stones[killid]->setCol(toCol);
+        // 检查是否吃掉将/帅
+        if (m_stones[killid]->type() == Stone::JIANG) {
+            QString winner = m_stones[moveid]->isRed() ? "红方" : "黑方";
+            m_gameOver = true;
+            emit gameOver(winner);
+        }
     }
 
     // 切换回合

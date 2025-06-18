@@ -4,7 +4,7 @@
 #include "stone.h"
 #include <QDebug>
 #include <QtQml/qqmlregistration.h>
-#include <QPoint> //在头文件中包含
+#include <QPoint>
 class Board : public QObject
 {
     Q_OBJECT
@@ -34,17 +34,9 @@ public:
     Q_INVOKABLE bool trySelectStone(int col, int row);
 
     Q_INVOKABLE bool canMove(int moveid, int killid, int col, int row);
-    // Q_INVOKABLE void isSelected(int id); //选中一个棋子
 
-    // Q_INVOKABLE void move(int id, int x, int y);
-
-    // Q_INVOKABLE void deselectPiece()
-    // {
-    //     for (Stone *st : m_stones) {
-    //         qDebug() << st->col() << " " << st->row();
-    //     }
-    // }
 signals:
+    void gameOver(QString winner); // 新增：游戏结束信号
     void redTurnChanged();
     void stonesChanged();
     void selectionCleared();
@@ -60,6 +52,7 @@ private:
     bool canMoveShi(int moveid, int killid, int col, int row);
     bool canMoveXiang(int moveid, int killid, int col, int row);
     int m_selectedPieceId = -1; // 当前选中的棋子ID
+    bool m_gameOver = false;    // 游戏是否结束
     QVector<Stone *> m_stones; // 存储所有棋子
     int m_selectid = -1;
     bool m_bRedTurn = true;
