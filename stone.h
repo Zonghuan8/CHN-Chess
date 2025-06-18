@@ -30,6 +30,8 @@ public:
     bool isRed() const { return _red; }
     bool isDead() const { return _dead; }
     int id() const { return _id; }
+    bool isPiece() { return _isPiece; }
+    bool isSeleceted() { return _isSelected; }
 
     // Setter方法
     void setRow(int row);
@@ -44,12 +46,12 @@ signals:
     void deadChanged();
 
 private:
-    int _row;
-    int _col;
-    TYPE _type;
-    bool _red;
-    bool _dead;
-    int _id;
-    bool _isPiece;
-    bool _isSelected;
+    int _row;         //行
+    int _col;         //列
+    TYPE _type;       //棋子类型
+    bool _red;        //是否红方
+    bool _dead;       //是否被吃
+    int _id;          //棋子id
+    bool _isPiece;    //是否为棋子
+    bool _isSelected; //是否被选择
 };

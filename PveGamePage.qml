@@ -5,8 +5,8 @@ import QtQuick.Layouts
 
 Item {
     id: _pve
-    width: 700
-    height: 800
+    // width: parent.width
+    // height: parent.height
     anchors.fill: parent
 
     property var buttonStyle: QtObject {
@@ -25,15 +25,15 @@ Item {
 
     ChessBoard{
         id:_board
-        width: 540
-        height: 600
+        width: 600
+        height: 660
         anchors.centerIn: parent
 
         //创建棋子
         Component.onCompleted: {
             var cw = _board.width/8
             var ch = _board.height/9
-            Init.initializeBoard(_board, cw, ch)
+            //Init.initializeBoard(_board, cw, ch)
         }
     }
 

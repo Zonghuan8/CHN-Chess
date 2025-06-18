@@ -5,9 +5,9 @@ import QtQuick.Layouts
 
 Item {
     id: _home
-    width: 700
-    height: 800
-    anchors.fill: parent
+    width: parent.width
+    height: parent.height
+    // anchors.fill: parent
 
     property var buttonStyle: QtObject {
         property int width: 200
@@ -17,7 +17,7 @@ Item {
         property string fontFamily: "FZMiaoWuS\-GB"
     }
 
-    //signal gameModeSelected(string mode) //通知主窗口选择了游戏模式
+    signal gameModeSelected(string mode) //通知主窗口选择了游戏模式
 
     Rectangle{
         id: _homeBackground

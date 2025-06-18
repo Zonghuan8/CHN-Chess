@@ -4,8 +4,8 @@ import QtQuick.Controls
 
 Item {
     id: _pvp
-    width: 700
-    height: 800
+    // width: parent.width
+    // height: parent.height
     anchors.fill: parent
 
     //窗口过大时填充背景
@@ -15,17 +15,17 @@ Item {
     }
 
     ChessBoard{
-        id:_board
-        width: 540
-        height: 600
-        anchors.centerIn: parent
+       id:_board
+       width: 600
+       height: 660
+       // anchors.centerIn: parent
 
         //创建棋子
-        Component.onCompleted: {
-            var cw = _board.width/8
-            var ch = _board.height/9
-            Init.initializeBoard(_board, cw, ch)
-        }
+        // Component.onCompleted: {
+        //     var cw = _board.width/8
+        //     var ch = _board.height/9
+        //     Init.initializeBoard(_board, cw, ch)
+        // }
     }
 
     Button {
@@ -50,7 +50,7 @@ Item {
         text: "双人对战模式"
         font {
             family:"FZKai\-Z03"
-            pixelSize: 40
+            pixelSize: 20
             bold: true
         }
         anchors {
