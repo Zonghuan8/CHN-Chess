@@ -1,162 +1,61 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(chess VERSION 0.1 LANGUAGES CXX)
+project(CHN-Chess VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 
-qt_standard_project_setup(REQUIRES 6.9)
+qt_standard_project_setup(REQUIRES 6.8)
 
-qt_add_executable(appchess)
+#添加下面一行解决图片资源无法找到的问题
+set(CMAKE_AUTORCC ON)
 
-qt_add_qml_module(appchess
-    URI chess
+qt_add_executable(appCHN-Chess
+    main.cpp
+    chess.qrc
+)
+
+qt_add_qml_module(appCHN-Chess
+    URI Chess
     VERSION 1.0
-    SOURCES     main.cpp
-    QML_FILES   Window.qml
-    QML_FILES Actions.qml
-    QML_FILES setting.js
-    QML_FILES Dialogs.qml
-    QML_FILES Content.qml
-    RESOURCES backgroundmusic.qrc
+    QML_FILES
+        Main.qml
+        QML_FILES ChessBoard.qml
+        QML_FILES ChessPiece.qml
+        RESOURCES chess.qrc
+        QML_FILES HomePage.qml
+        QML_FILES PvpGamePage.qml
+        QML_FILES PveGamePage.qml
+        SOURCES stone.h stone.cpp
+        SOURCES board.h board.cpp
+        QML_FILES   Window.qml
+        QML_FILES Actions.qml
+        QML_FILES setting.js
+        QML_FILES Dialogs.qml
+        QML_FILES Content.qml
+        RESOURCES backgroundmusic.qrc
+
 )
 
-target_compile_features(appchess PRIVATE cxx_std_23)
-
-target_link_libraries(appchess
-    PRIVATE
-        Qt6::Quick
-)
-
-set_target_properties(appchess PROPERTIES
-#    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.appchess
+# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
+# If you are developing for iOS or macOS you should consider setting an
+# explicit, fixed bundle identifier manually though.
+set_target_properties(appCHN-Chess PROPERTIES
+#    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.appCHN-Chess
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
 
+target_link_libraries(appCHN-Chess
+    PRIVATE Qt6::Quick
+)
+
 include(GNUInstallDirs)
-install(TARGETS appchess
+install(TARGETS appCHN-Chess
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# set(CMAKE_CXX_STANDARD_REQUIRED ON) # Globally preventing the fallback behaviour of C++ standard
-#qt_add_executable(chess)  //Creates and finalizes an application target of a platform-specific type.
-#This command performs the following tasks:
-#    1. Create a CMake target of the appropriate type for the target platform.
-#    2. Link the target to the Qt::Core library.
-#    3. Handle finalization of the CMake target.
-
-# set(CMAKE_CXX_STANDARD_REQUIRED ON) # Globally preventing the fallback behaviour of C++ standard
-
-# qt_standard_project_setup()  #set(CMAKE_AUTOUIC ON)  set(CMAKE_AUTOMOC ON)
-
-
-
-
-
-
-# cmake_minimum_required(VERSION 3.16)
-#
-# project(chess VERSION 0.1 LANGUAGES CXX)
-#
-# @if !true
-# set(CMAKE_AUTOMOC ON)
-# @endif
-# set(CMAKE_CXX_STANDARD_REQUIRED ON)
-#
-# find_package(Qt6 REQUIRED COMPONENTS Quick)
-#
-# @if true
-# @if true
-# qt_standard_project_setup(REQUIRES 6.9)
-# @else
-# qt_standard_project_setup()
-# @endif
-# @endif
-#
-# qt_add_executable(appchess
-#     main.cpp
-# )
-#
-# qt_add_qml_module(appchess
-#     URI chess
-#     VERSION 1.0
-#     QML_FILES
-#         Main.qml
-# )
-#
-# # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
-# # If you are developing for iOS or macOS you should consider setting an
-# # explicit, fixed bundle identifier manually though.
-# set_target_properties(appchess PROPERTIES
-# #    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.appchess
-#     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-#     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-#     MACOSX_BUNDLE TRUE
-#     WIN32_EXECUTABLE TRUE
-# )
-#
-# target_link_libraries(appchess
-#     PRIVATE Qt6::Quick
-# )
-#
-# include(GNUInstallDirs)
-# install(TARGETS appchess
-#     BUNDLE DESTINATION .
-#     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-# )
