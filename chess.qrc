@@ -9,5 +9,6 @@
         <file>images/bb3.png</file>
         <file>images/bb2.png</file>
         <file>images/bb1.png</file>
+        <file>images/settings.png</file>
     </qresource>
 </RCC>

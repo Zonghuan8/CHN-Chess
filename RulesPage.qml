@@ -32,12 +32,7 @@ Item {
                     Layout.alignment: Qt.AlignHCenter
                     color: "#8B4513"
                 }
-                Text {
-                    text: "中国象棋规则"
-                    font.pointSize: 18
-                    font.bold: true
-                    horizontalAlignment: Text.AlignHCenter
-                }
+
 
                 //规则内容
                 Text {

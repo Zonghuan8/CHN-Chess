@@ -32,6 +32,7 @@ qt_add_qml_module(appCHN-Chess
         QML_FILES RulesPage.qml
         QML_FILES AboutPage.qml
         RESOURCES music.qrc
+        QML_FILES settings.js
 
 
 )
