@@ -4,5 +4,10 @@
         <file>images/red_chess.png</file>
         <file>images/black_chess.png</file>
         <file>images/home_background.png</file>
+        <file>images/bamboo.png</file>
+        <file>images/bamboo2.png</file>
+        <file>images/bb3.png</file>
+        <file>images/bb2.png</file>
+        <file>images/bb1.png</file>
     </qresource>
 </RCC>
