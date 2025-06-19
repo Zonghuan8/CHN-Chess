@@ -10,22 +10,22 @@ Item {
     anchors.centerIn: parent
     property int square: width/10
     property alias boardLogic: chess
-    // 胜利动画组件
+    //胜利动画组件
     Rectangle {
         id: victoryOverlay
         anchors.fill: parent
-        color: "#80000000" // 半透明黑色
+        color: "#80000000"//半透明黑色
         visible: false
-        z: 100 // 确保在最上层
+        z: 100//确保在最上层
 
         property string winnerText: ""
         property color winnerColor: winnerText === "红方" ? "#ff0000" : "#0000ff"
 
-        // 胜利文本容器
+        //胜利文本容器
         Item {
             anchors.centerIn: parent
 
-            // 发光效果 - 使用多个文本层
+            //发光效果：使用多个文本层
             Text {
                 id: glowText
                 anchors.centerIn: parent
@@ -36,7 +36,7 @@ Item {
                 opacity: 0.7
             }
 
-            // 主文本
+            //主文本
             Text {
                 id: victoryText
                 anchors.centerIn: parent
@@ -49,12 +49,12 @@ Item {
             }
         }
 
-        // 进入动画
+        //进入动画
         SequentialAnimation {
             id: victoryAnimation
             running: false
 
-            // 淡入
+            //淡入
             NumberAnimation {
                 target: victoryOverlay
                 property: "opacity"
@@ -63,7 +63,7 @@ Item {
                 duration: 1000
             }
 
-            // 文字跳动
+            //文字跳动
             ParallelAnimation {
                 loops: Animation.Infinite
                 SequentialAnimation {
@@ -85,7 +85,7 @@ Item {
                     }
                 }
 
-                // 颜色变化
+                //颜色变化
                 SequentialAnimation {
                     ColorAnimation {
                         targets: [victoryText, glowText]
@@ -126,17 +126,17 @@ Item {
             Rectangle {
                 id: captureEffect
                 property point startPos
-                property bool isGeneral: false // 是否是将/帅
+                property bool isGeneral: false//是否是将/帅
 
                 width: _board.square
                 height: _board.square
                 radius: width / 2
                 color: "transparent"
-                border.color: isGeneral ? "#FFFF00" : "#FF0000" // 将军特殊颜色
+                border.color: isGeneral ? "#FFFF00" : "#FF0000"//将军特殊颜色
                 border.width: isGeneral ? 5 : 3
                 opacity: 0.8
 
-                // 将军特殊效果 - 使用旋转矩形
+                //将军特殊效果：使用旋转矩形
                 Rectangle {
                     anchors.fill: parent
                     anchors.margins: -5
@@ -164,7 +164,7 @@ Item {
                             target: captureEffect
                             property: "scale"
                             from: 1.0
-                            to: isGeneral ? 2.0 : 1.5 // 将军放大更多
+                            to: isGeneral ? 2.0 : 1.5//将军放大更多
                             duration: isGeneral ? 500 : 300
                         }
                         NumberAnimation {
@@ -190,7 +190,7 @@ Item {
         Board {
             id: chess
 
-            // 监听游戏结束信号
+            //监听游戏结束信号
             onGameOver: (winner) => {
                 victoryOverlay.winnerText = winner;
                 victoryOverlay.visible = true;
@@ -198,21 +198,21 @@ Item {
             }
 
             onStonesChanged: {
-                // 当棋子状态改变时，检查是否有棋子被吃
+                //当棋子状态改变时，检查是否有棋子被吃
                 for (var i = 0; i < chess.stones.length; i++) {
                     var stone = chess.stones[i];
                     if (stone.dead && !stone._handledDead) {
                         stone._handledDead = true;
 
-                        // 创建吃子动画效果
+                        //创建吃子动画效果
                         var startX = (stone.col + 1) * _board.square
                         var startY = (stone.row + 1) * _board.square
                         var anim = captureAnimation.createObject(boardBackground, {
                             startPos: Qt.point(startX, startY),
-                            isGeneral: (stone.type === Stone.JIANG) // 标记是否是将/帅
+                            isGeneral: (stone.type === Stone.JIANG)//标记是否是将/帅
                         });
 
-                        // 如果是将/帅，添加额外效果
+                        //如果是将/帅，添加额外效果
                         if (stone.type === Stone.JIANG) {
                             createGeneralCaptureEffect(startX, startY, stone.isRed);
                         }
@@ -220,14 +220,14 @@ Item {
                 }
             }
 
-            // 创建将军被吃的特殊效果
+            //创建将军被吃的特殊效果
             function createGeneralCaptureEffect(x, y, isRed) {
-                // 创建多个圆形扩散效果
+                //创建多个圆形扩散效果
                 for (var i = 0; i < 3; i++) {
                     (function(index) {
                         var delay = index * 200;
 
-                        // 创建AnimationEffect实例
+                        //创建AnimationEffect实例
                         var effect = Qt.createComponent("AnimationEffect.qml");
                         if (effect.status === Component.Ready) {
                             var obj = effect.createObject(boardBackground, {
@@ -273,11 +273,11 @@ Item {
                 ctx.stroke()
                 }
 
-                // 竖线
+                //竖线
                 for (var col = 1; col <= 9; col++) {
                     ctx.beginPath()
                     ctx.moveTo(col * _board.square, _board.square)
-                    ctx.lineTo(col * _board.square, _board.square * 5) // 上半部分
+                    ctx.lineTo(col * _board.square, _board.square * 5)//上半部分
                     ctx.stroke()
                 }
 
@@ -369,37 +369,37 @@ Item {
                           }
                       }
                 isRed: modelData.isRed
-                selected: modelData.selected  // 绑定到Stone的selected属性
-                visible: !modelData.dead // 死亡棋子不可见
+                selected: modelData.selected//绑定到Stone的selected属性
+                visible: !modelData.dead//死亡棋子不可见
                 }
             }
         }
 
     TapHandler {
         property int selectedPieceId: -1
-        property int selectedRow: -1 // 行坐标
-        property int selectedCol: -1 // 列坐标
+        property int selectedRow: -1//行坐标
+        property int selectedCol: -1//列坐标
 
         onTapped: (event) => {
-            // 如果游戏结束，不允许操作
+            //如果游戏结束，不允许操作
             if (victoryOverlay.visible) {
                 return;
             }
 
-            // chess.deselectPiece();
+            //chess.deselectPiece();
             var pos = chess.clickPosition(square, event.position.x, event.position.y);
-            var boardCol = pos.x - 1; // 点击位置的列
-            var boardRow = pos.y - 1; // 点击位置的行
+            var boardCol = pos.x - 1;//点击位置的列
+            var boardRow = pos.y - 1;//点击位置的行
 
                       for (var i = 0; i < chess.stones.length; i++) {
                                  var stone = chess.stones[i];
                                  if (stone.id !== -1) {
-                                     // 正确方式：使用赋值而不是调用函数
-                                     stone.selected = false;
+                                    //正确方式：使用赋值而不是调用函数
+                                    stone.selected = false;
                                  }
                              }
 
-            // 判断点击位置是否有棋子
+            //判断点击位置是否有棋子
             var hasPiece = chess.isPiece(boardCol, boardRow);
             var pieceId = hasPiece ? chess.getPieceId(boardCol, boardRow) : -1;
             var piece = hasPiece ? chess.getStoneById(pieceId) : null;
@@ -408,13 +408,13 @@ Item {
                        "有棋子:", hasPiece,
                        piece ? "ID:" + piece.id + " 类型:" + piece.type : "");
 
-            // 1. 点击位置有棋子
+            //1. 点击位置有棋子
             if (hasPiece) {
-                // 1.1 当前没有选中棋子
+                //1.1 当前没有选中棋子
                 if (selectedPieceId === -1) {
-                    // 检查是否轮到此方走棋 (判断颜色)
+                    //检查是否轮到此方走棋(判断颜色)
                     if ((piece.isRed && chess.isRedTurn) || (!piece.isRed && !chess.isRedTurn)) {
-                        // 选中棋子
+                        //选中棋子
                         selectedPieceId = pieceId;
                         selectedCol = boardCol;
                         selectedRow = boardRow;
@@ -425,24 +425,24 @@ Item {
                         console.log("不是当前回合的棋子");
                     }
                 }
-                // 1.2 当前已有选中棋子
+                //1.2当前已有选中棋子
                 else {
-                    // 获取当前选中棋子对象
+                    //获取当前选中棋子对象
                     var selectedPiece = chess.getStoneById(selectedPieceId);
 
-                    // 1.2.1 点击同一棋子：取消选中
+                    //1.2.1点击同一棋子：取消选中
                     if (selectedPieceId === pieceId) {
                         selectedPieceId = -1;
                         selectedRow = -1;
                         selectedCol = -1;
                         console.log("取消选中");
                     }
-                    // 1.2.2 点击己方其他棋子：切换选中
+                    //1.2.2点击己方其他棋子：切换选中
                     else if (piece.isRed === selectedPiece.isRed) {
-                        // 检查轮次
+                        //检查轮次
                         if ((piece.isRed && chess.isRedTurn) || (!piece.isRed && !chess.isRedTurn)) {
-                            selectedPiece.selected=false; // 取消前一个棋子的选中
-                            piece.selected=true; // 选中新棋子
+                            selectedPiece.selected=false;//取消前一个棋子的选中
+                            piece.selected=true;//选中新棋子
 
                             selectedPieceId = pieceId;
                             selectedCol = boardCol;
@@ -452,33 +452,33 @@ Item {
                             console.log("不是当前回合的棋子");
                         }
                     }
-                    // 1.2.3 点击敌方棋子：尝试吃子
+                    //1.2.3点击敌方棋子：尝试吃子
                     else {
                         console.log("尝试吃子: 从(", selectedCol, selectedRow, ")到(", boardCol, boardRow, ")");
 
-                        // 尝试移动棋子 (吃子)
+                        //尝试移动棋子(吃子)
                         if (chess.moveStone(selectedCol, selectedRow, boardCol, boardRow)) {
                             console.log("吃子成功");
-                            selectedPieceId = -1; // 清除选中状态
-                            // 不需要手动设置棋子状态，因为移动后棋子位置已经改变
+                            selectedPieceId = -1;//清除选中状态
+                            //不需要手动设置棋子状态，因为移动后棋子位置已经改变
                         } else {
                             console.log("吃子失败，不符合规则");
-                            // 移动失败保持选中状态
+                            //移动失败保持选中状态
                         }
                     }
                 }
             }
-            // 2. 点击空白位置
+            //2.点击空白位置
             else {
-                // 有选中棋子时尝试移动
+                //有选中棋子时尝试移动
                 if (selectedPieceId !== -1) {
-                    // 尝试移动棋子
+                    //尝试移动棋子
                     if (chess.moveStone(selectedCol, selectedRow, boardCol, boardRow)) {
                         console.log("移动成功");
-                        selectedPieceId = -1; // 清除选中状态
+                        selectedPieceId = -1;//清除选中状态
                     } else {
                         console.log("移动失败，不符合规则");
-                        // 移动失败保持选中状态
+                        //移动失败保持选中状态
                     }
                 } else {
                     console.log("无选中棋子");

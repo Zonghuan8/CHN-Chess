@@ -33,55 +33,53 @@ Item {
         }
 
         ToolButton {
-                    id: settingsButton
-                    anchors.left:parent.left
-                    anchors.top:parent.top
-                    anchors.margins: 10
-                    width: 40
-                    height: 40
-                    icon.source: "qrc:/images/settings.png"    // 设置图标路径
+            id: settingsButton
+            anchors.left:parent.left
+            anchors.top:parent.top
+            anchors.margins: 10
+            width: 40
+            height: 40
+            icon.source: "qrc:/images/settings.png"//设置图标路径
 
-                    // 设置菜单
+            //设置菜单
+            Menu {
+                id: settingsMenu
+                y: parent.height//菜单显示在按钮下方
+                x: parent.x//菜单与按钮左对齐
 
-                    Menu {
-                        id: settingsMenu
-                        y: parent.height     // 菜单显示在按钮下方
-                        x: parent.x          // 菜单与按钮左对齐
+            //音乐控制项
+            MenuItem {
+                id: musicMenuItem
+                text: "音乐"
+                icon.name: musicEnabled ? "audio-volume-high" : "audio-volume-muted"
+                onTriggered:{
+                    musicEnabled = !musicEnabled
+                    Controller.toggleMusic(musicEnabled)
+                }
+            }
 
-                        // 音乐控制项
-                        MenuItem {
-                            id: musicMenuItem
-                            text: "音乐"
-                            icon.name: musicEnabled ? "audio-volume-high" : "audio-volume-muted"
-                            onTriggered:{
-                                musicEnabled = !musicEnabled
-                                Controller.toggleMusic(musicEnabled)
-                            }
-                        }
+            //音效控制项
+            MenuItem {
+                id: soundMenuItem
+                text:"音效"
+                icon.name: soundEnabled ? "audio-volume-high" : "audio-volume-muted"
+                onTriggered: {
+                    soundEnabled = !soundEnabled
+                    Controller.toggleSound(soundEnabled)
+                }
+            }
 
-                        // 音效控制项
-                        MenuItem {
-                            id: soundMenuItem
-                            text:"音效"
-                            icon.name: soundEnabled ? "audio-volume-high" : "audio-volume-muted"
-                            onTriggered: {
-                                soundEnabled = !soundEnabled
-                                Controller.toggleSound(soundEnabled)
-                            }
-                        }
-
-                        MenuItem{
-                            id: quitItem
-                            text: "退出"
-                            icon.name: "application-exit"
-                            onTriggered: Qt.quit()
-                        }
-                    }
-                    onClicked: {
-                            settingsMenu.popup()
-                    }
-
+            MenuItem{
+                id: quitItem
+                text: "退出"
+                icon.name: "application-exit"
+                onTriggered: Qt.quit()
+            }
         }
+        onClicked: {
+            settingsMenu.popup()
+        }
+    }
 
         //竹叶粒子系统
         ParticleSystem {//逻辑粒子（不会自动渲染）：关联渲染器、发射器，管理共享时间线（对粒子系统的运行进行整体控制）

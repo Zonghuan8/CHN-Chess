@@ -1,4 +1,4 @@
-// moverecord.cpp
+//moverecord.cpp
 #include "moverecord.h"
 #include <QDebug>
 

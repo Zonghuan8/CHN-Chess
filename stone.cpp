@@ -1,4 +1,4 @@
-// stone.cpp
+//stone.cpp
 #include "stone.h"
 #include <QDebug>
 
@@ -10,7 +10,7 @@ void Stone::setSelected(bool selected)
 {
     if (m_selected != selected) {
         m_selected = selected;
-        emit selectedChanged(); // 触发信号
+        emit selectedChanged(); //触发信号
     }
 }
 
@@ -56,7 +56,7 @@ void Stone::init(int id)
     m_selected = false;
     m_red = (id < 16);
 
-    // qDebug() << "初始化棋子 ID:" << m_id << "位置: (" << m_col << "," << m_row << ")"
+    //qDebug() << "初始化棋子 ID:" << m_id << "位置: (" << m_col << "," << m_row << ")"
     //          << "类型:" << m_type << "颜色:" << (m_red ? "红" : "黑");
 }
 

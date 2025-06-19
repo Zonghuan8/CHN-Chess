@@ -34,9 +34,9 @@ public:
     TYPE type() const { return m_type; }
     bool isRed() const { return m_red; }
 
-    // 确保声明正确
-    bool selected() const { return m_selected; } // 读取选中状态
-    void setSelected(bool selected);             // 设置选中状态
+    //确保声明正确
+    bool selected() const { return m_selected; } //读取选中状态
+    void setSelected(bool selected);             //设置选中状态
 
     void init(int id);
     void setRow(int row);
@@ -44,7 +44,7 @@ public:
     void setDead(bool dead);
 
 signals:
-    void selectedChanged(); // 选中状态改变信号
+    void selectedChanged(); //选中状态改变信号
     void rowChanged();
     void colChanged();
     void deadChanged();
@@ -54,7 +54,7 @@ private:
     int m_row = 0;
     int m_col = 0;
     bool m_dead = false;
-    bool m_selected = false; // 选中状态
+    bool m_selected = false; //选中状态
     TYPE m_type;
     bool m_red = false;
 };

@@ -19,9 +19,43 @@ ApplicationWindow{
         id: stackView
         initialItem: "HomePage.qml"
         anchors.fill: parent
+
+        //推送和弹出操作的简单淡出式过渡
+        pushEnter: Transition {
+             PropertyAnimation {
+                 property: "opacity"
+                 from: 0
+                 to:1
+                 duration: 150
+             }
+         }
+         pushExit: Transition {
+             PropertyAnimation {
+                 property: "opacity"
+                 from: 1
+                 to:0
+                 duration: 150
+             }
+         }
+         popEnter: Transition {
+             PropertyAnimation {
+                 property: "opacity"
+                 from: 0
+                 to:1
+                 duration:150
+             }
+         }
+         popExit: Transition {
+             PropertyAnimation {
+                 property: "opacity"
+                 from: 1
+                 to:0
+                 duration:150
+             }
+         }
     }
 
     Component.onCompleted: {
-      Controller.initial(true,true);    //开始时音乐默认为开
+      Controller.initial(true,true);//开始时音乐默认为开
     }
 }

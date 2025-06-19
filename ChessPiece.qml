@@ -32,7 +32,7 @@ Item {
             color: "transparent"
             visible: root.selected
 
-            // 发光边框 - 使用径向渐变
+            //发光边框，使用径向渐变
             gradient: Gradient {
                 GradientStop { position: 0.0; color: root.isRed ? "#FFFF0080" : "#00FFFF80" }
                 GradientStop { position: 1.0; color: "transparent" }
@@ -53,7 +53,7 @@ Item {
             color: root.isRed ? "#B22222" : "#000000"
         }
     }
-    // 选中时的缩放效果
+    //选中时的缩放效果
     scale: selected ? 1.1 : 1.0
         Behavior on scale {
         NumberAnimation { duration: 200; easing.type: Easing.OutQuad }
