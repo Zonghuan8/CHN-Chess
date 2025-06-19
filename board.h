@@ -2,6 +2,8 @@
 #include <QObject>
 #include <QVector>
 #include "stone.h"
+#include "moverecord.h"
+#include <QStack>
 #include <QDebug>
 #include <QtQml/qqmlregistration.h>
 #include <QPoint>
@@ -34,15 +36,18 @@ public:
     Q_INVOKABLE bool trySelectStone(int col, int row);
 
     Q_INVOKABLE bool canMove(int moveid, int killid, int col, int row);
-
+    Q_INVOKABLE void undoMove();
 signals:
     void gameOver(QString winner); // 新增：游戏结束信号
     void redTurnChanged();
     void stonesChanged();
+    void undoPerformed();
     void selectionCleared();
 public slots:
 
 private:
+    void reliveStone(int id);
+    void backOne();
     bool checkJiangFaceOff(int moveid, int killid);
     bool canMoveChe(int moveid, int killid, int col, int row);
     bool canMoveMa(int moveid, int killid, int col, int row);
@@ -57,4 +62,5 @@ private:
     int m_selectid = -1;
     bool m_bRedTurn = true;
     bool m_bSide = false; // true为红方在下
+    QList<MoveRecord> m_steps;
 };

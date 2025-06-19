@@ -9,7 +9,7 @@ Item {
     height: parent.height
     anchors.centerIn: parent
     property int square: width/10
-
+    property alias boardLogic: chess
     // 胜利动画组件
     Rectangle {
         id: victoryOverlay

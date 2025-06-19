@@ -18,10 +18,22 @@ Board::Board(QObject *parent) : QObject(parent)
 
 void Board::initGame()
 {
-    //重置所有棋子状态
+    // 清空历史记录
+    m_steps.clear();
+    qDebug() << "游戏初始化: 清空历史记录";
+
+    // 重置所有棋子状态
     for (Stone *stone : m_stones) {
         stone->init(stone->id());
     }
+
+    // 重置游戏状态
+    m_bRedTurn = true;
+    m_gameOver = false;
+    m_selectid = -1;
+
+    qDebug() << "游戏初始化完成";
+
     emit stonesChanged();
 }
 
@@ -109,6 +121,11 @@ bool Board::moveStone(int fromCol, int fromRow, int toCol, int toRow)
     m_stones[moveid]->setCol(toCol);
     m_stones[moveid]->setRow(toRow);
 
+    MoveRecord record(moveid, fromRow, fromCol, toRow, toCol, killid, (killid != -1) ? m_stones[killid]->dead() : false);
+
+    // 存储移动记录到步骤列表
+    m_steps.append(record);
+    qDebug() << "记录移动：" << record.toString() << "总步数:" << m_steps.size();
     // 处理吃棋
     if (killid != -1) {
         // 标记被吃棋子为死亡状态
@@ -180,6 +197,7 @@ bool Board::canMove(int moveid, int killid, int col, int row)
         return false;
     }
 }
+
 //车
 bool Board::canMoveChe(int moveid, int killid, int col, int row)
 {
@@ -552,4 +570,57 @@ bool Board::canMoveXiang(int moveid, int killid, int col, int row)
 
     qDebug() << "相/象移动合法";
     return true;
+}
+
+void Board::reliveStone(int id)
+{
+    if (id != -1) {
+        Stone *stone = getStoneById(id);
+        if (stone) { stone->setDead(false); }
+    }
+}
+
+void Board::backOne()
+{
+    if (m_steps.size() == 0) {
+        qDebug() << "无法悔棋: 没有历史记录";
+        return;
+    }
+
+    // 获取最后一步记录
+    MoveRecord record = m_steps.last();
+    m_steps.removeLast();
+
+    qDebug() << "悔棋：" << record.toString();
+
+    // 复活被吃的棋子
+    reliveStone(record.killId());
+
+    // 移动棋子回原位置
+    Stone *movedStone = getStoneById(record.moveId());
+    if (movedStone) {
+        movedStone->setRow(record.fromRow());
+        movedStone->setCol(record.fromCol());
+        qDebug() << "恢复棋子" << record.moveId() << "到位置(" << record.fromCol() << "," << record.fromRow() << ")";
+    }
+
+    // 恢复游戏状态
+    m_bRedTurn = !m_bRedTurn; // 切换回之前的玩家回合
+    m_gameOver = false;       // 取消游戏结束状态
+
+    // 更新界面
+    emit stonesChanged();
+    clearSelection();
+    emit undoPerformed();
+}
+
+void Board::undoMove()
+{
+    qDebug() << "尝试悔棋...";
+    qDebug() << "历史记录数:" << m_steps.size();
+    qDebug() << "游戏结束状态:" << m_gameOver;
+
+    if (m_gameOver) { qDebug() << "游戏已结束，允许悔棋..."; }
+
+    backOne();
 }
