@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
+import "settings.js" as Controller
 
 ApplicationWindow{
     id:root
@@ -25,5 +26,9 @@ ApplicationWindow{
         anchors.fill: parent
         source: "qrc:/images/background.png"
         opacity: 0.3
+    }
+
+    Component.onCompleted: {
+      Controller.initial(true,true);    //开始时音乐默认为开
     }
 }

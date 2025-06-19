@@ -3,6 +3,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Particles//提供了对粒子系统的支持
+import "settings.js" as Controller
 
 Item {
     id: _home
@@ -19,6 +20,9 @@ Item {
 
     signal gameModeSelected(string mode)//通知主窗口选择了游戏模式
 
+    property bool musicEnabled: true
+    property bool soundEnabled: true
+
     Rectangle{
         id: _homeBackground
         anchors.fill: parent
@@ -28,6 +32,56 @@ Item {
             source: "qrc:/images/home_background.png"
         }
 
+        ToolButton {
+                    id: settingsButton
+                    anchors.left:parent.left
+                    anchors.top:parent.top
+                    anchors.margins: 10
+                    width: 40
+                    height: 40
+                    icon.source: "qrc:/images/settings.png"    // 设置图标路径
+
+                    // 设置菜单
+
+                    Menu {
+                        id: settingsMenu
+                        y: parent.height     // 菜单显示在按钮下方
+                        x: parent.x          // 菜单与按钮左对齐
+
+                        // 音乐控制项
+                        MenuItem {
+                            id: musicMenuItem
+                            text: "音乐"
+                            icon.name: musicEnabled ? "audio-volume-high" : "audio-volume-muted"
+                            onTriggered:{
+                                musicEnabled = !musicEnabled
+                                Controller.toggleMusic(musicEnabled)
+                            }
+                        }
+
+                        // 音效控制项
+                        MenuItem {
+                            id: soundMenuItem
+                            text:"音效"
+                            icon.name: soundEnabled ? "audio-volume-high" : "audio-volume-muted"
+                            onTriggered: {
+                                soundEnabled = !soundEnabled
+                                Controller.toggleSound(soundEnabled)
+                            }
+                        }
+
+                        MenuItem{
+                            id: quitItem
+                            text: "退出"
+                            icon.name: "application-exit"
+                            onTriggered: Qt.quit()
+                        }
+                    }
+                    onClicked: {
+                            settingsMenu.popup()
+                    }
+
+        }
         //竹叶粒子系统
         ParticleSystem {//逻辑粒子（不会自动渲染）：关联渲染器、发射器，管理共享时间线（对粒子系统的运行进行整体控制）
             id: _bamboo
@@ -39,32 +93,32 @@ Item {
                 delegate:
                     //竹叶精灵动画
                     SpriteSequence {
-                        id: _bamboosa
-                        width: 40
-                        height: 40
-                        interpolate: true
-                        Sprite {
-                            name: "leaf1"
-                           source: "qrc:/images/bb1.png"
-                           frameCount: 1
-                           frameDuration: 1000
-                           to: {"leaf2": 1}//只过渡到一个组，权重设置为1
-                        }
-                        Sprite {
-                           name: "leaf2"
-                           source: "qrc:/images/bb2.png"
-                           frameCount: 1
-                           frameDuration: 1000
-                           to: {"leaf3": 1}
-                        }
-                        Sprite {
-                            name: "leaf3"
-                            source: "qrc:/images/bb3.png"
-                            frameCount: 1
-                            frameDuration: 1000
-                            to: {"leaf2": 1}
-                         }
+                    id: _bamboosa
+                    width: 40
+                    height: 40
+                    interpolate: true
+                    Sprite {
+                        name: "leaf1"
+                        source: "qrc:/images/bb1.png"
+                        frameCount: 1
+                        frameDuration: 1000
+                        to: {"leaf2": 1}//只过渡到一个组，权重设置为1
                     }
+                    Sprite {
+                        name: "leaf2"
+                        source: "qrc:/images/bb2.png"
+                        frameCount: 1
+                        frameDuration: 1000
+                        to: {"leaf3": 1}
+                    }
+                    Sprite {
+                        name: "leaf3"
+                        source: "qrc:/images/bb3.png"
+                        frameCount: 1
+                        frameDuration: 1000
+                        to: {"leaf2": 1}
+                    }
+                }
             }
 
             //发射器
