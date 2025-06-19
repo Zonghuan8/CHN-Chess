@@ -10,5 +10,6 @@
         <file>images/bb2.png</file>
         <file>images/bb1.png</file>
         <file>images/settings.png</file>
+        <file>images/bg.png</file>
     </qresource>
 </RCC>

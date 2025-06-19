@@ -8,10 +8,14 @@ Item {
     width: 600
     height: 800
 
-    //窗口过大时填充背景
-    Rectangle {
+    Rectangle{
         anchors.fill: parent
-        color: "#f0e0d0"
+        Image {
+            source: "qrc:/images/bg.png"
+            anchors.fill: parent
+            opacity: 0.3
+        }
+        color:"#f0e0d0"
 
         ScrollView {
             anchors.fill: parent

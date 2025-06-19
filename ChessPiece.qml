@@ -29,7 +29,6 @@ Item {
             id: glowEffect
             anchors.fill: parent
             radius: width / 2
-// <<<<<<< HEAD
             color: "transparent"
             visible: root.selected
 
@@ -38,9 +37,7 @@ Item {
                 GradientStop { position: 0.0; color: root.isRed ? "#FFFF0080" : "#00FFFF80" }
                 GradientStop { position: 1.0; color: "transparent" }
             }
-// =======
-//             color: root.isRed ? "#FFC0C0" : "#E0E0E0"
-// >>>>>>> CHN-Chess/main
+            //color: root.isRed ? "#FFC0C0" : "#E0E0E0"
         }
 
         //棋子文字
@@ -55,14 +52,11 @@ Item {
             }
             color: root.isRed ? "#B22222" : "#000000"
         }
-// <<<<<<< HEAD
     }
     // 选中时的缩放效果
     scale: selected ? 1.1 : 1.0
         Behavior on scale {
         NumberAnimation { duration: 200; easing.type: Easing.OutQuad }
-// =======
-// >>>>>>> CHN-Chess/main
     }
 }
 

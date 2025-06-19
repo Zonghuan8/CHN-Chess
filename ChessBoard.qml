@@ -16,9 +16,12 @@ Item {
         width:parent.width
         anchors.fill: parent
         color: "#f0e0d0"
-        border.width:4
-        border.color: "#DCB35C"
-        radius: 4
+
+        Image {
+            anchors.fill: parent
+            source: "qrc:/images/background.png"
+            opacity: 0.3
+        }
 
         Canvas {
             id: boardCanvas
@@ -147,7 +150,6 @@ Item {
                 }
             }
         }
-
 
     TapHandler {
         property int selectedPieceId: -1

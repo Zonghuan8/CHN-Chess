@@ -16,10 +16,9 @@ Item {
         property string fontFamily: "FZKai\-Z03"
     }
 
-    //窗口过大时填充背景
-    Rectangle {
+    Image {
+        source: "qrc:/images/bg.png"
         anchors.fill: parent
-        color: "#f0e0d0"
     }
 
     ColumnLayout {
