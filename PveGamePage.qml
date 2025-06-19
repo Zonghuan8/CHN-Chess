@@ -66,7 +66,6 @@ Item {
                 anchors.centerIn: parent
             }
         }
-
         //底部按钮区域
         RowLayout{
             Layout.fillWidth: true
@@ -95,9 +94,6 @@ Item {
                 font {
                     pixelSize: buttonStyle.fontSize
                     family: buttonStyle.fontFamily
-                }
-                onClicked: {
-                    //悔棋逻辑
                 }
             }
         }

@@ -1,5 +1,6 @@
-//棋盘
+// ChessBoard.qml
 import QtQuick
+import QtQuick.Controls
 import Chess 1.0
 
 Item {
@@ -8,6 +9,102 @@ Item {
     height: parent.height
     anchors.centerIn: parent
     property int square: width/10
+    property alias boardLogic: chess
+    // 胜利动画组件
+    Rectangle {
+        id: victoryOverlay
+        anchors.fill: parent
+        color: "#80000000" // 半透明黑色
+        visible: false
+        z: 100 // 确保在最上层
+
+        property string winnerText: ""
+        property color winnerColor: winnerText === "红方" ? "#ff0000" : "#0000ff"
+
+        // 胜利文本容器
+        Item {
+            anchors.centerIn: parent
+
+            // 发光效果 - 使用多个文本层
+            Text {
+                id: glowText
+                anchors.centerIn: parent
+                text: victoryOverlay.winnerText + "胜利!"
+                font.pixelSize: 60
+                font.bold: true
+                color: victoryOverlay.winnerColor
+                opacity: 0.7
+            }
+
+            // 主文本
+            Text {
+                id: victoryText
+                anchors.centerIn: parent
+                text: victoryOverlay.winnerText + "胜利!"
+                font.pixelSize: 60
+                font.bold: true
+                color: "white"
+                style: Text.Outline
+                styleColor: "#40000000"
+            }
+        }
+
+        // 进入动画
+        SequentialAnimation {
+            id: victoryAnimation
+            running: false
+
+            // 淡入
+            NumberAnimation {
+                target: victoryOverlay
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: 1000
+            }
+
+            // 文字跳动
+            ParallelAnimation {
+                loops: Animation.Infinite
+                SequentialAnimation {
+                    NumberAnimation {
+                        target: victoryText
+                        property: "scale"
+                        from: 1.0
+                        to: 1.1
+                        duration: 500
+                        easing.type: Easing.InOutQuad
+                    }
+                    NumberAnimation {
+                        target: victoryText
+                        property: "scale"
+                        from: 1.1
+                        to: 1.0
+                        duration: 500
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+
+                // 颜色变化
+                SequentialAnimation {
+                    ColorAnimation {
+                        targets: [victoryText, glowText]
+                        property: "color"
+                        from: "white"
+                        to: victoryOverlay.winnerColor
+                        duration: 1000
+                    }
+                    ColorAnimation {
+                        targets: [victoryText, glowText]
+                        property: "color"
+                        from: victoryOverlay.winnerColor
+                        to: "white"
+                        duration: 1000
+                    }
+                }
+            }
+        }
+    }
 
     //棋盘背景
     Rectangle {
@@ -21,6 +118,136 @@ Item {
             anchors.fill: parent
             source: "qrc:/images/background.png"
             opacity: 0.3
+        }
+
+        Component {
+            id: captureAnimation
+
+            Rectangle {
+                id: captureEffect
+                property point startPos
+                property bool isGeneral: false // 是否是将/帅
+
+                width: _board.square
+                height: _board.square
+                radius: width / 2
+                color: "transparent"
+                border.color: isGeneral ? "#FFFF00" : "#FF0000" // 将军特殊颜色
+                border.width: isGeneral ? 5 : 3
+                opacity: 0.8
+
+                // 将军特殊效果 - 使用旋转矩形
+                Rectangle {
+                    anchors.fill: parent
+                    anchors.margins: -5
+                    radius: parent.radius
+                    color: "transparent"
+                    visible: isGeneral
+                    border.color: "#FFFFFF"
+                    border.width: 2
+
+                    RotationAnimation on rotation {
+                        from: 0
+                        to: 360
+                        duration: 1000
+                        loops: Animation.Infinite
+                        running: isGeneral
+                    }
+                }
+
+                SequentialAnimation {
+                    id: anim
+                    running: true
+
+                    ParallelAnimation {
+                        NumberAnimation {
+                            target: captureEffect
+                            property: "scale"
+                            from: 1.0
+                            to: isGeneral ? 2.0 : 1.5 // 将军放大更多
+                            duration: isGeneral ? 500 : 300
+                        }
+                        NumberAnimation {
+                            target: captureEffect
+                            property: "opacity"
+                            from: 1.0
+                            to: 0.0
+                            duration: isGeneral ? 500 : 300
+                        }
+                    }
+                    ScriptAction {
+                        script: captureEffect.destroy()
+                    }
+                }
+
+                Component.onCompleted: {
+                    x = startPos.x - width / 2
+                    y = startPos.y - height / 2
+                }
+            }
+        }
+
+        Board {
+            id: chess
+
+            // 监听游戏结束信号
+            onGameOver: (winner) => {
+                victoryOverlay.winnerText = winner;
+                victoryOverlay.visible = true;
+                victoryAnimation.start();
+            }
+
+            onStonesChanged: {
+                // 当棋子状态改变时，检查是否有棋子被吃
+                for (var i = 0; i < chess.stones.length; i++) {
+                    var stone = chess.stones[i];
+                    if (stone.dead && !stone._handledDead) {
+                        stone._handledDead = true;
+
+                        // 创建吃子动画效果
+                        var startX = (stone.col + 1) * _board.square
+                        var startY = (stone.row + 1) * _board.square
+                        var anim = captureAnimation.createObject(boardBackground, {
+                            startPos: Qt.point(startX, startY),
+                            isGeneral: (stone.type === Stone.JIANG) // 标记是否是将/帅
+                        });
+
+                        // 如果是将/帅，添加额外效果
+                        if (stone.type === Stone.JIANG) {
+                            createGeneralCaptureEffect(startX, startY, stone.isRed);
+                        }
+                    }
+                }
+            }
+
+            // 创建将军被吃的特殊效果
+            function createGeneralCaptureEffect(x, y, isRed) {
+                // 创建多个圆形扩散效果
+                for (var i = 0; i < 3; i++) {
+                    (function(index) {
+                        var delay = index * 200;
+
+                        // 创建AnimationEffect实例
+                        var effect = Qt.createComponent("AnimationEffect.qml");
+                        if (effect.status === Component.Ready) {
+                            var obj = effect.createObject(boardBackground, {
+                                centerX: x,
+                                centerY: y,
+                                effectColor: isRed ? "#ff0000" : "#0000ff",
+                                square: _board.square,
+                                delay: delay
+                            });
+
+                            if (!obj) {
+                                console.error("Failed to create AnimationEffect object");
+                            }
+                        } else {
+                            console.error("Component not ready:", effect.errorString());
+                        }
+                    })(i);
+                }
+
+            }
         }
 
         Canvas {
@@ -123,10 +350,6 @@ Item {
             styleColor: "#00000011"
         }
 
-        Board{
-            id:chess
-        }
-
         Repeater {
             model: chess.stones
             delegate: ChessPiece {
@@ -147,6 +370,7 @@ Item {
                       }
                 isRed: modelData.isRed
                 selected: modelData.selected  // 绑定到Stone的selected属性
+                visible: !modelData.dead // 死亡棋子不可见
                 }
             }
         }
@@ -157,6 +381,11 @@ Item {
         property int selectedCol: -1 // 列坐标
 
         onTapped: (event) => {
+            // 如果游戏结束，不允许操作
+            if (victoryOverlay.visible) {
+                return;
+            }
+
             // chess.deselectPiece();
             var pos = chess.clickPosition(square, event.position.x, event.position.y);
             var boardCol = pos.x - 1; // 点击位置的列

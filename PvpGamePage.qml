@@ -2,7 +2,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-
+import Chess 1.0
 Item {
     id: _pvp
     width: 600
@@ -67,7 +67,9 @@ Item {
                 anchors.centerIn: parent
             }
         }
-
+        // Board{
+        //     id:ch
+        // }
         //底部按钮区域
         RowLayout{
             Layout.fillWidth: true
@@ -99,6 +101,7 @@ Item {
                 }
                 onClicked: {
                     //悔棋逻辑
+                    _board.boardLogic.undoMove()
                 }
             }
         }

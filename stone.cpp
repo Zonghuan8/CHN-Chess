@@ -6,11 +6,6 @@ Stone::Stone(QObject *parent) : QObject(parent) {}
 
 Stone::~Stone() {}
 
-// bool Stone::selected() const
-// {
-//     return m_selected;
-// }
-
 void Stone::setSelected(bool selected)
 {
     if (m_selected != selected) {
