@@ -30,8 +30,10 @@ public:
     Q_INVOKABLE bool isPiece(int x, int y); //判断是否为棋子
 
     Q_INVOKABLE int getPieceId(int x, int y); //获取棋子id
+
     Q_INVOKABLE void setSelectedPieceId(int id);
     Q_INVOKABLE void clearSelection();
+
     //走棋和吃棋方法
     Q_INVOKABLE bool moveStone(int fromRow, int fromCol, int toCol, int toRow);
     Q_INVOKABLE bool trySelectStone(int col, int row);
@@ -47,6 +49,17 @@ public:
             emit redTurnChanged();
         }
     }
+
+    // signals:
+    //     void gameOver(QString winner); //新增：游戏结束信号
+    //     void redTurnChanged();
+    //     void stonesChanged();
+    //     void undoPerformed();
+    //     void selectionCleared();
+    // public slots:
+
+    // private:
+    // >>>>>>> CHN-Chess/main
     void reliveStone(int id);
     void backOne();
     bool checkJiangFaceOff(int moveid, int killid);
@@ -62,6 +75,7 @@ public:
     QVector<Stone *> m_stones;  //存储所有棋子
     int m_selectid = -1;
     bool m_bRedTurn = true;
+
     bool m_bSide = false;
     QList<MoveRecord> m_steps;
 signals:
@@ -71,4 +85,7 @@ signals:
     void undoPerformed();
     void selectionCleared();
 public slots:
+
+    // bool m_bSide = false; //true为红方在下
+    // QList<MoveRecord> m_steps;
 };

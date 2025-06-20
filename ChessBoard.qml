@@ -381,6 +381,14 @@ Item {
         property int selectedCol: -1//列坐标
 
         onTapped: (event) => {
+// <<<<<<< HEAD
+// =======
+//             //如果游戏结束，不允许操作
+//             if (victoryOverlay.visible) {
+//                 return;
+//             }
+
+// >>>>>>> CHN-Chess/main
             //chess.deselectPiece();
             var pos = chess.clickPosition(square, event.position.x, event.position.y);
             var boardCol = pos.x - 1;//点击位置的列
@@ -482,4 +490,7 @@ Item {
         }
     }
 }
+// <<<<<<< HEAD
 
+// =======
+// >>>>>>> CHN-Chess/main
