@@ -55,6 +55,12 @@ Item {
                 onTriggered:{
                     musicEnabled = !musicEnabled
                     Controller.toggleMusic(musicEnabled)
+                    if (musicEnabled)
+                    {
+                      player.bgMusic.play()
+                    }else {
+                     player.bgMusic.pause()
+                           }
                 }
             }
 
@@ -66,6 +72,11 @@ Item {
                 onTriggered: {
                     soundEnabled = !soundEnabled
                     Controller.toggleSound(soundEnabled)
+                    if (soundEnabled)
+                       player.moveSound.play()
+                    else{
+                      player.moveSound.pause()
+                    }
                 }
             }
 

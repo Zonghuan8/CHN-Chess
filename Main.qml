@@ -12,9 +12,6 @@ ApplicationWindow{
     visible: true
     title: qsTr("中国象棋")
 
-    property string currentPage: "home"//当前页面
-    property string currentGameMode: "pvp"//当前游戏模式
-
     StackView {
         id: stackView
         initialItem: "HomePage.qml"
@@ -53,6 +50,10 @@ ApplicationWindow{
                  duration:150
              }
          }
+    }
+
+    MusicPlayer {
+       id: player
     }
 
     Component.onCompleted: {

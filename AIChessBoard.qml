@@ -584,6 +584,7 @@ Item {
                 //尝试移动棋子
                 if (boardLogic.moveStone(selectedCol, selectedRow, boardCol, boardRow)) {
                     console.log("移动成功");
+                    player.moveSound.play()
                     selectedPieceId = -1; //清除选中状态
 
                     //检查是否需要AI移动
