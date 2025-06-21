@@ -18,8 +18,6 @@ Item {
         property string fontFamily: "FZMiaoWuS\-GB"
     }
 
-    signal gameModeSelected(string mode)//通知主窗口选择了游戏模式
-
     property bool musicEnabled: true
     property bool soundEnabled: true
 
@@ -55,6 +53,12 @@ Item {
                 onTriggered:{
                     musicEnabled = !musicEnabled
                     Controller.toggleMusic(musicEnabled)
+                    if (musicEnabled)
+                    {
+                      musicPlayer.bgMusic.play()
+                    }else {
+                     musicPlayer.bgMusic.pause()
+                           }
                 }
             }
 
@@ -66,6 +70,10 @@ Item {
                 onTriggered: {
                     soundEnabled = !soundEnabled
                     Controller.toggleSound(soundEnabled)
+                    if (soundEnabled)
+                      musicPlayer.moveSound.play()
+                    else
+                      musicPlayer.moveSound.pause()
                 }
             }
 

@@ -37,6 +37,8 @@ qt_add_qml_module(appCHN-Chess
         SOURCES moverecord.h moverecord.cpp
 
         QML_FILES settings.js
+        SOURCES
+        QML_FILES Player.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

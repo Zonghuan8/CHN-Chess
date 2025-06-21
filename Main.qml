@@ -9,11 +9,10 @@ ApplicationWindow{
     height: 800
     minimumWidth: 600
     minimumHeight: 800
+    maximumHeight: 800
+    maximumWidth: 600
     visible: true
     title: qsTr("中国象棋")
-
-    property string currentPage: "home"//当前页面
-    property string currentGameMode: "pvp"//当前游戏模式
 
     StackView {
         id: stackView
@@ -53,6 +52,10 @@ ApplicationWindow{
                  duration:150
              }
          }
+    }
+
+    Player {
+       id: musicPlayer
     }
 
     Component.onCompleted: {

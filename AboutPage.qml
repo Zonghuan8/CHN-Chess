@@ -5,7 +5,6 @@ import QtQuick.Layouts
 import QtCore
 
 Item {
-
     id: _aboutPage
     width: 600
     height: 800
