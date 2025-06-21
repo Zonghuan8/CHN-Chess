@@ -394,11 +394,14 @@ Item {
         property int selectedCol: -1//列坐标
 
         onTapped: (event) => {
-            //如果游戏结束，不允许操作
-            if (victoryOverlay.visible) {
-                return;
-            }
+// <<<<<<< HEAD
+// =======
+//             //如果游戏结束，不允许操作
+//             if (victoryOverlay.visible) {
+//                 return;
+//             }
 
+// >>>>>>> CHN-Chess/main
             //chess.deselectPiece();
             var pos = chess.clickPosition(square, event.position.x, event.position.y);
             var boardCol = pos.x - 1;//点击位置的列
@@ -471,6 +474,7 @@ Item {
 
                         //尝试移动棋子(吃子)
                         if (chess.moveStone(selectedCol, selectedRow, boardCol, boardRow)) {
+                             player.captureSound.play()
                             console.log("吃子成功");
                             selectedPieceId = -1;//清除选中状态
                             //不需要手动设置棋子状态，因为移动后棋子位置已经改变
@@ -487,6 +491,7 @@ Item {
                 if (selectedPieceId !== -1) {
                     //尝试移动棋子
                     if (chess.moveStone(selectedCol, selectedRow, boardCol, boardRow)) {
+                        player.moveSound.play()
                         console.log("移动成功");
                         selectedPieceId = -1;//清除选中状态
                     } else {
@@ -500,3 +505,7 @@ Item {
         }
     }
 }
+// <<<<<<< HEAD
+
+// =======
+// >>>>>>> CHN-Chess/main

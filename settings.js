@@ -3,7 +3,7 @@ var musicEnabled = true;
 var soundEnabled = true;
 
 function initial() {
-    console.log("游戏初始化完成，音乐:开启,音效: 开启" );
+   console.log("游戏初始化完成，音乐:开启,音效: 开启" );
 }
 
 //音乐控制函数

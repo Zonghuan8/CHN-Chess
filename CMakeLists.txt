@@ -31,7 +31,6 @@ qt_add_qml_module(appCHN-Chess
         SOURCES board.h board.cpp
         QML_FILES RulesPage.qml
         QML_FILES AboutPage.qml
-        RESOURCES music.qrc
 
         QML_FILES AnimationEffect.qml
         SOURCES moverecord.h moverecord.cpp
@@ -39,6 +38,12 @@ qt_add_qml_module(appCHN-Chess
         QML_FILES settings.js
         SOURCES
         QML_FILES Player.qml
+
+        SOURCES aigameboard.h aigameboard.cpp
+        QML_FILES AIChessBoard.qml
+
+        QML_FILES MusicPlayer.qml
+        RESOURCES music.qrc
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

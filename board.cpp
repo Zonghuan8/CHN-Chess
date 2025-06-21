@@ -1,4 +1,8 @@
 #include "board.h"
+
+// #include <QTime>
+// #include <QtGlobal>
+
 #include <QPoint>
 #include <QDebug>
 Board::Board(QObject *parent) : QObject(parent)
@@ -9,11 +13,14 @@ Board::Board(QObject *parent) : QObject(parent)
         stone->init(i);
         m_stones.append(stone);
     }
+    // <<<<<<< HEAD
+    // =======
 
-    // for (Stone *stone : m_stones) {
-    //     qDebug() << "验证棋子 ID:" << stone->id() << "位置: (" << stone->col() << "," << stone->row() << ")"
-    //              << "类型:" << stone->type() << "颜色:" << (stone->isRed() ? "红" : "黑");
-    // }
+    for (Stone *stone : m_stones) {
+        qDebug() << "验证棋子 ID:" << stone->id() << "位置: (" << stone->col() << "," << stone->row() << ")"
+                 << "类型:" << stone->type() << "颜色:" << (stone->isRed() ? "红" : "黑");
+    }
+    // >>>>>>> CHN-Chess/main
 }
 
 void Board::initGame()
@@ -206,17 +213,17 @@ bool Board::canMoveChe(int moveid, int killid, int col, int row)
 
     //检查目标位置是否在棋盘范围内
     if (row < 0 || row > 9 || col < 0 || col > 8) {
-        qDebug() << "兵移动：目标位置超出棋盘范围";
+        // qDebug() << "兵移动：目标位置超出棋盘范围";
+
         return false;
     }
 
     //同行或同列
     if (fromRow != row && fromCol != col) {
-        qDebug() << "车移动：必须同行或同列";
+        // qDebug() << "车移动：必须同行或同列";
         return false;
     }
 
-    //qDebug() << "车移动: 从(" << fromCol << "," << fromRow << ") 到 (" << col << "," << row << ")";
     //检查路径是否有阻挡
     if (fromRow == row) { //水平移动：检查列
         int minCol = qMin(fromCol, col);
@@ -266,14 +273,16 @@ bool Board::canMoveMa(int moveid, int, int targetCol, int targetRow)
 
             //检查马腿位置是否有棋子
             if (getPieceId(legCol, legRow) != -1) {
-                qDebug() << "马腿被绊，位置:(" << legCol << "," << legRow << ")";
+                // qDebug() << "马腿被绊，位置:(" << legCol << "," << legRow << ")";
+
                 return false;
             }
 
             //检查目标位置是否有己方棋子
             int targetId = getPieceId(targetCol, targetRow);
             if (targetId != -1 && m_stones[targetId]->isRed() == movingStone->isRed()) {
-                qDebug() << "尝试吃己方棋子，移动失败";
+                // qDebug() << "尝试吃己方棋子，移动失败";
+
                 return false;
             }
 
@@ -282,7 +291,9 @@ bool Board::canMoveMa(int moveid, int, int targetCol, int targetRow)
     }
 
     //没有找到通往目标位置的合法路径
-    qDebug() << "不符合马的走法规则";
+
+    // qDebug() << "不符合马的走法规则";
+
     return false;
 }
 
@@ -290,7 +301,8 @@ bool Board::canMovePao(int moveid, int killid, int col, int row)
 {
     //检查目标位置是否合法
     if (row < 0 || row > 9 || col < 0 || col > 8) {
-        qDebug() << "炮移动：目标位置超出棋盘范围";
+        //qDebug() << "炮移动：目标位置超出棋盘范围";
+
         return false;
     }
 
@@ -300,7 +312,8 @@ bool Board::canMovePao(int moveid, int killid, int col, int row)
 
     //炮只能直行
     if (fromRow != row && fromCol != col) {
-        qDebug() << "炮移动：只能直行";
+        // qDebug() << "炮移动：只能直行";
+
         return false;
     }
 
@@ -312,9 +325,10 @@ bool Board::canMovePao(int moveid, int killid, int col, int row)
         int endCol = qMax(fromCol, col);
 
         for (int c = startCol; c < endCol; c++) {
-            //修正参数顺序：col在前，row在后
+            //col在前，row在后
             if (getPieceId(c, row) != -1) {
-                qDebug() << "发现中间棋子，位置:(" << c << "," << row << ")";
+                // qDebug() << "发现中间棋子，位置:(" << c << "," << row << ")";
+
                 stoneCount++;
             }
         }
@@ -325,7 +339,7 @@ bool Board::canMovePao(int moveid, int killid, int col, int row)
         for (int r = startRow; r < endRow; r++) {
             //修正参数顺序：col在前，row在后
             if (getPieceId(col, r) != -1) {
-                qDebug() << "发现中间棋子，位置:(" << col << "," << r << ")";
+                // qDebug() << "发现中间棋子，位置:(" << col << "," << r << ")";
                 stoneCount++;
             }
         }
@@ -334,43 +348,50 @@ bool Board::canMovePao(int moveid, int killid, int col, int row)
     //炮的走法规则
     if (killid == -1) { //移动
         if (stoneCount != 0) {
-            qDebug() << "炮移动：路径上有" << stoneCount << "个棋子，必须为0";
+            // qDebug() << "炮移动：路径上有" << stoneCount << "个棋子，必须为0";
+
             return false;
         }
 
         //目标位置必须为空
         int targetId = getPieceId(col, row);
         if (targetId != -1) {
-            qDebug() << "炮移动：目标位置有棋子，ID=" << targetId;
+            // qDebug() << "炮移动：目标位置有棋子，ID=" << targetId;
+
             return false;
         }
 
         return true;
     } else { //吃子
         if (stoneCount != 1) {
-            qDebug() << "炮吃子：路径上有" << stoneCount << "个棋子，必须为1";
+            // qDebug() << "炮吃子：路径上有" << stoneCount << "个棋子，必须为1";
+
             return false;
         }
 
         //验证killid有效性
         if (killid < 0 || killid > 32) {
-            qDebug() << "炮吃子：无效的killid=" << killid;
+            // qDebug() << "炮吃子：无效的killid=" << killid;
+
             return false;
         }
 
         if (m_stones[killid] == nullptr) {
-            qDebug() << "炮吃子：m_stones[" << killid << "]为空指针";
+            // qDebug() << "炮吃子：m_stones[" << killid << "]为空指针";
+
             return false;
         }
 
         //目标位置必须是对方棋子
         if (m_stones[killid]->col() != col || m_stones[killid]->row() != row) {
-            qDebug() << "炮吃子：killid位置与目标位置不匹配";
+            // qDebug() << "炮吃子：killid位置与目标位置不匹配";
+
             return false;
         }
 
         if (m_stones[killid]->isRed() == movingStone->isRed()) {
-            qDebug() << "炮吃子：不能吃己方棋子";
+            // qDebug() << "炮吃子：不能吃己方棋子";
+
             return false;
         }
 
@@ -385,7 +406,8 @@ bool Board::canMoveBing(int moveid, int, int col, int row)
 
     //检查目标位置是否在棋盘范围内
     if (row < 0 || row > 9 || col < 0 || col > 8) {
-        qDebug() << "兵移动：目标位置超出棋盘范围";
+        // qDebug() << "兵移动：目标位置超出棋盘范围";
+
         return false;
     }
 
@@ -415,7 +437,8 @@ bool Board::canMoveJiang(int moveid, int killid, int col, int row)
 {
     //检查目标位置是否在棋盘范围内
     if (col < 0 || col > 8 || row < 0 || row > 9) {
-        qDebug() << "将/帅移动：目标位置超出棋盘范围";
+        // qDebug() << "将/帅移动：目标位置超出棋盘范围";
+
         return false;
     }
 
@@ -433,7 +456,8 @@ bool Board::canMoveJiang(int moveid, int killid, int col, int row)
     if (distance == 1) {
         //检查列是否在九宫范围内（3-5列）
         if (col < 3 || col > 5) {
-            qDebug() << "将/帅移动：不能出九宫（列范围错误）";
+            // qDebug() << "将/帅移动：不能出九宫（列范围错误）";
+
             return false;
         }
 
@@ -454,7 +478,8 @@ bool Board::canMoveJiang(int moveid, int killid, int col, int row)
             Stone *targetStone = m_stones[killid];
             //目标必须是对方棋子
             if (targetStone->isRed() == isRed) {
-                qDebug() << "将/帅吃子：不能吃己方棋子";
+                // qDebug() << "将/帅吃子：不能吃己方棋子";
+
                 return false;
             }
         }
@@ -465,13 +490,15 @@ bool Board::canMoveJiang(int moveid, int killid, int col, int row)
     else {
         //必须是吃子且目标是对方将/帅
         if (killid == -1 || m_stones[killid]->type() != Stone::JIANG) {
-            qDebug() << "将帅对脸：目标不是对方将帅";
+            // qDebug() << "将帅对脸：目标不是对方将帅";
+
             return false;
         }
 
         //必须同一列
         if (col != fromCol) {
-            qDebug() << "将帅对脸：不在同一列";
+            // qDebug() << "将帅对脸：不在同一列";
+
             return false;
         }
 
@@ -480,12 +507,14 @@ bool Board::canMoveJiang(int moveid, int killid, int col, int row)
         int maxRow = qMax(row, fromRow);
         for (int r = minRow + 1; r < maxRow; r++) {
             if (getPieceId(col, r) != -1) {
-                qDebug() << "将帅对脸：中间有棋子阻挡";
+                // qDebug() << "将帅对脸：中间有棋子阻挡";
+
                 return false;
             }
         }
 
-        qDebug() << "将帅对脸：合法移动";
+        // qDebug() << "将帅对脸：合法移动";
+
         return true;
     }
 }
@@ -499,13 +528,15 @@ bool Board::canMoveShi(int moveid, int killid, int col, int row)
 
     //士只能斜走一步（行和列各变化1格）
     if (qAbs(row - fromRow) != 1 || qAbs(col - fromCol) != 1) {
-        qDebug() << "士移动：必须斜走一格";
+        // qDebug() << "士移动：必须斜走一格";
+
         return false;
     }
 
     //士不能出九宫（列3-5）
     if (col < 3 || col > 5) {
-        qDebug() << "士移动：不能出九宫（列范围错误）";
+        // qDebug() << "士移动：不能出九宫（列范围错误）";
+
         return false;
     }
 
@@ -513,13 +544,15 @@ bool Board::canMoveShi(int moveid, int killid, int col, int row)
     if (isRed) {
         //红士在棋盘上方（0-2行）
         if (row < 0 || row > 2) {
-            qDebug() << "红士移动：不能出九宫（行范围错误）";
+            // qDebug() << "红士移动：不能出九宫（行范围错误）";
+
             return false;
         }
     } else {
         //黑士在棋盘下方（7-9行）
         if (row < 7 || row > 9) {
-            qDebug() << "黑士移动：不能出九宫（行范围错误）";
+            // qDebug() << "黑士移动：不能出九宫（行范围错误）";
+
             return false;
         }
     }
@@ -528,12 +561,14 @@ bool Board::canMoveShi(int moveid, int killid, int col, int row)
     if (killid != -1) {
         Stone *target = m_stones[killid];
         if (target->isRed() == isRed) {
-            qDebug() << "士吃子：不能吃己方棋子";
+            // qDebug() << "士吃子：不能吃己方棋子";
+
             return false;
         }
     }
 
-    qDebug() << "士移动合法";
+    // qDebug() << "士移动合法";
+
     return true;
 }
 
@@ -546,7 +581,8 @@ bool Board::canMoveXiang(int moveid, int killid, int col, int row)
 
     //相/象走田字（对角线移动两格）
     if (qAbs(row - fromRow) != 2 || qAbs(col - fromCol) != 2) {
-        qDebug() << "相/象移动：必须走田字（两格对角线）";
+        // qDebug() << "相/象移动：必须走田字（两格对角线）";
+
         return false;
     }
 
@@ -554,7 +590,8 @@ bool Board::canMoveXiang(int moveid, int killid, int col, int row)
     int eyeRow = (fromRow + row) / 2;
     int eyeCol = (fromCol + col) / 2;
     if (getPieceId(eyeCol, eyeRow) != -1) {
-        qDebug() << "相/象移动：象眼位置(" << eyeCol << "," << eyeRow << ")有棋子阻挡";
+        // qDebug() << "相/象移动：象眼位置(" << eyeCol << "," << eyeRow << ")有棋子阻挡";
+
         return false;
     }
 
@@ -562,13 +599,15 @@ bool Board::canMoveXiang(int moveid, int killid, int col, int row)
     if (isRed) {
         //红相在棋盘上方（0-4行）
         if (row > 4) {
-            qDebug() << "红相移动：不能过河";
+            // qDebug() << "红相移动：不能过河";
+
             return false;
         }
     } else {
         //黑象在棋盘下方（5-9行）
         if (row < 5) {
-            qDebug() << "黑象移动：不能过河";
+            // qDebug() << "黑象移动：不能过河";
+
             return false;
         }
     }
@@ -577,12 +616,14 @@ bool Board::canMoveXiang(int moveid, int killid, int col, int row)
     if (killid != -1) {
         Stone *target = m_stones[killid];
         if (target->isRed() == isRed) {
-            qDebug() << "相/象吃子：不能吃己方棋子";
+            // qDebug() << "相/象吃子：不能吃己方棋子";
+
             return false;
         }
     }
 
-    qDebug() << "相/象移动合法";
+    // qDebug() << "相/象移动合法";
+
     return true;
 }
 
@@ -597,7 +638,8 @@ void Board::reliveStone(int id)
 void Board::backOne()
 {
     if (m_steps.size() == 0) {
-        qDebug() << "无法悔棋: 没有历史记录";
+        // qDebug() << "无法悔棋: 没有历史记录";
+
         return;
     }
 
@@ -615,7 +657,7 @@ void Board::backOne()
     if (movedStone) {
         movedStone->setRow(record.fromRow());
         movedStone->setCol(record.fromCol());
-        qDebug() << "恢复棋子" << record.moveId() << "到位置(" << record.fromCol() << "," << record.fromRow() << ")";
+        // qDebug() << "恢复棋子" << record.moveId() << "到位置(" << record.fromCol() << "," << record.fromRow() << ")";
     }
 
     //恢复游戏状态

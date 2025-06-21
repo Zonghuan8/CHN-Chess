@@ -67,9 +67,7 @@ Item {
                 anchors.centerIn: parent
             }
         }
-        // Board{
-        //     id:ch
-        // }
+
         //底部按钮区域
         RowLayout{
             Layout.fillWidth: true

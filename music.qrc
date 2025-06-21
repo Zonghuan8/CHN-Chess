@@ -1,6 +1,9 @@
 <RCC>
     <qresource prefix="/">
-        <file>sounds/bgm.ogg</file>
+        <file>sounds/bgm.mp3</file>
         <file>sounds/move.wav</file>
+        <file>sounds/click.wav</file>
+        <file>sounds/success.ogg</file>
+        <file>sounds/capture.mp3</file>
     </qresource>
 </RCC>

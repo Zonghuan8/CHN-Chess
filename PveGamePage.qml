@@ -1,4 +1,3 @@
-//人机对战
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -13,6 +12,7 @@ Item {
         property int height: 50
         property int radius: 5
         property int fontSize:28
+
         property string fontFamily: "FZKai\-Z03"
     }
 
@@ -25,12 +25,14 @@ Item {
         anchors.fill: parent
         spacing: 5
 
-        //返回按钮
+        // 返回按钮
         Button {
             Layout.alignment: Qt.AlignLeft
             Layout.topMargin: 5
             Layout.leftMargin: 5
+
             text:"返回首页"
+
             onClicked: {
                 stackView.pop()
                 stackView.push("HomePage.qml")
@@ -53,7 +55,7 @@ Item {
             Layout.alignment: Qt.AlignHCenter
         }
 
-        //棋盘区域
+        // 棋盘区域
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -61,13 +63,15 @@ Item {
             width: Math.min(parent.width, 600)
             height: Math.min(parent.height, 660)
 
-            ChessBoard {
-                id: _board
+            // 使用新的AI棋盘组件
+            AIChessBoard {
+                id: _aiBoard
                 anchors.centerIn: parent
             }
         }
-        //底部按钮区域
-        RowLayout{
+
+        // 底部按钮区域
+        RowLayout {
             Layout.fillWidth: true
             Layout.bottomMargin: 10
             Layout.alignment: Qt.AlignHCenter
@@ -82,8 +86,12 @@ Item {
                     family: buttonStyle.fontFamily
                 }
                 onClicked: {
+
+                    _aiBoard.boardLogic.initGame();
+
                     stackView.pop()
                     stackView.push("PveGamePage.qml")
+
                 }
             }
             RoundButton {
@@ -95,8 +103,18 @@ Item {
                     pixelSize: buttonStyle.fontSize
                     family: buttonStyle.fontFamily
                 }
+// <<<<<<< HEAD
+                onClicked: {
+                    // 悔棋逻辑
+                    _aiBoard.boardLogic.undoMove();
+                }
+// =======
+// >>>>>>> CHN-Chess/main
             }
         }
     }
 }
+// <<<<<<< HEAD
+// =======
 
+// >>>>>>> CHN-Chess/main

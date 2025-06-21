@@ -55,9 +55,9 @@ Item {
                     Controller.toggleMusic(musicEnabled)
                     if (musicEnabled)
                     {
-                      musicPlayer.bgMusic.play()
+                      player.bgMusic.play()
                     }else {
-                     musicPlayer.bgMusic.pause()
+                     player.bgMusic.pause()
                            }
                 }
             }
@@ -71,9 +71,10 @@ Item {
                     soundEnabled = !soundEnabled
                     Controller.toggleSound(soundEnabled)
                     if (soundEnabled)
-                      musicPlayer.moveSound.play()
-                    else
-                      musicPlayer.moveSound.pause()
+                       player.moveSound.play()
+                    else{
+                      player.moveSound.pause()
+                    }
                 }
             }
 

@@ -54,8 +54,8 @@ ApplicationWindow{
          }
     }
 
-    Player {
-       id: musicPlayer
+    MusicPlayer {
+       id: player
     }
 
     Component.onCompleted: {
