@@ -34,6 +34,7 @@ Item {
             text:"返回首页"
 
             onClicked: {
+                player.click.play()
                 stackView.pop()
                 stackView.push("HomePage.qml")
             }
@@ -86,7 +87,7 @@ Item {
                     family: buttonStyle.fontFamily
                 }
                 onClicked: {
-
+                    player.click.play()
                     _aiBoard.boardLogic.initGame();
 
                     stackView.pop()
@@ -103,18 +104,15 @@ Item {
                     pixelSize: buttonStyle.fontSize
                     family: buttonStyle.fontFamily
                 }
-// <<<<<<< HEAD
+
                 onClicked: {
                     // 悔棋逻辑
+                    player.click.play()
                     _aiBoard.boardLogic.undoMove();
                 }
-// =======
-// >>>>>>> CHN-Chess/main
+
             }
         }
     }
 }
-// <<<<<<< HEAD
-// =======
 
-// >>>>>>> CHN-Chess/main

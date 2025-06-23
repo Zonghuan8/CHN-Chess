@@ -20,11 +20,7 @@ public:
     Q_PROPERTY(int row READ row WRITE setRow NOTIFY rowChanged)
     Q_PROPERTY(int col READ col WRITE setCol NOTIFY colChanged)
     Q_PROPERTY(bool dead READ dead WRITE setDead NOTIFY deadChanged)
-    // =======
-    //     Q_PROPERTY(int row READ row NOTIFY rowChanged)
-    //     Q_PROPERTY(int col READ col NOTIFY colChanged)
-    //     Q_PROPERTY(bool dead READ dead NOTIFY deadChanged)
-    // >>>>>>> CHN-Chess/main
+
     Q_PROPERTY(bool selected READ selected WRITE setSelected NOTIFY selectedChanged)
     Q_PROPERTY(int id READ id CONSTANT)
     Q_PROPERTY(int type READ type CONSTANT)

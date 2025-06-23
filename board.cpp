@@ -13,14 +13,12 @@ Board::Board(QObject *parent) : QObject(parent)
         stone->init(i);
         m_stones.append(stone);
     }
-    // <<<<<<< HEAD
-    // =======
 
-    for (Stone *stone : m_stones) {
+    // =======
+    /*  for (Stone *stone : m_stones) {
         qDebug() << "验证棋子 ID:" << stone->id() << "位置: (" << stone->col() << "," << stone->row() << ")"
                  << "类型:" << stone->type() << "颜色:" << (stone->isRed() ? "红" : "黑");
-    }
-    // >>>>>>> CHN-Chess/main
+    }*/
 }
 
 void Board::initGame()
