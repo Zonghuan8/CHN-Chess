@@ -18,8 +18,6 @@ Item {
         property string fontFamily: "FZMiaoWuS\-GB"
     }
 
-    signal gameModeSelected(string mode)//通知主窗口选择了游戏模式
-
     property bool musicEnabled: true
     property bool soundEnabled: true
 

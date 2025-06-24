@@ -31,3 +31,4 @@ function getMusicEnabled() {
 function getSoundEnabled(){
     return soundEnabled;
 }
+

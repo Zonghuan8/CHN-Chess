@@ -1,5 +1,6 @@
 //棋子
 import QtQuick
+import Qt5Compat.GraphicalEffects
 
 Item {
     id:root
@@ -21,6 +22,13 @@ Item {
     Image {
         id: _piece
         source: root.isRed ? "qrc:/images/red_chess.png" : "qrc:/images/black_chess.png"
+        smooth: true
+        BrightnessContrast{//高度对比度
+            anchors.fill:_piece
+            source: _piece
+            brightness: 0.01
+            contrast: -0.01
+        }
         anchors.fill: parent
         width: 56
         height: 56
@@ -57,6 +65,17 @@ Item {
     scale: selected ? 1.1 : 1.0
         Behavior on scale {
         NumberAnimation { duration: 200; easing.type: Easing.OutQuad }
+    }
+
+    //棋子阴影效果
+    DropShadow{
+        anchors.fill: _piece
+        source: _piece
+        horizontalOffset: 5
+        verticalOffset: 5
+        radius:8
+        samples: 16
+        color: "#80000000"
     }
 }
 

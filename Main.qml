@@ -9,6 +9,8 @@ ApplicationWindow{
     height: 800
     minimumWidth: 600
     minimumHeight: 800
+    maximumHeight: 800
+    maximumWidth: 600
     visible: true
     title: qsTr("中国象棋")
 
