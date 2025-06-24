@@ -24,11 +24,5 @@ function toggleSound(enabled) {
     console.log("音效已" + (soundEnabled ? "开启" : "关闭"));
 }
 
-function getMusicEnabled() {
-    return musicEnabled;
-}
 
-function getSoundEnabled(){
-    return soundEnabled;
-}
 

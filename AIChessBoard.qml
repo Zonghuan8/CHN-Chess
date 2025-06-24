@@ -72,6 +72,7 @@ Item {
                     var killedPiece = boardLogic.getStoneById(killId);
                     if (killedPiece) {
                         killedPiece.dead = true;
+                        player.captureSound.play()
                     }
                 }
             }
@@ -327,6 +328,7 @@ Item {
                     break;
                 }
             }
+
             if (!piece) return;
 
             //创建动画
@@ -340,8 +342,12 @@ Item {
                                                       toRow: toRow,   // 传递目标行坐标
                                                       killId: killId
                                                   });
+
+
             anim.start();
+            player.moveSound.play()
         }
+
 
         Canvas {
             id: boardCanvas
@@ -483,6 +489,7 @@ Item {
                       var isAITurn = (chess.isRedTurn && chess.aiIsRed) || (!chess.isRedTurn && !chess.aiIsRed);
                       if (isAITurn) {
                           console.log("AI回合，忽略玩家点击");
+
                           return;
                       }
 

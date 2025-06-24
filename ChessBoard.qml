@@ -1,8 +1,9 @@
+
+
 // ChessBoard.qml
 import QtQuick
 import QtQuick.Controls
 import Chess 1.0
-import Qt5Compat.GraphicalEffects
 
 Item {
     id: _board
@@ -114,23 +115,11 @@ Item {
         width:parent.width
         anchors.fill: parent
         color: "#f0e0d0"
-        radius: 50
-        //设置图片为圆角
-        clip:true
-        layer.enabled: true
-        layer.effect: OpacityMask {
-            maskSource: Rectangle {
-                width: boardBackground.width
-                height: boardBackground.height
-                radius: boardBackground.radius
-            }
-        }
 
         Image {
-            id:_bbg
-            //anchors.fill: boardBackground
+            anchors.fill: parent
             source: "qrc:/images/background.png"
-            opacity: 0.2
+            opacity: 0.3
         }
 
         Component {
@@ -506,4 +495,5 @@ Item {
         }
     }
 }
+
 
