@@ -22,9 +22,9 @@ Item {
         id: aiTimer
         interval: 100
         onTriggered: {
-        if (!chess.isGameOver() &&
-            ((chess.isRedTurn && chess.aiIsRed) ||
-            (!chess.isRedTurn && !chess.aiIsRed))) {
+            if (!chess.isGameOver() &&
+                    ((chess.isRedTurn && chess.aiIsRed) ||
+                     (!chess.isRedTurn && !chess.aiIsRed))) {
                 chess.computerMove()
             }
         }
@@ -72,6 +72,7 @@ Item {
                     var killedPiece = boardLogic.getStoneById(killId);
                     if (killedPiece) {
                         killedPiece.dead = true;
+                        player.captureSound.play()
                     }
                 }
             }
@@ -286,10 +287,11 @@ Item {
                         var startX = (stone.col + 1) * _aiBoard.square;
                         var startY = (stone.row + 1) * _aiBoard.square;
                         var anim = captureAnimation.createObject(boardBackground, {
-                            startPos: Qt.point(startX, startY),
-                            isGeneral: (stone.type === Stone.JIANG)
-                        });
+                                                                     startPos: Qt.point(startX, startY),
+                                                                     isGeneral: (stone.type === Stone.JIANG)
+                                                                 });
                         if (stone.type === Stone.JIANG) {
+
                             createGeneralCaptureEffect(startX, startY, stone.isRed);
                         }
                     }
@@ -312,12 +314,12 @@ Item {
                     var effect = Qt.createComponent("AnimationEffect.qml");
                     if (effect.status === Component.Ready) {
                         var obj = effect.createObject(boardBackground, {
-                            centerX: x,
-                            centerY: y,
-                            effectColor: isRed ? "#ff0000" : "#0000ff",
-                            square: _aiBoard.square,
-                            delay: delay
-                        });
+                                                          centerX: x,
+                                                          centerY: y,
+                                                          effectColor: isRed ? "#ff0000" : "#0000ff",
+                                                          square: _aiBoard.square,
+                                                          delay: delay
+                                                      });
 
                         if (!obj) {
                             console.error("Failed to create AnimationEffect object");
@@ -339,6 +341,7 @@ Item {
                     break;
                 }
             }
+
             if (!piece) return;
 
             //创建动画
@@ -353,7 +356,9 @@ Item {
                 killId: killId
             });
             anim.start();
+            player.moveSound.play()
         }
+
 
         Canvas {
             id: boardCanvas
@@ -484,7 +489,6 @@ Item {
 
             onTapped: (event) => {
                 console.log("点击事件触发");
-
                 //如果游戏结束，不允许操作
                 if (victoryOverlay.visible) {
                     console.log("游戏已结束，忽略点击");

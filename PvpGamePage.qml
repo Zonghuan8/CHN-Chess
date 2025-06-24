@@ -35,6 +35,7 @@ Item {
             text:"返回首页"
             onClicked: {
                 clickAnim.start()//点击动画
+                player.click.play()
                 stackView.pop()
                 stackView.push("HomePage.qml")
             }
@@ -99,6 +100,7 @@ Item {
                     family: buttonStyle.fontFamily
                 }
                 onClicked: {
+                    player.click.play()
                     stackView.pop()
                     stackView.push("PvpGamePage.qml")
                 }
@@ -114,6 +116,7 @@ Item {
                 }
                 onClicked: {
                     //悔棋逻辑
+                    player.click.play()
                     _board.boardLogic.undoMove()
                 }
             }

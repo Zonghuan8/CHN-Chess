@@ -62,6 +62,6 @@ ApplicationWindow{
     }
 
     Component.onCompleted: {
-      Controller.initial(true,true);//开始时音乐默认为开
+      Controller.initial();//开始时音乐默认为开
     }
 }

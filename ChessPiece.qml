@@ -67,7 +67,7 @@ Item {
     }
 
     //棋子阴影效果
-    DropShadow{
+  /*  DropShadow{
         anchors.fill: _piece
         source: _piece
         horizontalOffset: 5
@@ -75,6 +75,6 @@ Item {
         radius:8
         samples: parent.width*0.02
         color: "#80000000"
-    }
+    }*/
 }
 

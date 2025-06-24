@@ -3,7 +3,7 @@
         <file>sounds/bgm.mp3</file>
         <file>sounds/move.wav</file>
         <file>sounds/click.wav</file>
-        <file>sounds/success.ogg</file>
-        <file>sounds/capture.mp3</file>
+        <file>sounds/success.wav</file>
+        <file>sounds/capture.wav</file>
     </qresource>
 </RCC>

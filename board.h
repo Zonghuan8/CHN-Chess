@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QtQml/qqmlregistration.h>
 #include <QPoint>
+
 class Board : public QObject
 {
     Q_OBJECT
@@ -50,16 +51,6 @@ public:
         }
     }
 
-    // signals:
-    //     void gameOver(QString winner); //新增：游戏结束信号
-    //     void redTurnChanged();
-    //     void stonesChanged();
-    //     void undoPerformed();
-    //     void selectionCleared();
-    // public slots:
-
-    // private:
-    // >>>>>>> CHN-Chess/main
     void reliveStone(int id);
     void backOne();
     bool checkJiangFaceOff(int moveid, int killid);

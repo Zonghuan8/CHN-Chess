@@ -86,9 +86,7 @@ int Board::getPieceId(int col, int row)
     for (Stone *stone : m_stones) {
         if (stone->dead()) continue;
 
-        if (stone->col() == col && stone->row() == row) {
-            return stone->id();
-        }
+        if (stone->col() == col && stone->row() == row) { return stone->id(); }
     }
     return -1;
 }

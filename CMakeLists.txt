@@ -37,7 +37,7 @@ qt_add_qml_module(appCHN-Chess
 
         QML_FILES settings.js
         SOURCES
-        QML_FILES Player.qml
+        QML_FILES
 
         SOURCES aigameboard.h aigameboard.cpp
         QML_FILES AIChessBoard.qml

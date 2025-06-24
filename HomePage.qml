@@ -56,12 +56,6 @@ Item {
                 onTriggered:{
                     musicEnabled = !musicEnabled
                     Controller.toggleMusic(musicEnabled)
-                    if (musicEnabled)
-                    {
-                      player.bgMusic.play()
-                    }else {
-                     player.bgMusic.pause()
-                           }
                 }
             }
 
@@ -73,11 +67,6 @@ Item {
                 onTriggered: {
                     soundEnabled = !soundEnabled
                     Controller.toggleSound(soundEnabled)
-                    if (soundEnabled)
-                       player.moveSound.play()
-                    else{
-                      player.moveSound.pause()
-                    }
                 }
             }
 
@@ -89,7 +78,9 @@ Item {
             }
         }
         onClicked: {
+            player.click.play()
             settingsMenu.popup()
+
         }
     }
 
@@ -161,6 +152,7 @@ Item {
                     family: buttonStyle.fontFamily
                 }
                 onClicked: {
+                    player.click.play()
                     stackView.pop(stackView.currentItem)//先清除上一级界面
                     stackView.push("PvpGamePage.qml", {
                         width: stackView.width,
@@ -179,6 +171,7 @@ Item {
                     family: buttonStyle.fontFamily
                 }
                 onClicked: {
+                     player.click.play()
                     stackView.pop(stackView.currentItem)
                     stackView.push("PveGamePage.qml")
                 }
@@ -194,6 +187,7 @@ Item {
                     family: buttonStyle.fontFamily
                 }
                 onClicked: {
+                    player.click.play()
                     stackView.pop(stackView.currentItem)
                     stackView.push("RulesPage.qml")
                 }
@@ -209,6 +203,7 @@ Item {
                     family: buttonStyle.fontFamily
                 }
                 onClicked: {
+                    player.click.play()
                     stackView.pop(stackView.currentItem)
                     stackView.push("AboutPage.qml")
                 }

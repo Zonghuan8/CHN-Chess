@@ -11,51 +11,52 @@ Item {
   property alias click: _click   //点击音乐
   property alias success:_success  //胜利音乐
 
-  // 暴露控制状态属性
-  property bool musicEnabled: true
-  property bool soundEnabled: true
+  // 暴露可绑定属性
+  property bool musicEnabled:true
+  property bool soundEnabled:true
 
-  // 背景音乐播放器
+  // 背景音乐
   MediaPlayer {
     id: _bgMusic
     audioOutput: AudioOutput {
       id: bgAudioOutput
-      volume: 2.0
+      volume:musicManager.musicEnabled ? 1.0 : 0.0  // 随musicEnabled变化
     }
     source: "qrc:/sounds/bgm.mp3"
     loops: MediaPlayer.Infinite
   }
 
-  // 音效播放器 - 走棋音效
+  //走棋音效
    SoundEffect{
     id: _moveSound
-    volume: 1.0
+    volume: musicManager.soundEnabled ? 1.0 : 0.0  // 随soundEnabled变化
     source: "qrc:/sounds/move.wav"
   }
 
-   // 音效播放器 - 吃子音效
+   // 吃子音效
    SoundEffect {
      id: _captureSound
-     volume:1.0
-     source: "qrc:/sounds/capture.mp3"
+     volume: musicManager.soundEnabled ? 1.0 : 0.0
+     source: "qrc:/sounds/capture.wav"
    }
 
+   //点击音效
    SoundEffect{
     id: _click
-    volume: 1.0
- //   source: "qrc:/sounds/click.ogg"
+    volume: musicManager.soundEnabled ? 1.0 : 0.0
+    source: "qrc:/sounds/click.wav"
   }
 
+   //胜利音效
    SoundEffect{
     id: _success
-    volume: 1.0
-//    source: "qrc:/sounds/success.ogg"
+    volume: musicManager.soundEnabled ? 1.0 : 0.0
+    source: "qrc:/sounds/success.wav"
   }
 
   // 初始化自动播放
   Component.onCompleted: {
      bgMusic.play()
-  //   click.play()
-  //  success.play()
   }
+
 }

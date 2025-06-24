@@ -115,6 +115,12 @@ Item {
         anchors.topMargin: 0
         color: "#f0e0d0"
         radius: 50
+
+        Image {
+            anchors.fill: parent
+            source: "qrc:/images/background.png"
+            opacity: 0.3
+        }
         //设置图片为圆角
         clip:true
         layer.enabled: true
@@ -124,13 +130,6 @@ Item {
                 height: boardBackground.height
                 radius: boardBackground.radius
             }
-        }
-
-        Image {
-            id:_bbg
-            //anchors.fill: boardBackground
-            source: "qrc:/images/background.png"
-            opacity: 0.2
         }
 
         Component {
@@ -227,6 +226,7 @@ Item {
 
                         //如果是将/帅，添加额外效果
                         if (stone.type === Stone.JIANG) {
+
                             createGeneralCaptureEffect(startX, startY, stone.isRed);
                         }
                     }
@@ -435,7 +435,6 @@ Item {
                     else {
                         //获取当前选中棋子对象
                         var selectedPiece = chess.getStoneById(selectedPieceId);
-
                         //1.2.1点击同一棋子：取消选中
                         if (selectedPieceId === pieceId) {
                             selectedPieceId = -1;

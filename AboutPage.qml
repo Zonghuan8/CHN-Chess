@@ -24,7 +24,7 @@ Item {
             spacing: 20
 
             Text {
-                text: "关于中国象棋"
+                text: "中国象棋"
                 font {
                     family: "FZKai-Z03"
                     pixelSize: _aboutPage.width/10
@@ -45,7 +45,9 @@ Item {
             }
 
             Text {
-                text: "这是一款中国象棋游戏，中国象棋是起源于中国的传统两人对战棋类游戏，拥有2000多年历史。"
+                text: "中国象棋作为中华民族传统文化的瑰宝，承载着数千年的历史与智慧，其蕴含的战略思维、"+
+                      "逻辑推理和博弈艺术，深受各年龄段人群喜爱。开发中国象棋游戏项目，"+
+                      "旨在让更多人体验象棋的魅力。"
                 font {
                     family: "FZKai-Z03"
                     pixelSize: _aboutPage.width/20
