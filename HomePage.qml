@@ -7,8 +7,8 @@ import "settings.js" as Controller
 
 Item {
     id: _home
-    width: parent.width
-    height: parent.height
+    width: stackView.width//parent是stackView
+    height: stackView.height
 
     property var buttonStyle: QtObject {
         property int width: parent.width/2
@@ -38,15 +38,17 @@ Item {
             anchors.topMargin: 35
             width: _home.width/12
             height:_home.width/12
-            icon.source: "qrc:/images/settings.png"//设置图标路径
-
+            Image {
+                anchors.fill:parent
+                source: "qrc:/images/settings.png"//设置图标路径
+            }
             //设置菜单
             Menu {
                 id: settingsMenu
                 y: parent.height//菜单显示在按钮下方
                 x: parent.x//菜单与按钮左对齐
 
-            //音乐控制项            width: 70
+            //音乐控制项
             MenuItem {
                 id: musicMenuItem
                 text: "音乐"
@@ -103,8 +105,8 @@ Item {
                     //竹叶精灵动画
                     SpriteSequence {
                     id: _bamboosa
-                    width: _home.width/15
-                    height: _home.width/15
+                    width: _home.width/13
+                    height: _home.width/13
                     interpolate: true
                     Sprite {
                         name: "leaf1"
@@ -124,8 +126,8 @@ Item {
                         name: "leaf3"
                         source: "qrc:/images/bb3.png"
                         frameCount: 1
-                        frameDuration: 101600
-                        to: {"leaf2": 1}
+                        frameDuration: 1000
+                        to: {"leaf1": 1}
                     }
                 }
             }
@@ -160,7 +162,10 @@ Item {
                 }
                 onClicked: {
                     stackView.pop(stackView.currentItem)//先清除上一级界面
-                    stackView.push("PvpGamePage.qml")
+                    stackView.push("PvpGamePage.qml", {
+                        width: stackView.width,
+                        height: stackView.height
+                    });
                 }
             }
             RoundButton {

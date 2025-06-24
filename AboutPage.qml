@@ -6,8 +6,8 @@ import QtCore
 
 Item {
     id: _aboutPage
-    width: parent.width
-    height: parent.height
+    width: stackView.width//parent是stackView
+    height: stackView.height
 
     Rectangle {
         anchors.fill: parent
@@ -96,18 +96,35 @@ Item {
             }
 
             Button {
+                id:_backButton
                 text: "返回首页"
                 Layout.alignment: Qt.AlignHCenter
-                Layout.topMargin: _aboutPage.width/20
-                onClicked: stackView.pop()
+                Layout.bottomMargin:_aboutPage.width/20
+                onClicked: {
+                    clickAnim.start()//点击动画
+                    stackView.pop()
+                    stackView.push("HomePage.qml")
+                }
                 background: Rectangle {
-                    color: "#808080"
-                    radius: 5
-                    border.color: "#696969"
+                  id:btnBg
+                  color: _backButton.down ? "#696969":"#808080"
+                  radius: 5
+                  border.color: "#696969"
+                  border.width: 2
                 }
                 font {
-                    family: "FZKai-Z03"
-                    pixelSize: _aboutPage.width/20
+                  family: "FZKai-Z03"
+                  pixelSize: _aboutPage.width/20
+                }
+            }
+            SequentialAnimation {
+                id: clickAnim
+                PropertyAnimation {
+                    target: _backButton
+                    property: "scale"
+                    to: 1.0
+                    duration: 500
+                    easing.type: Easing.OutBack
                 }
             }
         }

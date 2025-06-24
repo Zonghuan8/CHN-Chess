@@ -5,9 +5,8 @@ import QtQuick.Layouts
 
 Item {
     id: _rulesPage
-    width: parent.width
-    height: parent.height
-    anchors.fill: parent
+    width: stackView.width//parent是stackView
+    height: stackView.height
 
     Rectangle{
         anchors.fill: parent
@@ -24,7 +23,7 @@ Item {
             clip: true
 
             ColumnLayout {
-                spacing: _rulesPage.width/20
+                spacing: _rulesPage.width/21
                 width: parent.width
                 Text {
                     text: "中国象棋规则"
@@ -45,7 +44,7 @@ Item {
   以下是基本规则："
                     font {
                         family:"阿里巴巴普惠体 2.0 115 Black"
-                        pixelSize: _rulesPage.width/20
+                        pixelSize: _rulesPage.width/22
                     }
                     wrapMode: Text.Wrap//换行
                     //Layout.fillWidth: true
@@ -55,7 +54,7 @@ Item {
                     text: "棋盘结构："
                     font {
                         family: "FZKai-Z03"
-                        pixelSize:  _rulesPage.width/20
+                        pixelSize:  _rulesPage.width/22
                         bold: true
                     }
                     //wrapMode: Text.Wrap
@@ -67,7 +66,7 @@ Item {
   棋子摆在交叉点上。"
                     font {
                         family: "阿里巴巴普惠体 2.0 115 Black"
-                        pixelSize:  _rulesPage.width/20
+                        pixelSize:  _rulesPage.width/22
                     }
                     wrapMode: Text.Wrap
                     //Layout.fillWidth: true
@@ -77,7 +76,7 @@ Item {
                     text: "棋子介绍："
                     font {
                         family: "FZKai-Z03"
-                        pixelSize:  _rulesPage.width/20
+                        pixelSize:  _rulesPage.width/22
                         bold: true
                     }
                     wrapMode: Text.Wrap
@@ -97,7 +96,7 @@ Item {
  左右移动。"
                     font {
                         family: "阿里巴巴普惠体 2.0 115 Black"
-                        pixelSize:  _rulesPage.width/20
+                        pixelSize:  _rulesPage.width/22
                     }
                     wrapMode: Text.Wrap
                 }
@@ -107,7 +106,7 @@ Item {
                     font.bold: true
                     font {
                         family: "FZKai-Z03"
-                        pixelSize:  _rulesPage.width/20
+                        pixelSize:  _rulesPage.width/22
                         bold: true
                     }
                     wrapMode: Text.Wrap
@@ -117,27 +116,41 @@ Item {
                     text: "     吃掉对方的'将'或'帅'即为胜利。"
                     font {
                         family: "阿里巴巴普惠体 2.0 115 Black"
-                        pixelSize:  _rulesPage.width/20
+                        pixelSize:  _rulesPage.width/22
                     }
                     wrapMode: Text.Wrap
                 }
 
                 Button {
+                    id:_backButton
                     text: "返回首页"
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.topMargin:  _rulesPage.width/20
+                    Layout.bottomMargin:  _rulesPage.width/22
                     onClicked: {
+                        clickAnim.start()//点击动画
                         stackView.pop()
                         stackView.push("HomePage.qml")
                     }
-                    background: Rectangle {
-                        color: "#808080"
-                        radius: 5
-                        border.color: "#696969"
+                  background: Rectangle {
+                      id:btnBg
+                      color: _backButton.down ? "#696969":"#808080"
+                      radius: 5
+                      border.color: "#696969"
+                      border.width: 2
                     }
                     font {
                         family: "FZKai-Z03"
-                        pixelSize:  _rulesPage.width/20
+                        pixelSize:  _rulesPage.width/22
+                    }
+                }
+                SequentialAnimation {
+                    id: clickAnim
+                    PropertyAnimation {
+                        target: _backButton
+                        property: "scale"
+                        to: 1.0
+                        duration: 500
+                        easing.type: Easing.OutBack
                     }
                 }
             }

@@ -5,17 +5,16 @@ import Qt5Compat.GraphicalEffects
 
 Item {
     id: _aiBoard
-    width: parent.width
-    height: parent.height
-    anchors.centerIn: parent
-    property int square: width/10
+    width: stackView.width//parent是stackView
+    height: stackView.height
+    property int square: _aiBoard.width/10
     property alias boardLogic: chess
 
     //创建AI棋盘
     AIGameBoard {
         id: chess
-        aiIsRed: false //AI执黑方
-        aiLevel: 1     //AI难度
+        aiIsRed: false//AI执黑方
+        aiLevel: 1//AI难度
     }
 
     //AI移动定时器
@@ -31,7 +30,7 @@ Item {
         }
     }
 
-    // 移动动画组件
+    //移动动画组件
     Component {
         id: moveAnimation
 
@@ -41,8 +40,8 @@ Item {
             property real fromY
             property real toX
             property real toY
-            property int toCol   //添加目标列坐标
-            property int toRow   //添加目标行坐标
+            property int toCol//添加目标列坐标
+            property int toRow//添加目标行坐标
             property int killId
 
             NumberAnimation on fromX {
@@ -83,7 +82,7 @@ Item {
     Rectangle {
         id: victoryOverlay
         anchors.fill: parent
-        color: "#80000000" // 半透明黑色
+        color: "#80000000" //半透明黑色
         visible: false
         z: 100 //确保在最上层
 
@@ -105,7 +104,7 @@ Item {
                 opacity: 0.7
             }
 
-            // 主文本
+            //主文本
             Text {
                 id: victoryText
                 anchors.centerIn: parent
@@ -154,7 +153,7 @@ Item {
                     }
                 }
 
-                // 颜色变化
+                //颜色变化
                 SequentialAnimation {
                     ColorAnimation {
                         targets: [victoryText, glowText]
@@ -175,14 +174,13 @@ Item {
         }
     }
 
-    // 棋盘背景
+    //棋盘背景
     Rectangle {
         id: boardBackground
-        height: parent.height*0.56
+        height: parent.height*0.91
         width:parent.width
-        anchors.fill: parent
         anchors.top:parent.top
-        anchors.topMargin: parent.height*1/7
+        anchors.topMargin: 0
         color: "#f0e0d0"
         radius: 50
 
@@ -209,17 +207,17 @@ Item {
             Rectangle {
                 id: captureEffect
                 property point startPos
-                property bool isGeneral: false // 是否是将/帅
+                property bool isGeneral: false //是否是将/帅
 
                 width: _aiBoard.square
                 height: _aiBoard.square
                 radius: width / 2
                 color: "transparent"
-                border.color: isGeneral ? "#FFFF00" : "#FF0000" // 将军特殊颜色
+                border.color: isGeneral ? "#FFFF00" : "#FF0000" //将军特殊颜色
                 border.width: isGeneral ? 5 : 3
                 opacity: 0.8
 
-                // 将军特殊效果：使用旋转矩形
+                //将军特殊效果：使用旋转矩形
                 Rectangle {
                     anchors.fill: parent
                     anchors.margins: -5
@@ -247,7 +245,7 @@ Item {
                             target: captureEffect
                             property: "scale"
                             from: 1.0
-                            to: isGeneral ? 2.0 : 1.5 // 将军放大更多
+                            to: isGeneral ? 2.0 : 1.5 //将军放大更多
                             duration: isGeneral ? 500 : 300
                         }
                         NumberAnimation {
@@ -350,8 +348,8 @@ Item {
                 fromY: (fromRow + 1) * _aiBoard.square,
                 toX: (toCol + 1) * _aiBoard.square,
                 toY: (toRow + 1) * _aiBoard.square,
-                toCol: toCol,   // 传递目标列坐标
-                toRow: toRow,   // 传递目标行坐标
+                toCol: toCol,   //传递目标列坐标
+                toRow: toRow,   //传递目标行坐标
                 killId: killId
             });
             anim.start();
@@ -367,11 +365,11 @@ Item {
 
                 ctx.clearRect(0, 0, width, height)
 
-                // 绘制网格线
+                //绘制网格线
                 ctx.strokeStyle = "#000000"
                 ctx.lineWidth = 1
 
-                // 横线
+                //横线
                 for (var row = 1; row <= 10; row++) {
                     ctx.beginPath()
                     ctx.moveTo(_aiBoard.square, _aiBoard.square * row)
@@ -379,11 +377,11 @@ Item {
                     ctx.stroke()
                 }
 
-                // 竖线
+                //竖线
                 for (var col = 1; col <= 9; col++) {
                     ctx.beginPath()
                     ctx.moveTo(col * _aiBoard.square, _aiBoard.square)
-                    ctx.lineTo(col * _aiBoard.square, _aiBoard.square * 5) // 上半部分
+                    ctx.lineTo(col * _aiBoard.square, _aiBoard.square * 5) //上半部分
                     ctx.stroke()
                 }
 
@@ -475,14 +473,14 @@ Item {
                     }
                 }
                 isRed: modelData.isRed
-                selected: modelData.selected // 绑定到Stone的selected属性
-                visible: !modelData.dead // 死亡棋子不可见
+                selected: modelData.selected //绑定到Stone的selected属性
+                visible: !modelData.dead //死亡棋子不可见
             }
         }
         TapHandler {
             property int selectedPieceId: -1
-            property int selectedRow: -1 // 行坐标
-            property int selectedCol: -1 // 列坐标
+            property int selectedRow: -1 //行坐标
+            property int selectedCol: -1 //列坐标
 
             onTapped: (event) => {
                 console.log("点击事件触发");
@@ -524,13 +522,13 @@ Item {
 
                 console.log("点击位置有棋子:", hasPiece, piece ? "ID:" + piece.id : "");
 
-                // 1. 点击位置有棋子
+                //1. 点击位置有棋子
                 if (hasPiece) {
-                // 1.1 当前没有选中棋子
+                //1.1 当前没有选中棋子
                 if (selectedPieceId === -1) {
-                    // 检查是否轮到此方走棋(判断颜色)
+                    //检查是否轮到此方走棋(判断颜色)
                     if ((piece.isRed && boardLogic.isRedTurn) || (!piece.isRed && !boardLogic.isRedTurn)) {
-                    // 选中棋子
+                    //选中棋子
                     selectedPieceId = pieceId;
                     selectedCol = boardCol;
                     selectedRow = boardRow;
@@ -541,24 +539,24 @@ Item {
                         console.log("不是当前回合的棋子");
                     }
                 }
-                // 1.2 当前已有选中棋子
+                //1.2 当前已有选中棋子
                 else {
-                // 获取当前选中棋子对象
+                //获取当前选中棋子对象
                 var selectedPiece = boardLogic.getStoneById(selectedPieceId);
 
-                // 1.2.1 点击同一棋子：取消选中
+                //1.2.1 点击同一棋子：取消选中
                 if (selectedPieceId === pieceId) {
                     selectedPieceId = -1;
                     selectedRow = -1;
                     selectedCol = -1;
                     console.log("取消选中");
                 }
-                // 1.2.2 点击己方其他棋子：切换选中
+                //1.2.2 点击己方其他棋子：切换选中
                 else if (piece.isRed === selectedPiece.isRed) {
                 // 检查轮次
                 if ((piece.isRed && boardLogic.isRedTurn) || (!piece.isRed && !boardLogic.isRedTurn)) {
-                    selectedPiece.selected = false; // 取消前一个棋子的选中
-                    piece.selected = true; // 选中新棋子
+                    selectedPiece.selected = false; //取消前一个棋子的选中
+                    piece.selected = true; //选中新棋子
 
                     selectedPieceId = pieceId;
                     selectedCol = boardCol;
@@ -590,7 +588,7 @@ Item {
                         }
                     }
                 }
-                // 2.点击空白位置
+                //2.点击空白位置
                 else {
                     //有选中棋子时尝试移动
                     if (selectedPieceId !== -1) {

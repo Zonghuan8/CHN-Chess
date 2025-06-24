@@ -4,11 +4,11 @@ import QtQuick.Layouts
 
 Item {
     id: _pve
-    width: parent.width
-    height: parent.height
+    width: stackView.width//parent是stackView
+    height: stackView.height
 
     property var buttonStyle: QtObject {
-        property int width: parent.width/3
+        property int width: _pve.width/3
         property int height: width/3
         property int radius: 5
         property int fontSize:_pve.width/20
@@ -27,28 +27,37 @@ Item {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.leftMargin: 0
-        anchors.rightMargin: 0
-        anchors.topMargin: 0
-        anchors.bottomMargin: 0
-        spacing: _pve.width/120
+        spacing: 5
 
         //返回按钮
         Button {
+            id:_backButton
             Layout.alignment: Qt.AlignLeft
-
-            text:"返回首页"
             Layout.leftMargin: 15
             Layout.topMargin: 20
-
+            text:"返回首页"
             onClicked: {
+                clickAnim.start()//点击动画
                 stackView.pop()
                 stackView.push("HomePage.qml")
             }
             background: Rectangle {
-                color: "#808080"
+                id:btnBg
+                color: _backButton.down ? "#696969":"#808080"
                 radius: 5
                 border.color: "#696969"
+                border.width: 2
+            }
+
+            SequentialAnimation {
+                id: clickAnim
+                PropertyAnimation {
+                    target: _backButton
+                    property: "scale"
+                    to: 1.0
+                    duration: 500
+                    easing.type: Easing.OutBack
+                }
             }
         }
 
@@ -61,6 +70,8 @@ Item {
             }
             color: "#696969"
             Layout.alignment: Qt.AlignHCenter
+            Layout.topMargin: 10
+            Layout.bottomMargin: 20
         }
 
         //棋盘区域
@@ -68,27 +79,19 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.alignment: Qt.AlignCenter
-            width: parent.width
-            height: parent.height
 
             //使用新的AI棋盘组件
             AIChessBoard {
                 id: _aiBoard
-                anchors.centerIn: parent
+                anchors.fill: parent
             }
         }
 
         //底部按钮区域
         RowLayout {
-            Layout.bottomMargin: 50
-            Layout.margins: 0
-            Layout.topMargin: 0
-            Layout.leftMargin: 0
-            clip: false
-            Layout.fillHeight: false
-            Layout.maximumHeight: 65533
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter
+            Layout.bottomMargin: 50
             spacing: _pve.width/12
             RoundButton {
                 text: qsTr("重开")

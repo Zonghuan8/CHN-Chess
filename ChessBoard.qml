@@ -1,4 +1,4 @@
-// ChessBoard.qml
+//ChessBoard.qml
 import QtQuick
 import QtQuick.Controls
 import Chess 1.0
@@ -6,9 +6,8 @@ import Qt5Compat.GraphicalEffects
 
 Item {
     id: _board
-    width: parent.width
-    height: parent.height
-    anchors.centerIn: parent
+    width: stackView.width//parent是stackView
+    height: stackView.height
     property int square: width/10
     property alias boardLogic: chess
     //胜利动画组件
@@ -110,11 +109,10 @@ Item {
     //棋盘背景
     Rectangle {
         id: boardBackground
-        height: parent.height
+        height: parent.height*0.91
         width:parent.width
-        anchors.fill: parent
         anchors.top:parent.top
-        anchors.topMargin: parent.height*1/7
+        anchors.topMargin: 0
         color: "#f0e0d0"
         radius: 50
         //设置图片为圆角

@@ -1,4 +1,4 @@
-// AnimationEffect.qml
+//AnimationEffect.qml
 import QtQuick 6.0
 
 Rectangle {
@@ -8,18 +8,19 @@ Rectangle {
     property int square: 50
     property int delay: 0
 
+    id:_animEff
     width: square
     height: square
-    radius: width / 2
+    radius: _animEff.width / 2
     color: "transparent"
     border.color: effectColor
     border.width: 3
     opacity: 0.8
 
-    x: centerX - width / 2
-    y: centerY - height / 2
+    x: centerX - _animEff.width / 2
+    y: centerY - _animEff.height / 2
 
-    // 并行动画
+    //并行动画
     ParallelAnimation {
         id: anim
         running: true
@@ -42,7 +43,7 @@ Rectangle {
         onFinished: parent.destroy()
     }
 
-    // 定时器
+    //定时器
     Timer {
         id: timer
         interval: delay
@@ -50,7 +51,7 @@ Rectangle {
         onTriggered: parent.opacity = 0.8
     }
 
-    // 组件销毁时停止动画
+    //组件销毁时停止动画
     Component.onDestruction: {
         anim.running = false
         timer.running = false

@@ -5,7 +5,7 @@ import "settings.js" as Controller
 
 ApplicationWindow{
     id:root
-    width: (height/8)*6
+    width: (height/10)*6
     height: Screen.height
     minimumWidth: width
     minimumHeight: height
@@ -14,8 +14,11 @@ ApplicationWindow{
     visible: true
     title: qsTr("中国象棋")
 
-    StackView {
+
+    StackView {//StackView会将加载的页面作为其子项
         id: stackView
+        // width:parent.width //StackView的内容区域会自动匹配窗口大小，因此无需直接绑定到root。
+        // height: parent.height
         initialItem: "HomePage.qml"
         anchors.fill: parent
 

@@ -5,11 +5,11 @@ import QtQuick.Layouts
 import Chess 1.0
 Item {
     id: _pvp
-    width: parent.width
-    height: parent.height
+    width: stackView.width//parent是stackView
+    height: stackView.height
 
     property var buttonStyle: QtObject {
-        property int width: parent.width/3
+        property int width: _pvp.width/3
         property int height: width/3
         property int radius: 5
         property int fontSize:_pvp.width/20
@@ -28,18 +28,33 @@ Item {
 
         //返回按钮
         Button {
+            id:_backButton
             Layout.alignment: Qt.AlignLeft
             Layout.leftMargin: 15
             Layout.topMargin: 20
             text:"返回首页"
             onClicked: {
+                clickAnim.start()//点击动画
                 stackView.pop()
                 stackView.push("HomePage.qml")
             }
             background: Rectangle {
-                color: "#808080"
+                id:btnBg
+                color: _backButton.down ? "#696969":"#808080"
                 radius: 5
                 border.color: "#696969"
+                border.width: 2
+            }
+
+            SequentialAnimation {
+                id: clickAnim
+                PropertyAnimation {
+                    target: _backButton
+                    property: "scale"
+                    to: 1.0
+                    duration: 500
+                    easing.type: Easing.OutBack
+                }
             }
         }
 
@@ -52,6 +67,8 @@ Item {
             }
             color: "#696969"
             Layout.alignment: Qt.AlignHCenter
+            Layout.topMargin: 10
+            Layout.bottomMargin: 20
         }
 
         //棋盘区域
@@ -59,11 +76,10 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.alignment: Qt.AlignCenter
-            width: parent.width
-            height: parent.height
+
             ChessBoard {
                 id: _board
-                anchors.centerIn: parent
+                anchors.fill: parent
             }
         }
 

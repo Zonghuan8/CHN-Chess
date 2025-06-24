@@ -4,15 +4,15 @@ import Qt5Compat.GraphicalEffects
 
 Item {
     id:root
-    width: parent.width*0.1
-    height: parent.width*0.1
+    width: stackView.width*0.1
+    height: root.width
 
     property real centerX: 0//设置棋子位置
     property real centerY: 0
     property bool selected: false//是否选中
     property string text: "兵"//棋子文字
     property bool isRed: true//是否红方
-    property int size: parent.width*0.1
+    property int size: root.width*0.1
     //计算位置（使中心点位于交叉线）
     x: centerX - width / 2
     y: centerY - height / 2
@@ -54,7 +54,7 @@ Item {
             text: root.text
             font {
                 family: root.isRed ? "FZKai-Z03" : "FZKai-Z03"//终端输入：fc-list : family查看可用字体
-                pixelSize: _piece.width*0.8
+                pixelSize: _piece.width*0.68
                 bold: true
             }
             color: root.isRed ? "#B22222" : "#000000"
@@ -73,7 +73,7 @@ Item {
         horizontalOffset: 5
         verticalOffset: 5
         radius:8
-        samples: parent.width*0.025
+        samples: parent.width*0.02
         color: "#80000000"
     }
 }
