@@ -29,7 +29,6 @@ public:
     Q_PROPERTY(int id READ id CONSTANT)
     Q_PROPERTY(int type READ type CONSTANT)
     Q_PROPERTY(bool isRed READ isRed CONSTANT)
-    QML_ELEMENT
 
 public:
     int id() const { return m_id; }

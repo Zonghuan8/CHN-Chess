@@ -5,12 +5,12 @@ import "settings.js" as Controller
 
 ApplicationWindow{
     id:root
-    width: 600
-    height: 800
-    minimumWidth: 600
-    minimumHeight: 800
-    maximumHeight: 800
-    maximumWidth: 600
+    width: (height/8)*6
+    height: Screen.height
+    minimumWidth: width
+    minimumHeight: height
+    maximumWidth: width
+    maximumHeight: height
     visible: true
     title: qsTr("中国象棋")
 

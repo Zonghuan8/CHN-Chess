@@ -5,14 +5,14 @@ import QtQuick.Layouts
 import Chess 1.0
 Item {
     id: _pvp
-    width: 600
-    height: 800
+    width: parent.width
+    height: parent.height
 
     property var buttonStyle: QtObject {
-        property int width: 200
-        property int height: 50
-        property int radius:5
-        property int fontSize:28
+        property int width: parent.width/3
+        property int height: width/3
+        property int radius: 5
+        property int fontSize:_pvp.width/20
         property string fontFamily: "FZKai\-Z03"
     }
 
@@ -29,8 +29,8 @@ Item {
         //返回按钮
         Button {
             Layout.alignment: Qt.AlignLeft
-            Layout.topMargin: 5
-            Layout.leftMargin: 5
+            Layout.leftMargin: 15
+            Layout.topMargin: 20
             text:"返回首页"
             onClicked: {
                 stackView.pop()
@@ -47,7 +47,7 @@ Item {
             text: "双人对战模式"
             font {
                 family: "FZKai\-Z03"
-                pixelSize: 40
+                pixelSize: _pvp.width/10
                 bold: true
             }
             color: "#696969"
@@ -59,9 +59,8 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.alignment: Qt.AlignCenter
-            width: Math.min(parent.width, 600)
-            height: Math.min(parent.height, 660)
-
+            width: parent.width
+            height: parent.height
             ChessBoard {
                 id: _board
                 anchors.centerIn: parent
@@ -70,10 +69,10 @@ Item {
 
         //底部按钮区域
         RowLayout{
+            Layout.bottomMargin: 50
             Layout.fillWidth: true
-            Layout.bottomMargin: 10
             Layout.alignment: Qt.AlignHCenter
-            spacing: 50
+            spacing: _pvp.width/12
             RoundButton {
                 text: qsTr("重开")
                 radius: buttonStyle.radius

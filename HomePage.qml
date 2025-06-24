@@ -7,14 +7,14 @@ import "settings.js" as Controller
 
 Item {
     id: _home
-    width: 600
-    height: 800
+    width: parent.width
+    height: parent.height
 
     property var buttonStyle: QtObject {
-        property int width: 200
-        property int height: 50
-        property int radius: 10
-        property int fontSize: 24
+        property int width: parent.width/2
+        property int height: width/4
+        property int radius: 5
+        property int fontSize:_home.width/20
         property string fontFamily: "FZMiaoWuS\-GB"
     }
 
@@ -34,9 +34,10 @@ Item {
             id: settingsButton
             anchors.left:parent.left
             anchors.top:parent.top
-            anchors.margins: 10
-            width: 40
-            height: 40
+            anchors.leftMargin: 19
+            anchors.topMargin: 35
+            width: _home.width/12
+            height:_home.width/12
             icon.source: "qrc:/images/settings.png"//设置图标路径
 
             //设置菜单
@@ -45,7 +46,7 @@ Item {
                 y: parent.height//菜单显示在按钮下方
                 x: parent.x//菜单与按钮左对齐
 
-            //音乐控制项
+            //音乐控制项            width: 70
             MenuItem {
                 id: musicMenuItem
                 text: "音乐"
@@ -102,8 +103,8 @@ Item {
                     //竹叶精灵动画
                     SpriteSequence {
                     id: _bamboosa
-                    width: 40
-                    height: 40
+                    width: _home.width/15
+                    height: _home.width/15
                     interpolate: true
                     Sprite {
                         name: "leaf1"
@@ -123,7 +124,7 @@ Item {
                         name: "leaf3"
                         source: "qrc:/images/bb3.png"
                         frameCount: 1
-                        frameDuration: 1000
+                        frameDuration: 101600
                         to: {"leaf2": 1}
                     }
                 }
@@ -138,7 +139,7 @@ Item {
                 anchors.top: parent.top//从顶部随机位置发射竹叶粒子
                 width: parent.width
                 height: 1
-                size: 30
+                size: _home.width/20
                 velocity: PointDirection { y: 40; xVariation: 20 }//设定发射速度：向下发射，但各个粒子间的x值可以不同（飘落并轻微水平摆动）
                 acceleration: PointDirection { x: 0; y: 10 }//发射粒子的初始加速度
             }
@@ -148,6 +149,7 @@ Item {
             spacing: 20
             anchors.centerIn: parent
             RoundButton {
+                width: 70
                 text: qsTr("双人对战")
                 Layout.preferredWidth: buttonStyle.width
                 Layout.preferredHeight: buttonStyle.height
@@ -162,6 +164,7 @@ Item {
                 }
             }
             RoundButton {
+                width: 70
                 text: qsTr("人机对战")
                 Layout.preferredWidth: buttonStyle.width
                 Layout.preferredHeight: buttonStyle.height
@@ -176,6 +179,7 @@ Item {
                 }
             }
             RoundButton {
+                width: 70
                 text: qsTr("游戏规则")
                 Layout.preferredWidth: buttonStyle.width
                 Layout.preferredHeight: buttonStyle.height
@@ -190,6 +194,7 @@ Item {
                 }
             }
             RoundButton {
+                width: 70
                 text: qsTr("联系我们")
                 Layout.preferredWidth: buttonStyle.width
                 Layout.preferredHeight: buttonStyle.height

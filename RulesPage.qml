@@ -5,8 +5,9 @@ import QtQuick.Layouts
 
 Item {
     id: _rulesPage
-    width: 600
-    height: 800
+    width: parent.width
+    height: parent.height
+    anchors.fill: parent
 
     Rectangle{
         anchors.fill: parent
@@ -19,18 +20,17 @@ Item {
 
         ScrollView {
             anchors.fill: parent
-            anchors.margins: 20
+            anchors.margins: _rulesPage.width/30
             clip: true
 
             ColumnLayout {
+                spacing: _rulesPage.width/20
                 width: parent.width
-                spacing: 30
-
                 Text {
                     text: "中国象棋规则"
                     font {
                         family: "FZKai-Z03"
-                        pixelSize: 28
+                        pixelSize: _rulesPage.width/10
                         bold: true
                     }
                     Layout.alignment: Qt.AlignHCenter
@@ -40,59 +40,64 @@ Item {
 
                 //规则内容
                 Text {
-                    text: "   中国象棋是一种源于中国古代的传统棋类游戏，使用方形棋盘和红黑两色
-圆形棋子进行对弈,以下是基本规则："
+                    text: "  中国象棋是一种源于中国古代的传统棋类游戏，
+  使用方形棋盘和红黑两色圆形棋子进行对弈，
+  以下是基本规则："
                     font {
                         family:"阿里巴巴普惠体 2.0 115 Black"
-                        pixelSize: 17
+                        pixelSize: _rulesPage.width/20
                     }
                     wrapMode: Text.Wrap//换行
+                    //Layout.fillWidth: true
                 }
 
                 Text {
                     text: "棋盘结构："
                     font {
                         family: "FZKai-Z03"
-                        pixelSize: 20
+                        pixelSize:  _rulesPage.width/20
                         bold: true
                     }
-                    wrapMode: Text.Wrap
+                    //wrapMode: Text.Wrap
                 }
 
                 Text {
-                    text: "  中国象棋棋盘由九道直线和十道横线交叉组成，"+
-                    "棋盘中间有一条‘楚河汉界’
-将双方分隔。"+
-                    "棋子摆在交叉点上。"
+                    text: "  中国象棋棋盘由九道直线和十道横线交叉组成。
+  棋盘中间有一条‘楚河汉界’将双方分隔。
+  棋子摆在交叉点上。"
                     font {
                         family: "阿里巴巴普惠体 2.0 115 Black"
-                        pixelSize: 17
+                        pixelSize:  _rulesPage.width/20
                     }
                     wrapMode: Text.Wrap
+                    //Layout.fillWidth: true
                 }
 
                 Text {
                     text: "棋子介绍："
                     font {
                         family: "FZKai-Z03"
-                        pixelSize: 20
+                        pixelSize:  _rulesPage.width/20
                         bold: true
                     }
                     wrapMode: Text.Wrap
                 }
 
                 Text {
-                    text: "1. 将/帅：只能在九宫格内活动，可以上下左右移动一格。\n" +
-                          "2. 士/仕：只能在九宫格内斜线移动一格。\n" +
-                          "3. 象/相：不能过河，走'田'字格，但如果'田'字中间有棋子（绊象腿）则
-不能走。\n" +
-                          "4. 马：走'日'字格，有'蹩马腿'的限制。\n" +
-                          "5. 车：可以沿直线任意移动。\n" +
-                          "6. 炮：移动方式与车相同，但吃子时必须跳过一个棋子（炮架）。\n" +
-                          "7. 兵/卒：未过河时只能前进一格，过河后可以左右移动。"
+                    text: "1. 将/帅：只能在九宫格内活动，可以上下左右
+ 移动一格。
+2. 士/仕：只能在九宫格内斜线移动一格。
+3. 象/相：不能过河，走'田'字格，但如果'田'字
+ 中间有棋子（绊象腿）则不能走。
+4. 马：走'日'字格，有'蹩马腿'的限制。
+5. 车：可以沿直线任意移动。
+6. 炮：移动方式与车相同，但吃子时必须跳过
+ 一个棋子（炮架）。
+7. 兵/卒：未过河时只能前进一格，过河后可以
+ 左右移动。"
                     font {
                         family: "阿里巴巴普惠体 2.0 115 Black"
-                        pixelSize: 17
+                        pixelSize:  _rulesPage.width/20
                     }
                     wrapMode: Text.Wrap
                 }
@@ -102,7 +107,7 @@ Item {
                     font.bold: true
                     font {
                         family: "FZKai-Z03"
-                        pixelSize: 20
+                        pixelSize:  _rulesPage.width/20
                         bold: true
                     }
                     wrapMode: Text.Wrap
@@ -112,7 +117,7 @@ Item {
                     text: "     吃掉对方的'将'或'帅'即为胜利。"
                     font {
                         family: "阿里巴巴普惠体 2.0 115 Black"
-                        pixelSize: 17
+                        pixelSize:  _rulesPage.width/20
                     }
                     wrapMode: Text.Wrap
                 }
@@ -120,7 +125,7 @@ Item {
                 Button {
                     text: "返回首页"
                     Layout.alignment: Qt.AlignHCenter
-                    Layout.topMargin: 20
+                    Layout.topMargin:  _rulesPage.width/20
                     onClicked: {
                         stackView.pop()
                         stackView.push("HomePage.qml")
@@ -132,7 +137,7 @@ Item {
                     }
                     font {
                         family: "FZKai-Z03"
-                        pixelSize: 18
+                        pixelSize:  _rulesPage.width/20
                     }
                 }
             }

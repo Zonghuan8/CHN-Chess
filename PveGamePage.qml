@@ -4,14 +4,14 @@ import QtQuick.Layouts
 
 Item {
     id: _pve
-    width: 600
-    height: 800
+    width: parent.width
+    height: parent.height
 
     property var buttonStyle: QtObject {
-        property int width: 200
-        property int height: 50
+        property int width: parent.width/3
+        property int height: width/3
         property int radius: 5
-        property int fontSize:28
+        property int fontSize:_pve.width/20
 
         property string fontFamily: "FZKai\-Z03"
     }
@@ -19,19 +19,27 @@ Item {
     Image {
         source: "qrc:/images/bg.png"
         anchors.fill: parent
+        anchors.leftMargin: 0
+        anchors.rightMargin: 0
+        anchors.topMargin: 0
+        anchors.bottomMargin: 0
     }
 
     ColumnLayout {
         anchors.fill: parent
-        spacing: 5
+        anchors.leftMargin: 0
+        anchors.rightMargin: 0
+        anchors.topMargin: 0
+        anchors.bottomMargin: 0
+        spacing: _pve.width/120
 
-        // 返回按钮
+        //返回按钮
         Button {
             Layout.alignment: Qt.AlignLeft
-            Layout.topMargin: 5
-            Layout.leftMargin: 5
 
             text:"返回首页"
+            Layout.leftMargin: 15
+            Layout.topMargin: 20
 
             onClicked: {
                 stackView.pop()
@@ -48,34 +56,40 @@ Item {
             text: "人机对战模式"
             font {
                 family: "FZKai\-Z03"
-                pixelSize: 40
+                pixelSize: _pve.width/10
                 bold: true
             }
             color: "#696969"
             Layout.alignment: Qt.AlignHCenter
         }
 
-        // 棋盘区域
+        //棋盘区域
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.alignment: Qt.AlignCenter
-            width: Math.min(parent.width, 600)
-            height: Math.min(parent.height, 660)
+            width: parent.width
+            height: parent.height
 
-            // 使用新的AI棋盘组件
+            //使用新的AI棋盘组件
             AIChessBoard {
                 id: _aiBoard
                 anchors.centerIn: parent
             }
         }
 
-        // 底部按钮区域
+        //底部按钮区域
         RowLayout {
+            Layout.bottomMargin: 50
+            Layout.margins: 0
+            Layout.topMargin: 0
+            Layout.leftMargin: 0
+            clip: false
+            Layout.fillHeight: false
+            Layout.maximumHeight: 65533
             Layout.fillWidth: true
-            Layout.bottomMargin: 10
             Layout.alignment: Qt.AlignHCenter
-            spacing: 50
+            spacing: _pve.width/12
             RoundButton {
                 text: qsTr("重开")
                 radius: buttonStyle.radius
@@ -103,18 +117,11 @@ Item {
                     pixelSize: buttonStyle.fontSize
                     family: buttonStyle.fontFamily
                 }
-// <<<<<<< HEAD
                 onClicked: {
                     // 悔棋逻辑
                     _aiBoard.boardLogic.undoMove();
                 }
-// =======
-// >>>>>>> CHN-Chess/main
             }
         }
     }
 }
-// <<<<<<< HEAD
-// =======
-
-// >>>>>>> CHN-Chess/main

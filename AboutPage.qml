@@ -6,8 +6,8 @@ import QtCore
 
 Item {
     id: _aboutPage
-    width: 600
-    height: 800
+    width: parent.width
+    height: parent.height
 
     Rectangle {
         anchors.fill: parent
@@ -27,7 +27,7 @@ Item {
                 text: "关于中国象棋"
                 font {
                     family: "FZKai-Z03"
-                    pixelSize: 28
+                    pixelSize: _aboutPage.width/10
                     bold: true
                 }
                 Layout.alignment: Qt.AlignHCenter
@@ -38,7 +38,7 @@ Item {
                 text: "版本: 1.0.0"
                 font {
                     family: "FZKai-Z03"
-                    pixelSize: 18
+                    pixelSize: _aboutPage.width/20
                 }
                 Layout.alignment: Qt.AlignHCenter
                 color: "#696969"
@@ -48,7 +48,7 @@ Item {
                 text: "这是一款中国象棋游戏，中国象棋是起源于中国的传统两人对战棋类游戏，拥有2000多年历史。"
                 font {
                     family: "FZKai-Z03"
-                    pixelSize: 18
+                    pixelSize: _aboutPage.width/20
                 }
                 wrapMode: Text.Wrap
                 Layout.fillWidth: true
@@ -58,7 +58,7 @@ Item {
                 text: "开发者团队:"
                 font {
                     family: "FZKai-Z03"
-                    pixelSize: 20
+                    pixelSize: _aboutPage.width/20
                     bold: true
                 }
                 Layout.alignment: Qt.AlignLeft
@@ -69,7 +69,7 @@ Item {
                 text: "• 张键 (2023051604093)\n• 张慧芝 (2023051604088)\n• 李露露 (2023051604116)"
                 font {
                     family: "FZKai-Z03"
-                    pixelSize: 18
+                    pixelSize: _aboutPage.width/20
                 }
                 Layout.alignment: Qt.AlignLeft
                 color: "#696969"
@@ -79,7 +79,7 @@ Item {
                 text: "指导老师: 龚伟"
                 font {
                     family: "FZKai-Z03"
-                    pixelSize: 18
+                    pixelSize: _aboutPage.width/20
                 }
                 Layout.alignment: Qt.AlignLeft
                 color: "#696969"
@@ -89,7 +89,7 @@ Item {
                 text: "联系我们: open-src@qq.com"
                 font {
                     family: "FZKai-Z03"
-                    pixelSize: 18
+                    pixelSize: _aboutPage.width/20
                 }
                 Layout.alignment: Qt.AlignLeft
                 color: "#1E90FF"
@@ -98,7 +98,7 @@ Item {
             Button {
                 text: "返回首页"
                 Layout.alignment: Qt.AlignHCenter
-                Layout.topMargin: 20
+                Layout.topMargin: _aboutPage.width/20
                 onClicked: stackView.pop()
                 background: Rectangle {
                     color: "#808080"
@@ -107,7 +107,7 @@ Item {
                 }
                 font {
                     family: "FZKai-Z03"
-                    pixelSize: 18
+                    pixelSize: _aboutPage.width/20
                 }
             }
         }
