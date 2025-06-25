@@ -42,6 +42,9 @@ qt_add_qml_module(appCHN-Chess
 
         QML_FILES MusicPlayer.qml
         RESOURCES music.qrc
+
+        SOURCES EleeyeEngine.h EleeyeEngine.cpp
+
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

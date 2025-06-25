@@ -54,7 +54,7 @@ void Stone::init(int id)
 
     m_dead = false;
     m_selected = false;
-    m_red = (id < 16);
+    m_red = (id >= 16);
 
     //qDebug() << "初始化棋子 ID:" << m_id << "位置: (" << m_col << "," << m_row << ")"
     //          << "类型:" << m_type << "颜色:" << (m_red ? "红" : "黑");
