@@ -465,7 +465,7 @@ Item {
 
                             //尝试移动棋子(吃子)
                             if (chess.moveStone(selectedCol, selectedRow, boardCol, boardRow)) {
-                                 player.captureSound.play()
+                                player.captureSound.play()
                                 console.log("吃子成功");
                                 selectedPieceId = -1;//清除选中状态
                                 //不需要手动设置棋子状态，因为移动后棋子位置已经改变

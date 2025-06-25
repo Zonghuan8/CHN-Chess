@@ -12,9 +12,9 @@ function toggleMusic(enabled) {
     console.log("音乐已" + (musicEnabled ? "开启" : "关闭"));
     if (musicEnabled)
     {
-      player.bgMusic.play()
+       player.musicEnabled=true
     }else {
-     player.bgMusic.stop()
+      player.musicEnabled=false
            }
 }
 
@@ -22,6 +22,12 @@ function toggleMusic(enabled) {
 function toggleSound(enabled) {
     soundEnabled = enabled;
     console.log("音效已" + (soundEnabled ? "开启" : "关闭"));
+    if(soundEnabled)
+    {
+       player.soundEnabled=true
+    }else{
+       player.soundEnabled=false
+    }
 }
 
 

@@ -581,6 +581,7 @@ Item {
 
                     //尝试移动棋子(吃子)
                     if (boardLogic.moveStone(selectedCol, selectedRow, boardCol, boardRow)) {
+                    player.captureSound.play()
                     console.log("吃子成功");
                     selectedPieceId = -1; // 清除选中状态
 

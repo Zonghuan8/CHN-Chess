@@ -104,6 +104,7 @@ Item {
                 Layout.bottomMargin:_aboutPage.width/20
                 onClicked: {
                     clickAnim.start()//点击动画
+                    player.click.play()
                     stackView.pop()
                     stackView.push("HomePage.qml")
                 }

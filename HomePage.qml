@@ -54,6 +54,7 @@ Item {
                 text: "音乐"
                 icon.name: musicEnabled ? "audio-volume-high" : "audio-volume-muted"
                 onTriggered:{
+                    player.click.play()
                     musicEnabled = !musicEnabled
                     Controller.toggleMusic(musicEnabled)
                 }
@@ -65,6 +66,7 @@ Item {
                 text:"音效"
                 icon.name: soundEnabled ? "audio-volume-high" : "audio-volume-muted"
                 onTriggered: {
+                    player.click.play()
                     soundEnabled = !soundEnabled
                     Controller.toggleSound(soundEnabled)
                 }
@@ -74,7 +76,10 @@ Item {
                 id: quitItem
                 text: "退出"
                 icon.name: "application-exit"
-                onTriggered: Qt.quit()
+                onTriggered: {
+                    player.click.play()
+                    Qt.quit()
+                }
             }
         }
         onClicked: {

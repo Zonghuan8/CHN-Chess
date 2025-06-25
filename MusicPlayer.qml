@@ -13,8 +13,8 @@ Item {
   property alias fail:_fail  //失败音乐
 
   // 暴露可绑定属性
-  property bool musicEnabled:true
-  property bool soundEnabled:true
+  property bool musicEnabled:Controller.musicEnabled
+  property bool soundEnabled:Controller.soundEnabled
 
   // 背景音乐
   MediaPlayer {
@@ -25,7 +25,7 @@ Item {
     }
     source: "qrc:/sounds/bgm.wav"
     loops: MediaPlayer.Infinite
-   // autoPlay: true                // 自动播放
+    autoPlay: true                // 自动播放
   }
 
   //走棋音效
