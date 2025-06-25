@@ -276,6 +276,14 @@ Item {
                 victoryOverlay.winnerText = winner;
                 victoryOverlay.visible = true;
                 victoryAnimation.start();
+                if(victoryOverlay.winnerText=="红方")
+                {
+                   player.success.play();
+                }
+                else{
+                    player.fail.play();
+                }
+
                 aiTimer.stop();
             }
 
@@ -291,8 +299,7 @@ Item {
                                                                      isGeneral: (stone.type === Stone.JIANG)
                                                                  });
                         if (stone.type === Stone.JIANG) {
-
-                            createGeneralCaptureEffect(startX, startY, stone.isRed);
+                                 createGeneralCaptureEffect(startX, startY, stone.isRed);
                         }
                     }
                 }
@@ -301,33 +308,32 @@ Item {
             function onComputerMoved(moveId, fromCol, fromRow, toCol, toRow, killId) {
                 boardBackground.createMoveAnimation(moveId, fromCol, fromRow, toCol, toRow, killId);
             }
-        }
+            //将军被吃的特殊效果
+            function createGeneralCaptureEffect(x, y, isRed) {
+                //多个圆形扩散效果
+                for (var i = 0; i < 3; i++) {
+                    (function(index) {
+                        var delay = index * 200;
 
-        //将军被吃的特殊效果
-        function createGeneralCaptureEffect(x, y, isRed) {
-            //多个圆形扩散效果
-            for (var i = 0; i < 3; i++) {
-                (function(index) {
-                    var delay = index * 200;
+                        //创建AnimationEffect实例
+                        var effect = Qt.createComponent("AnimationEffect.qml");
+                        if (effect.status === Component.Ready) {
+                            var obj = effect.createObject(boardBackground, {
+                                                              centerX: x,
+                                                              centerY: y,
+                                                              effectColor: isRed ? "#ff0000" : "#0000ff",
+                                                              square: _aiBoard.square,
+                                                              delay: delay
+                                                          });
 
-                    //创建AnimationEffect实例
-                    var effect = Qt.createComponent("AnimationEffect.qml");
-                    if (effect.status === Component.Ready) {
-                        var obj = effect.createObject(boardBackground, {
-                                                          centerX: x,
-                                                          centerY: y,
-                                                          effectColor: isRed ? "#ff0000" : "#0000ff",
-                                                          square: _aiBoard.square,
-                                                          delay: delay
-                                                      });
-
-                        if (!obj) {
-                            console.error("Failed to create AnimationEffect object");
+                            if (!obj) {
+                                console.error("Failed to create AnimationEffect object");
+                            }
+                        } else {
+                            console.error("Component not ready:", effect.errorString());
                         }
-                    } else {
-                        console.error("Component not ready:", effect.errorString());
-                    }
-                })(i);
+                    })(i);
+                }
             }
         }
 

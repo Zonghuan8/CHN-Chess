@@ -47,6 +47,7 @@ Item {
                 style: Text.Outline
                 styleColor: "#40000000"
             }
+
         }
 
         //进入动画
@@ -206,7 +207,9 @@ Item {
             onGameOver: (winner) => {
                 victoryOverlay.winnerText = winner;
                 victoryOverlay.visible = true;
+
                 victoryAnimation.start();
+                player.success.play();
             }
 
             onStonesChanged: {
@@ -226,7 +229,6 @@ Item {
 
                         //如果是将/帅，添加额外效果
                         if (stone.type === Stone.JIANG) {
-
                             createGeneralCaptureEffect(startX, startY, stone.isRed);
                         }
                     }

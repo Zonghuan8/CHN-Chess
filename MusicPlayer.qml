@@ -10,6 +10,7 @@ Item {
   property alias captureSound: _captureSound   //吃子音乐
   property alias click: _click   //点击音乐
   property alias success:_success  //胜利音乐
+  property alias fail:_fail  //失败音乐
 
   // 暴露可绑定属性
   property bool musicEnabled:true
@@ -22,8 +23,9 @@ Item {
       id: bgAudioOutput
       volume:musicManager.musicEnabled ? 1.0 : 0.0  // 随musicEnabled变化
     }
-    source: "qrc:/sounds/bgm.mp3"
+    source: "qrc:/sounds/bgm.wav"
     loops: MediaPlayer.Infinite
+   // autoPlay: true                // 自动播放
   }
 
   //走棋音效
@@ -54,9 +56,15 @@ Item {
     source: "qrc:/sounds/success.wav"
   }
 
-  // 初始化自动播放
-  Component.onCompleted: {
+   SoundEffect{
+    id: _fail
+    volume: musicManager.soundEnabled ? 1.0 : 0.0
+    source: "qrc:/sounds/fail.wav"
+   }
+
+   // 初始化自动播放
+   Component.onCompleted: {
      bgMusic.play()
-  }
+   }
 
 }
