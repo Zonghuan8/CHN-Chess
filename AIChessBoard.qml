@@ -10,25 +10,24 @@ Item {
     property int square: _aiBoard.width/10
     property alias boardLogic: chess
 
-    //创建AI棋盘
     AIGameBoard {
-        id: chess
-        aiIsRed: false//AI执黑方
-        aiLevel: 1//AI难度
-    }
+         id: chess
+         aiIsRed: false
+         aiLevel: 1
+     }
 
-    //AI移动定时器
-    Timer {
-        id: aiTimer
-        interval: 100
-        onTriggered: {
-            if (!chess.isGameOver() &&
-                    ((chess.isRedTurn && chess.aiIsRed) ||
-                     (!chess.isRedTurn && !chess.aiIsRed))) {
-                chess.computerMove()
-            }
-        }
-    }
+     // 修改computerMove调用
+     Timer {
+         id: aiTimer
+         interval: 100
+         onTriggered: {
+             if (!chess.isGameOver() &&
+                 ((chess.isRedTurn && chess.aiIsRed) ||
+                  (!chess.isRedTurn && !chess.aiIsRed))) {
+                 chess.computerMove()
+             }
+         }
+     }
 
     //移动动画组件
     Component {
@@ -469,11 +468,11 @@ Item {
                     switch (modelData.type) {
                     case Stone.CHE: return "車"
                     case Stone.MA: return "马"
-                    case Stone.XIANG: return modelData.isRed ? "相" : "象"
-                    case Stone.SHI: return modelData.isRed ? "仕" : "士"
-                    case Stone.JIANG: return modelData.isRed ? "帅" : "将"
+                    case Stone.XIANG: return modelData.isRed ? "象" : "相"
+                    case Stone.SHI: return modelData.isRed ? "仕" : "仕"
+                    case Stone.JIANG: return modelData.isRed ? "将" : "帅"
                     case Stone.PAO: return "炮"
-                    case Stone.BING: return modelData.isRed ? "兵" : "卒"
+                    case Stone.BING: return modelData.isRed ? "卒" : "兵"
                     default: return "?"
                     }
                 }

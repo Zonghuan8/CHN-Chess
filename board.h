@@ -25,7 +25,7 @@ public:
     //初始化所有棋子
     Q_INVOKABLE void initGame();
 
-    Q_INVOKABLE Stone *getStoneById(int id);
+    Q_INVOKABLE Stone *getStoneById(int id) const;
     Q_INVOKABLE QPoint clickPosition(int cellSize, qreal x, qreal y);
 
     Q_INVOKABLE bool isPiece(int x, int y); //判断是否为棋子
