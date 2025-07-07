@@ -183,6 +183,22 @@ Item {
             }
             RoundButton {
                 width: 70
+                text: qsTr("网络对战")
+                Layout.preferredWidth: buttonStyle.width
+                Layout.preferredHeight: buttonStyle.height
+                radius: buttonStyle.radius
+                font{
+                    pixelSize: buttonStyle.fontSize
+                    family: buttonStyle.fontFamily
+                }
+                onClicked: {
+                    //player.click.play()
+                    stackView.pop(stackView.currentItem)
+                    stackView.push("NetworkChessBoard.qml")
+                }
+            }
+            RoundButton {
+                width: 70
                 text: qsTr("游戏规则")
                 Layout.preferredWidth: buttonStyle.width
                 Layout.preferredHeight: buttonStyle.height

@@ -6,6 +6,31 @@ Stone::Stone(QObject *parent) : QObject(parent) {}
 
 Stone::~Stone() {}
 
+// stone.cpp
+QDataStream &operator<<(QDataStream &out, const Stone *stone)
+{
+    out << stone->id() << stone->row() << stone->col() << stone->dead() << stone->selected()
+        << static_cast<qint32>(stone->type()) << stone->isRed();
+    return out;
+}
+
+QDataStream &operator>>(QDataStream &in, Stone *&stone)
+{
+    int id, row, col, type;
+    bool dead, selected, isRed;
+
+    in >> id >> row >> col >> dead >> selected >> type >> isRed;
+
+    // 假设 stone 已经创建
+    stone->setRow(row);
+    stone->setCol(col);
+    stone->setDead(dead);
+    stone->setSelected(selected);
+    // 类型和颜色在初始化时已设置，不需要修改
+
+    return in;
+}
+
 void Stone::setSelected(bool selected)
 {
     if (m_selected != selected) {

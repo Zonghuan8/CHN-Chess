@@ -1,8 +1,5 @@
 #include "board.h"
 
-// #include <QTime>
-// #include <QtGlobal>
-
 #include <QPoint>
 #include <QDebug>
 Board::Board(QObject *parent) : QObject(parent)
@@ -21,6 +18,8 @@ Board::Board(QObject *parent) : QObject(parent)
 
 void Board::initGame()
 {
+    m_bRedTurn = true; // 必须初始化为红方先行
+    qDebug() << "游戏初始化：初始回合状态设置为" << (m_bRedTurn ? "红方" : "黑方");
     //清空历史记录
     m_steps.clear();
     qDebug() << "游戏初始化: 清空历史记录";
@@ -38,6 +37,52 @@ void Board::initGame()
     qDebug() << "游戏初始化完成";
 
     emit stonesChanged();
+}
+
+// board.cpp
+void Board::setStones(const QVector<Stone *> &stones)
+{
+    for (int i = 0; i < stones.size(); ++i) {
+        if (i < m_stones.size()) {
+            m_stones[i]->setRow(stones[i]->row());
+            m_stones[i]->setCol(stones[i]->col());
+            m_stones[i]->setDead(stones[i]->dead());
+            m_stones[i]->setSelected(stones[i]->selected());
+        }
+    }
+    emit stonesChanged();
+}
+
+QDataStream &operator<<(QDataStream &out, const Board *board)
+{
+    out << board->isRedTurn(); // 序列化回合状态
+    out << static_cast<qint32>(board->m_stones.size());
+    for (Stone *stone : board->m_stones) {
+        out << stone;
+    }
+    return out;
+}
+
+QDataStream &operator>>(QDataStream &in, Board *board)
+{
+    bool redTurn;
+    in >> redTurn;
+    board->setRedTurn(redTurn);
+
+    qint32 size;
+    in >> size;
+
+    QVector<Stone *> stones;
+    stones.reserve(size);
+
+    for (int i = 0; i < size; ++i) {
+        Stone *stone = new Stone(board);
+        in >> stone;
+        stones.append(stone);
+    }
+
+    board->setStones(stones);
+    return in;
 }
 
 Stone *Board::getStoneById(int id) const
@@ -175,6 +220,19 @@ void Board::clearSelection()
 
 bool Board::canMove(int moveid, int killid, int col, int row)
 {
+    // 0. 调试输出
+    qDebug() << "校验移动: moveid=" << moveid << "颜色=" << (m_stones[moveid]->isRed() ? "红" : "黑")
+             << "当前回合=" << (m_bRedTurn ? "红方" : "黑方");
+
+    // 1. 基础校验
+    if (moveid == -1) return false;
+
+    // 2. 回合校验（必须当前回合的棋子）
+    if (m_stones[moveid]->isRed() != m_bRedTurn) {
+        qDebug() << "错误：非当前回合的棋子！";
+        return false;
+    }
+
     //不能吃同色棋子
     if (killid != -1 && m_stones[moveid]->isRed() == m_stones[killid]->isRed()) { return false; }
 

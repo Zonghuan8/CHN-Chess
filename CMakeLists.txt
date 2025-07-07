@@ -44,6 +44,8 @@ qt_add_qml_module(appCHN-Chess
         RESOURCES music.qrc
 
         SOURCES EleeyeEngine.h EleeyeEngine.cpp
+        QML_FILES NetworkChessBoard.qml
+        SOURCES networkboard.h networkboard.cpp
 
 )
 

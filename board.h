@@ -18,9 +18,12 @@ class Board : public QObject
 public:
     explicit Board(QObject *parent = nullptr);
 
+    friend QDataStream &operator<<(QDataStream &out, const Board *board);
+    friend QDataStream &operator>>(QDataStream &in, Board *board);
+
     QVector<Stone *> stones() const { return m_stones; }
 
-    Q_INVOKABLE bool isRedTurn() { return m_bRedTurn; }
+    Q_INVOKABLE bool isRedTurn() const { return m_bRedTurn; }
 
     //初始化所有棋子
     Q_INVOKABLE void initGame();
@@ -69,6 +72,8 @@ public:
 
     bool m_bSide = false;
     QList<MoveRecord> m_steps;
+
+    Q_INVOKABLE void setStones(const QVector<Stone *> &stones);
 signals:
     void gameOver(QString winner);
     void redTurnChanged();

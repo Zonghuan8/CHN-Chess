@@ -2,7 +2,7 @@
 #include <QtMath>
 #include <QDebug>
 
-#include <QCoreApplication> // 添加此头文件
+#include <QCoreApplication>
 
 AIGameBoard::AIGameBoard(QObject* parent) : Board(parent), m_engine(new EleeyeEngine(this))
 {

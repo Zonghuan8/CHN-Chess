@@ -27,6 +27,8 @@ public:
     Q_PROPERTY(bool isRed READ isRed CONSTANT)
 
 public:
+    friend QDataStream &operator<<(QDataStream &out, const Stone *stone);
+    friend QDataStream &operator>>(QDataStream &in, Stone *&stone);
     int id() const { return m_id; }
     int row() const { return m_row; }
     int col() const { return m_col; }
