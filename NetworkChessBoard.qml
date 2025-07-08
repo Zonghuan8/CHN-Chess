@@ -12,124 +12,468 @@ Item {
     property int square: width/10
     property alias boardLogic: networkChess
 
-    // 连接状态面板
+    Image {
+        source: "qrc:/images/bg.png"
+        anchors.fill: parent
+    }
+
     Rectangle {
-        id: connectionPanel
-        width: parent.width * 0.8
-        height: 120
-        anchors.bottom: chatPanel.top
-        anchors.topMargin: 20
-        anchors.horizontalCenter: parent.horizontalCenter
+        id: connectionStatusIndicator
+        width: Math.min(parent.width * 0.3, 130)
+        height: 30
+        anchors.top: parent.top
+        anchors.topMargin: 5
+        anchors.right: parent.right
+        anchors.rightMargin: 5
+        radius: height / 2
         color: "#f0f0f0"
-        radius: 10
         border.color: "#888"
         border.width: 1
-        visible: true
-        z:100
-        Column {
-            anchors.centerIn: parent
-            spacing: 10
 
-            Text {
-                text: networkChess.connectionStatus
-                font.pixelSize: 20
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-
-            Row {
-                spacing: 20
-                anchors.horizontalCenter: parent.horizontalCenter
-                visible: networkChess.connectionStatus === "未连接"
-
-                Button {
-                    text: "创建游戏"
-                    onClicked: networkChess.createGame()
-                }
-
-                Button {
-                    text: "加入游戏"
-                    onClicked: joinDialog.open()
+        // 状态指示灯
+        Rectangle {
+            id: statusLight
+            width: 12
+            height: 12
+            radius: width / 2
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            color: {
+                switch(networkChess.connectionStatus) {
+                    case "已连接": return "#4CAF50"; // 绿色
+                    case "连接中": return "#FFC107";  // 黄色
+                    default: return "#F44336";       // 红色
                 }
             }
 
-            Button {
-                text: "断开连接"
-                visible: networkChess.connectionStatus !== "未连接"
-                onClicked: networkChess.disconnectGame()
+            // 呼吸动画效果
+            SequentialAnimation on opacity {
+                running: networkChess.connectionStatus === "连接中"
+                loops: Animation.Infinite
+                NumberAnimation { from: 0.5; to: 1.0; duration: 800; easing.type: Easing.InOutQuad }
+                NumberAnimation { from: 1.0; to: 0.5; duration: 800; easing.type: Easing.InOutQuad }
+            }
+        }
+
+        // 状态文本
+        Text {
+            id: statusText
+            anchors.left: statusLight.right
+            anchors.leftMargin: 8
+            anchors.verticalCenter: parent.verticalCenter
+            text: networkChess.connectionStatus
+            font.pixelSize: 14
+            color: "#333"
+        }
+
+        // 棋子颜色指示
+        Rectangle {
+            id: colorIndicator
+            width: 16
+            height: 16
+            radius: width / 2
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+            visible: networkChess.connectionStatus === "已连接"
+            color: networkChess.myColorIsRed ? "#e53935" : "#212121" // 红方红色，黑方黑色
+
+            // 动画效果
+            SequentialAnimation on scale {
+                running: networkChess.myTurn && networkChess.connectionStatus === "已连接"
+                loops: Animation.Infinite
+                NumberAnimation { from: 1.0; to: 1.2; duration: 500; easing.type: Easing.InOutQuad }
+                NumberAnimation { from: 1.2; to: 1.0; duration: 500; easing.type: Easing.InOutQuad }
+            }
+        }
+
+        // 鼠标悬停提示
+        ToolTip {
+            id: statusToolTip
+            delay: 500
+            timeout: 3000
+            text: {
+                if(networkChess.connectionStatus === "已连接") {
+                    return networkChess.myTurn ?
+                        (networkChess.myColorIsRed ? "您的回合 (红方)" : "您的回合 (黑方)") :
+                        "等待对手走棋...";
+                }
+                return networkChess.connectionStatus;
+            }
+        }
+
+        // 鼠标悬停事件
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            onEntered: statusToolTip.visible = true
+            onExited: statusToolTip.visible = false
+        }
+    }
+
+    //返回按钮
+    Button {
+        id:_backButton
+        anchors.top: parent.top
+        anchors.topMargin: 12
+        anchors.left: parent.left
+        anchors.leftMargin: 20
+        text:"返回首页"
+        onClicked: {
+            clickAnim.start()//点击动画
+            player.click.play()
+            stackView.pop()
+            stackView.push("HomePage.qml")
+        }
+        background: Rectangle {
+            id:btnBg
+            color: _backButton.down ? "#696969":"#808080"
+            radius: 5
+            border.color: "#696969"
+            border.width: 2
+        }
+
+        SequentialAnimation {
+            id: clickAnim
+            PropertyAnimation {
+                target: _backButton
+                property: "scale"
+                to: 1.0
+                duration: 500
+                easing.type: Easing.OutBack
             }
         }
     }
 
-    // 加入游戏对话框
-    // Dialog {
-    //     id: joinDialog
-    //     title: "加入游戏"
-    //     anchors.centerIn: parent
-    //     width: parent.width * 0.7
-    //     modal: true
+    // 主菜单对话框
+    Dialog {
+        id: mainMenuDialog
+        title: "联机对战"
+        width: parent.width * 0.8
+        height: 260
+        anchors.centerIn: parent
+        modal: true
+        visible: networkChess.connectionStatus === "未连接"
 
-    //     Column {
-    //         spacing: 20
-    //         width: parent.width
+        background: Rectangle {
+            color: "#f8f8f8"
+            radius: 12
+            border.color: "#d0d0d0"
+            border.width: 1
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: 2
+                verticalOffset: 2
+                radius: 8
+                samples: 16
+                color: "#40000000"
+            }
+        }
 
-    //         TextField {
-    //             id: ipInput
-    //             width: parent.width
-    //             placeholderText: "输入主机IP地址"
-    //             inputMethodHints: Qt.ImhFormattedNumbersOnly
-    //         }
+        header: Label {
+            text: mainMenuDialog.title
+            font.pixelSize: 18
+            font.bold: true
+            color: "#4a6ea9"
+            horizontalAlignment: Text.AlignHCenter
+            padding: 12
+        }
 
-    //         Button {
-    //             text: "连接"
-    //             width: parent.width
-    //             onClicked: {
-    //                 networkChess.joinGame(ipInput.text)
-    //                 joinDialog.close()
-    //             }
-    //         }
-    //     }
-    // }
+        Column {
+            anchors.fill: parent
+            spacing: 15
+            anchors.margins: 10
+
+            Button {
+                width: parent.width
+                height: 50
+                text: "创建游戏(红方)"
+                font.pixelSize: 16
+                background: Rectangle {
+                    radius: 6
+                    color: parent.down ? "#d9534f" : "#f56c6c"
+                }
+                contentItem: Text {
+                    text: parent.text
+                    font: parent.font
+                    color: "white"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                onClicked: {
+                    networkChess.createGame()
+                    mainMenuDialog.close()
+                    connectionStatusDialog.open()
+                }
+            }
+
+            Button {
+                width: parent.width
+                height: 50
+                text: "加入游戏(黑方)"
+                font.pixelSize: 16
+                background: Rectangle {
+                    radius: 6
+                    color: parent.down ? "#5bc0de" : "#67c23a"
+                }
+                contentItem: Text {
+                    text: parent.text
+                    font: parent.font
+                    color: "white"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                onClicked: {
+                    mainMenuDialog.close()
+                    joinDialog.open()
+                }
+            }
+
+            Button {
+                width: parent.width
+                height: 50
+                text: "取消"
+                font.pixelSize: 16
+                background: Rectangle {
+                    radius: 6
+                    color: parent.down ? "#6c757d" : "#909399"
+                }
+                contentItem: Text {
+                    text: parent.text
+                    font: parent.font
+                    color: "white"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                onClicked: mainMenuDialog.close()
+            }
+        }
+    }
+
+    // 连接状态对话框
+    Dialog {
+        id: connectionStatusDialog
+        title: "连接状态"
+        width: parent.width * 0.8
+        height: 220
+        anchors.centerIn: parent
+        modal: true
+        closePolicy: Popup.NoAutoClose
+
+        background: Rectangle {
+            color: "#f8f8f8"
+            radius: 12
+            border.color: "#d0d0d0"
+            border.width: 1
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: 2
+                verticalOffset: 2
+                radius: 8
+                samples: 16
+                color: "#40000000"
+            }
+        }
+
+        header: Label {
+            text: connectionStatusDialog.title
+            font.pixelSize: 18
+            font.bold: true
+            color: "#4a6ea9"
+            horizontalAlignment: Text.AlignHCenter
+            padding: 12
+        }
+
+        Column {
+            anchors.fill: parent
+            spacing: 15
+            anchors.margins: 10
+
+            Text {
+                width: parent.width
+                text: networkChess.connectionStatus
+                font.pixelSize: 16
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.Wrap
+                color: "#333"
+            }
+
+            Button {
+                width: parent.width
+                height: 50
+                text: "断开连接"
+                visible: networkChess.connectionStatus !== "未连接"
+                font.pixelSize: 16
+                background: Rectangle {
+                    radius: 6
+                    color: parent.down ? "#d9534f" : "#f56c6c"
+                }
+                contentItem: Text {
+                    text: parent.text
+                    font: parent.font
+                    color: "white"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                onClicked: {
+                    networkChess.disconnectGame()
+                    connectionStatusDialog.close()
+                    mainMenuDialog.open()
+                }
+            }
+
+            Button {
+                width: parent.width
+                height: 50
+                text: "关闭"
+                font.pixelSize: 16
+                background: Rectangle {
+                    radius: 6
+                    color: parent.down ? "#6c757d" : "#909399"
+                }
+                contentItem: Text {
+                    text: parent.text
+                    font: parent.font
+                    color: "white"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                onClicked: connectionStatusDialog.close()
+            }
+        }
+    }
 
     // 加入游戏对话框
     Dialog {
         id: joinDialog
         title: "加入游戏"
-        width: parent.width * 0.7
+        width: parent.width * 0.8
+        height: 220
+        anchors.centerIn: parent
         modal: true
 
-        // 使用固定位置而不是锚点
-        x: (parent.width - width) / 2
-        y: chatPanel.y - height - 20  // 显示在聊天面板上方20像素处
+        background: Rectangle {
+            color: "#f8f8f8"
+            radius: 12
+            border.color: "#d0d0d0"
+            border.width: 1
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                horizontalOffset: 2
+                verticalOffset: 2
+                radius: 8
+                samples: 16
+                color: "#40000000"
+            }
+        }
+
+        header: Label {
+            text: joinDialog.title
+            font.pixelSize: 18
+            font.bold: true
+            color: "#4a6ea9"
+            horizontalAlignment: Text.AlignHCenter
+            padding: 12
+        }
 
         Column {
-            spacing: 20
-            width: parent.width
+            anchors.fill: parent
+            spacing: 15
+            anchors.margins: 10
 
             TextField {
                 id: ipInput
                 width: parent.width
-                placeholderText: "输入主机IP地址"
+                height: 50
+                placeholderText: "输入主机IP地址 (如: 192.168.1.100)"
+                font.pixelSize: 16
                 inputMethodHints: Qt.ImhFormattedNumbersOnly
+                background: Rectangle {
+                    radius: 6
+                    color: "#909399"
+                    border.color: "#d0d0d0"
+                    border.width: 1
+                }
             }
 
-            Button {
-                text: "连接"
+            Row {
                 width: parent.width
-                onClicked: {
-                    networkChess.joinGame(ipInput.text)
-                    joinDialog.close()
+                spacing: 10
+
+                Button {
+                    width: parent.width * 0.5 - 5
+                    height: 50
+                    text: "连接"
+                    font.pixelSize: 16
+                    background: Rectangle {
+                        radius: 6
+                        color: parent.down ? "#5bc0de" : "#67c23a"
+                    }
+                    contentItem: Text {
+                        text: parent.text
+                        font: parent.font
+                        color: "white"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    onClicked: {
+                        if (ipInput.text.trim() !== "") {
+                            networkChess.joinGame(ipInput.text)
+                            joinDialog.close()
+                            connectionStatusDialog.open()
+                        }
+                    }
+                }
+
+                Button {
+                    width: parent.width * 0.5 - 5
+                    height: 50
+                    text: "取消"
+                    font.pixelSize: 16
+                    background: Rectangle {
+                        radius: 6
+                        color: parent.down ? "#6c757d" : "#909399"
+                    }
+                    contentItem: Text {
+                        text: parent.text
+                        font: parent.font
+                        color: "white"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    onClicked: {
+                        joinDialog.close()
+                        mainMenuDialog.open()
+                    }
                 }
             }
         }
     }
 
-    // 棋盘背景 (与本地对战相同)
+    Text {
+        text: "联机对战模式"
+        font {
+            family: "FZKai\-Z03"
+            pixelSize: _networkBoard.width/12
+            bold: true
+        }
+            color: "#696969"
+            anchors.top: parent.top
+            anchors.topMargin: 30
+            anchors.horizontalCenter: parent.horizontalCenter
+    }
+
+    // 棋盘背景
     Rectangle {
         id: boardBackground
-        height: parent.height*0.91
+        height: parent.height*0.65
         width:parent.width
         anchors.top:parent.top
-        anchors.topMargin: 0
+        anchors.topMargin: 100
         color: "#f0e0d0"
         radius: 50
 
@@ -148,91 +492,7 @@ Item {
             }
         }
 
-        // 胜利动画组件 (与本地对战相同)
-        Rectangle {
-            id: victoryOverlay
-            anchors.fill: parent
-            color: "#80000000"
-            visible: false
-            z: 100
-
-            property string winnerText: ""
-            property color winnerColor: winnerText === "红方" ? "#ff0000" : "#0000ff"
-
-            Item {
-                anchors.centerIn: parent
-                Text {
-                    id: glowText
-                    anchors.centerIn: parent
-                    text: victoryOverlay.winnerText + "胜利!"
-                    font.pixelSize: _networkBoard.width*0.1
-                    font.bold: true
-                    color: victoryOverlay.winnerColor
-                    opacity: 0.7
-                }
-                Text {
-                    id: victoryText
-                    anchors.centerIn: parent
-                    text: victoryOverlay.winnerText + "胜利!"
-                    font.pixelSize: _networkBoard.width*0.1
-                    font.bold: true
-                    color: "white"
-                    style: Text.Outline
-                    styleColor: "#40000000"
-                }
-            }
-
-            SequentialAnimation {
-                id: victoryAnimation
-                running: false
-                NumberAnimation {
-                    target: victoryOverlay
-                    property: "opacity"
-                    from: 0
-                    to: 1
-                    duration: 1000
-                }
-                ParallelAnimation {
-                    loops: Animation.Infinite
-                    SequentialAnimation {
-                        NumberAnimation {
-                            target: victoryText
-                            property: "scale"
-                            from: 1.0
-                            to: 1.1
-                            duration: 500
-                            easing.type: Easing.InOutQuad
-                        }
-                        NumberAnimation {
-                            target: victoryText
-                            property: "scale"
-                            from: 1.1
-                            to: 1.0
-                            duration: 500
-                            easing.type: Easing.InOutQuad
-                        }
-                    }
-                    SequentialAnimation {
-                        ColorAnimation {
-                            targets: [victoryText, glowText]
-                            property: "color"
-                            from: "white"
-                            to: victoryOverlay.winnerColor
-                            duration: 1000
-                        }
-                        ColorAnimation {
-                            targets: [victoryText, glowText]
-                            property: "color"
-                            from: victoryOverlay.winnerColor
-                            to: "white"
-                            duration: 1000
-                        }
-                    }
-                }
-            }
-        }
-
-        // 吃子动画组件 (与本地对战相同)
+        // 吃子动画组件
         Component {
             id: captureAnimation
             Rectangle {
@@ -288,12 +548,18 @@ Item {
                 Component.onCompleted: {
                     x = startPos.x - width / 2
                     y = startPos.y - height / 2
-                }
+                }// 灰色按钮
             }
         }
 
         NetworkBoard {
             id: networkChess
+            onConnectionStatusChanged: {
+                //当连接状态变为"已连接"时自动关闭对话框
+                if (connectionStatus === "已连接") {
+                    connectionStatusDialog.close()
+                }
+            }
             onGameOver: (winner) => {
                 victoryOverlay.winnerText = winner;
                 victoryOverlay.visible = true;
@@ -326,7 +592,7 @@ Item {
                     player.moveSound.play();
                 }
 
-                // 执行移动 - 使用正确的参数顺序
+                // 执行移动
                 if (networkChess.moveStone(fromCol, fromRow, toCol, toRow)) {
                     console.log("对手移动: ", fromCol, fromRow, "->", toCol, toRow);
                 }
@@ -358,7 +624,7 @@ Item {
             }
         }
 
-        // 棋盘绘制 (修复棋盘线问题)
+        // 棋盘绘制
         Canvas {
             id: boardCanvas
             width: parent.width
@@ -406,7 +672,7 @@ Item {
             }
         }
 
-        // 九宫斜线 (与本地对战相同)
+        // 九宫斜线
         Canvas {
             id: _palaceCanvas
             anchors.fill: parent
@@ -439,7 +705,7 @@ Item {
             }
         }
 
-        // 楚河汉界文字 (与本地对战相同)
+        // 楚河汉界文字
         Text {
             id: riverText
             x:4*_networkBoard.square
@@ -454,7 +720,7 @@ Item {
             styleColor: "#00000011"
         }
 
-        // 棋子 (与本地对战相同)
+        // 棋子
         Repeater {
             model: networkChess.stones
             delegate: ChessPiece {
@@ -619,11 +885,21 @@ Item {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 20
         anchors.horizontalCenter: parent.horizontalCenter
-        color: "#f0f0f0"
-        radius: 10
-        border.color: "#888"
+        color: "#f8f8f8"
+        radius: 11
+        border.color: "#d0d0d0"
         border.width: 1
         visible: networkChess.connectionStatus !== "未连接"
+
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            horizontalOffset: 2
+            verticalOffset: 2
+            radius: 8
+            samples: 16
+            color: "#40000000"
+        }
 
         Column {
             anchors.fill: parent
@@ -640,8 +916,20 @@ Item {
                     width: parent.width
                     readOnly: true
                     wrapMode: Text.Wrap
+                    font.pixelSize: 14
+                    color: "#333"
+                    background: Rectangle {
+                    color: "transparent"
+                }
+
+                // 自定义消息样式
+                textFormat: TextEdit.RichText
+                onTextChanged: {
+                // 自动滚动到底部
+                chatDisplay.cursorPosition = chatDisplay.length
                 }
             }
+       }
 
             Row {
                 width: parent.width
@@ -653,6 +941,15 @@ Item {
                     placeholderText: "输入消息..."
                 }
 
+                // 按Enter键发送消息
+                Keys.onReturnPressed: {
+                    if (chatInput.text.trim() !== "") {
+                        networkChess.sendMessage(chatInput.text);
+                        chatDisplay.append("我: " + chatInput.text);
+                        chatInput.clear();
+                    }
+                }
+
                 Button {
                     width: 70
                     text: "发送"
@@ -662,6 +959,90 @@ Item {
                             chatDisplay.append("我: " + chatInput.text);
                             chatInput.clear();
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    // 胜利动画组件
+    Rectangle {
+        id: victoryOverlay
+        anchors.fill: parent
+        color: "#80000000"
+        visible: false
+        z: 100
+
+        property string winnerText: ""
+        property color winnerColor: winnerText === "红方" ? "#ff0000" : "#0000ff"
+
+        Item {
+            anchors.centerIn: parent
+            Text {
+                id: glowText
+                anchors.centerIn: parent
+                text: victoryOverlay.winnerText + "胜利!"
+                font.pixelSize: _networkBoard.width*0.1
+                font.bold: true
+                color: victoryOverlay.winnerColor
+                opacity: 0.7
+            }
+            Text {
+                id: victoryText
+                anchors.centerIn: parent
+                text: victoryOverlay.winnerText + "胜利!"
+                font.pixelSize: _networkBoard.width*0.1
+                font.bold: true
+                color: "white"
+                style: Text.Outline
+                styleColor: "#40000000"
+            }
+        }
+
+        SequentialAnimation {
+            id: victoryAnimation
+            running: false
+            NumberAnimation {
+                target: victoryOverlay
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: 1000
+            }
+            ParallelAnimation {
+                loops: Animation.Infinite
+                SequentialAnimation {
+                    NumberAnimation {
+                        target: victoryText
+                        property: "scale"
+                        from: 1.0
+                        to: 1.1
+                        duration: 500
+                        easing.type: Easing.InOutQuad
+                    }
+                    NumberAnimation {
+                        target: victoryText
+                        property: "scale"
+                        from: 1.1
+                        to: 1.0
+                        duration: 500
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+                SequentialAnimation {
+                    ColorAnimation {
+                        targets: [victoryText, glowText]
+                        property: "color"
+                        from: "white"
+                        to: victoryOverlay.winnerColor
+                        duration: 1000
+                    }
+                    ColorAnimation {
+                        targets: [victoryText, glowText]
+                        property: "color"
+                        from: victoryOverlay.winnerColor
+                        to: "white"
+                        duration: 1000
                     }
                 }
             }

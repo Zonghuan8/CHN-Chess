@@ -2,7 +2,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Chess 1.0
+import Chess
 Item {
     id: _pvp
     width: stackView.width//parent是stackView

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.28)
 
 project(CHN-Chess VERSION 0.1 LANGUAGES CXX)
 
@@ -14,6 +14,21 @@ set(CMAKE_AUTORCC ON)
 qt_add_executable(appCHN-Chess
     main.cpp
     chess.qrc
+)
+
+source_group("QML Flies" FILES
+    Main.qml
+    ChessBoard.qml
+    ChessPiece.qml
+    HomePage.qml
+    PvpGamePage.qml
+    PveGamePage.qml
+    RulesPage.qml
+    AboutPage.qml
+    AnimationEffect.qml
+    AIChessBoard.qml
+    MusicPlayer.qml
+    NetworkChessBoard.qml
 )
 
 qt_add_qml_module(appCHN-Chess

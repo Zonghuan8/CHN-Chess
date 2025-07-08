@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import Chess 1.0
+import Chess
 import Qt5Compat.GraphicalEffects
 
 Item {

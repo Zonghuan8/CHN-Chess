@@ -1,5 +1,5 @@
 //AnimationEffect.qml
-import QtQuick 6.0
+import QtQuick
 
 Rectangle {
     property real centerX: 0
