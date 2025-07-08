@@ -1,3 +1,4 @@
+// EleeyeEngine.cpp
 #include "EleeyeEngine.h"
 #include <QCoreApplication>
 
@@ -27,7 +28,7 @@ void EleeyeEngine::startEngine(const QString &enginePath)
 
     if (!m_engineProcess->waitForStarted(3000)) {
         emit engineError("Failed to start engine: " + enginePath);
-        qCritical() << "Engine failed to start:" << enginePath; // 添加日志
+        qCritical() << "Engine failed to start:" << enginePath;
         return;
     }
     // 初始化引擎
@@ -59,7 +60,12 @@ void EleeyeEngine::setPosition(const QString &fen)
 
 void EleeyeEngine::think(int depth)
 {
-    sendCommand("go depth " + QString::number(depth));
+    // 设置攻击性参数
+    sendCommand("setoption knowledge large");   // 使用最大知识库
+    sendCommand("setoption pruning small");     // 减少裁剪，增加搜索广度
+    sendCommand("setoption attack_weight 200"); // 增加攻击权重
+
+    sendCommand("go depth " + QString::number(depth) + " attack");
 }
 
 void EleeyeEngine::stopThinking()
@@ -139,26 +145,27 @@ void EleeyeEngine::parseBestMove(const QString &line)
     int fromCol, fromRow, toCol, toRow;
     parseMove(move, fromCol, fromRow, toCol, toRow);
 
-    int moveId = -1; // 需要根据实际位置计算
-    int killId = -1; // 需要根据目标位置计算
+    // 检测将军状态
+    bool isCheck = line.contains("check");
+    if (isCheck) { qDebug() << "将军着法!"; }
 
-    emit bestMoveReceived(moveId, fromCol, fromRow, toCol, toRow, killId);
+    qDebug() << "最佳着法:" << move << "=> (" << fromCol << "," << fromRow << ")"
+             << "-> (" << toCol << "," << toRow << ")" << (isCheck ? "将军" : "");
+
+    emit bestMoveReceived(fromCol, fromRow, toCol, toRow, isCheck);
 }
 
-// EleeyeEngine.cpp
 void EleeyeEngine::parseMove(const QString &move, int &fromCol, int &fromRow, int &toCol, int &toRow)
 {
-    // 着法格式示例：c3c4
-    // 引擎坐标系：左下角(0,0)是黑方底线，右上角(8,9)是红方底线
-    // 项目坐标系：左上角(0,0)是黑方底线，右下角(8,9)是红方底线
-
-    // 列转换：a=0, b=1, ..., i=8（相同）
     fromCol = columnToIndex(move[0]);
     toCol = columnToIndex(move[2]);
 
-    // 行转换：翻转Y轴（9 - 引擎行号）
-    fromRow = 9 - rowToIndex(move[1]);
-    toRow = 9 - rowToIndex(move[3]);
+    // 翻转行号：引擎0=棋盘9（红方底线），9=棋盘0（黑方底线）
+    fromRow = 9 - move[1].digitValue();
+    toRow = 9 - move[3].digitValue();
+
+    qDebug() << "坐标转换: " << move << "=> (" << fromCol << "," << fromRow << ")"
+             << "-> (" << toCol << "," << toRow << ")";
 }
 
 int EleeyeEngine::columnToIndex(QChar col) const

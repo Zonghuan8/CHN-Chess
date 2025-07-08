@@ -150,7 +150,7 @@ bool Board::trySelectStone(int row, int col)
 }
 
 bool Board::moveStone(int fromCol, int fromRow, int toCol, int toRow)
-{
+{      
     int moveid = getPieceId(fromCol, fromRow);
     int killid = getPieceId(toCol, toRow);
 
@@ -176,7 +176,13 @@ bool Board::moveStone(int fromCol, int fromRow, int toCol, int toRow)
     if (killid != -1) {
         //标记被吃棋子为死亡状态
         m_stones[killid]->setDead(true);
-
+        // 新增：检测是否吃掉将/帅
+        if (m_stones[killid]->type() == Stone::JIANG) {
+            QString winner = m_stones[moveid]->isRed() ? "红方" : "黑方";
+            m_gameOver = true;
+            emit gameOver(winner);
+            qDebug() << "将死！击杀的棋子ID:" << killid << "类型:" << m_stones[killid]->type();
+        }
         //检查是否吃掉将/帅
         if (m_stones[killid]->type() == Stone::JIANG) {
             QString winner = m_stones[moveid]->isRed() ? "红方" : "黑方";

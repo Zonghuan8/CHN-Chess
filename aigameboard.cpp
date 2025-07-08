@@ -1,23 +1,37 @@
+// aigameboard.cpp
 #include "aigameboard.h"
 #include <QtMath>
 #include <QDebug>
-
 #include <QCoreApplication>
 
 AIGameBoard::AIGameBoard(QObject* parent) : Board(parent), m_engine(new EleeyeEngine(this))
 {
+    m_aiIsRed = false; // 明确设置为黑方
+
+    // 连接带将军状态的信号
     connect(m_engine,
             &EleeyeEngine::bestMoveReceived,
             this,
-            [=](int moveId, int fromCol, int fromRow, int toCol, int toRow, int killId) {
-                // 计算实际棋子ID
-                int actualMoveId = getPieceId(fromCol, fromRow);
-                int actualKillId = getPieceId(toCol, toRow);
+            [=](int fromCol, int fromRow, int toCol, int toRow, bool isCheck) {
+                int moveId = getPieceId(fromCol, fromRow);
+                Stone* stone = getStoneById(moveId);
 
-                QTimer::singleShot(500, this, [=]() {
-                    moveStone(fromCol, fromRow, toCol, toRow);
-                    emit computerMoved(actualMoveId, fromCol, fromRow, toCol, toRow, actualKillId);
-                });
+                // 验证棋子属于AI方
+                if (!stone || stone->isRed() != m_aiIsRed) {
+                    qDebug() << "AI移动错误：尝试移动" << (stone ? (stone->isRed() ? "红方" : "黑方") : "无效")
+                             << "棋子，但AI执" << (m_aiIsRed ? "红" : "黑");
+                    return;
+                }
+
+                // 检查是否可以攻击帅
+                if (isCheck) {
+                    qDebug() << "AI将军!";
+                    emit checkWarning(!m_aiIsRed); // 发送将军警告
+                }
+
+                int killId = getPieceId(toCol, toRow);
+                moveStone(fromCol, fromRow, toCol, toRow);
+                emit computerMoved(moveId, fromCol, fromRow, toCol, toRow, killId);
             });
 
     // 使用应用程序目录作为基础路径
@@ -28,10 +42,7 @@ AIGameBoard::AIGameBoard(QObject* parent) : Board(parent), m_engine(new EleeyeEn
 
 AIGameBoard::~AIGameBoard()
 {
-    if (m_engine) {
-        //m_engine->quitEngine();
-        m_engine->deleteLater();
-    }
+    if (m_engine) { m_engine->deleteLater(); }
 }
 
 bool AIGameBoard::aiIsRed() const
@@ -69,31 +80,32 @@ void AIGameBoard::startNewGame()
 void AIGameBoard::computerMove()
 {
     if (isGameOver()) return;
-    if (isRedTurn() != m_aiIsRed) return;
 
+    // 确保AI只走自己的颜色
+    if (isRedTurn() != m_aiIsRed) {
+        qDebug() << "AI跳过：当前回合为" << (isRedTurn() ? "红方" : "黑方") << "但AI执" << (m_aiIsRed ? "红" : "黑");
+        return;
+    }
+
+    // 1. 优先检查是否有立即将军的机会
+    if (hasImmediateCheckmateMove()) {
+        qDebug() << "发现直接将军机会，优先执行将军移动";
+        performCheckmateMove();
+        return;
+    }
+
+    // 2. 使用引擎计算最佳移动
     if (m_engine && m_engine->isReady()) {
-        // 使用引擎
         QString fen = getBoardFEN();
+        qDebug() << "AI执" << (m_aiIsRed ? "红" : "黑") << "，发送FEN:" << fen;
+
+        // 设置攻击性参数
+        m_engine->sendCommand("setoption knowledge large");
+        m_engine->sendCommand("setoption pruning small");
+
+        // 设置位置并思考
         m_engine->setPosition(fen);
-        m_engine->think(m_aiLevel * 9); // 思考深度基于AI等级
-    } else {
-        // 备选方案：Minimax算法
-        Step* step = getBestMove();
-        if (step) {
-            int fromCol = step->colFrom();
-            int fromRow = step->rowFrom();
-            int toCol = step->colTo();
-            int toRow = step->rowTo();
-            int moveId = step->moveId();
-            int killId = step->killId();
-
-            delete step;
-
-            QTimer::singleShot(500, this, [=]() {
-                moveStone(fromCol, fromRow, toCol, toRow);
-                emit computerMoved(moveId, fromCol, fromRow, toCol, toRow, killId);
-            });
-        }
+        m_engine->think(m_aiLevel * 9); // 增加思考深度
     }
 }
 
@@ -121,6 +133,16 @@ QString AIGameBoard::getBoardFEN() const
         }
     }
 
+    // 调试输出棋盘状态
+    qDebug() << "当前棋盘状态:";
+    for (int row = 0; row < 10; row++) {
+        QString rowStr;
+        for (int col = 0; col < 9; col++) {
+            rowStr += board[row][col];
+        }
+        qDebug() << "行" << row << ":" << rowStr;
+    }
+
     // 构建FEN字符串
     QString fen;
     for (int row = 0; row < 10; row++) {
@@ -140,9 +162,10 @@ QString AIGameBoard::getBoardFEN() const
         if (row < 9) fen += '/';
     }
 
-    // 添加轮到谁走
+    // 添加轮到谁走（红方w，黑方b）
     fen += (m_bRedTurn ? " w" : " b");
 
+    qDebug() << "完整FEN字符串: " << fen;
     return fen;
 }
 
@@ -157,173 +180,110 @@ QString AIGameBoard::pieceToFEN(int type, bool isRed) const
     return "";
 }
 
-Step* AIGameBoard::getBestMove()
+// aigameboard.cpp
+bool AIGameBoard::canAttackKing(Stone* attacker, int kingId)
 {
-    Step* ret = nullptr;
-    QVector<Step*> steps;
-    getAllPossibleMove(steps);
-    int maxInAllMinScore = -300000;
+    Stone* king = getStoneById(kingId);
+    if (!attacker || !king || attacker->dead() || king->dead()) { return false; }
 
-    while (steps.count()) {
-        Step* step = steps.last();
-        steps.removeLast();
+    // 获取攻击者和帅的位置
+    int aCol = attacker->col();
+    int aRow = attacker->row();
+    int kCol = king->col();
+    int kRow = king->row();
 
-        fakeMove(step);
-        int minScore = getMinScore(m_aiLevel - 1, maxInAllMinScore);
-        unfakeMove(step);
-
-        if (minScore > maxInAllMinScore) {
-            if (ret) delete ret;
-            ret = step;
-            maxInAllMinScore = minScore;
-        } else {
-            delete step;
-        }
+    // 检查是否在同一条线上
+    if (aCol != kCol && aRow != kRow) {
+        return false; // 不在同一条直线
     }
-    return ret;
-}
 
-void AIGameBoard::getAllPossibleMove(QVector<Step*>& steps)
-{
+    int count = 0; // 中间棋子计数
     int min, max;
-    if (m_aiIsRed != isRedTurn()) {
-        min = 0;
-        max = 16;
-    } else {
-        min = 16;
-        max = 32;
-    }
 
-    for (int i = min; i < max; i++) {
-        Stone* stoneObj = getStoneById(i);
-        if (!stoneObj || stoneObj->dead()) continue;
-
-        for (int row = 0; row <= 9; ++row) {
-            for (int col = 0; col <= 8; ++col) {
-                int killid = getPieceId(col, row);
-
-                if (killid != -1) {
-                    Stone* killStoneObj = getStoneById(killid);
-                    if (killStoneObj && stoneObj->isRed() == killStoneObj->isRed()) continue;
-                }
-
-                if (canMove(i, killid, col, row)) {
-                    steps.append(new Step(i, killid, stoneObj->row(), stoneObj->col(), row, col));
-                }
-            }
+    // 检查横向攻击
+    if (aRow == kRow) {
+        min = qMin(aCol, kCol);
+        max = qMax(aCol, kCol);
+        for (int c = min + 1; c < max; c++) {
+            if (getPieceId(c, aRow) != -1) { count++; }
         }
     }
-}
+    // 检查纵向攻击
+    else if (aCol == kCol) {
+        min = qMin(aRow, kRow);
+        max = qMax(aRow, kRow);
+        for (int r = min + 1; r < max; r++) {
+            if (getPieceId(aCol, r) != -1) { count++; }
+        }
+    }
 
-int AIGameBoard::score()
-{
-    // 简单的评价函数
-    static int pieceValues[] = {10000, 900, 900, 500, 1000, 200, 200};
-    int redScore = 0;
-    int blackScore = 0;
-
-    for (int i = 0; i < 32; ++i) {
-        Stone* stone = getStoneById(i);
-        if (!stone || stone->dead()) continue;
-
-        int value = pieceValues[stone->type()];
-        if (stone->isRed()) {
-            redScore += value;
-            // 红方棋子位置加分（靠近对方底线加分）
-            value += (9 - stone->row()) * 5;
+    // 根据棋子类型判断攻击条件
+    switch (attacker->type()) {
+    case Stone::CHE: // 车：需要无遮挡
+        return count == 0;
+    case Stone::PAO: // 炮：需要正好一个炮架
+        return count == 1;
+    case Stone::MA: // 马：特殊移动规则
+        // 马走日，这里简化处理
+        return (qAbs(aCol - kCol) == 1 && qAbs(aRow - kRow) == 2) || (qAbs(aCol - kCol) == 2 && qAbs(aRow - kRow) == 1);
+    case Stone::BING: // 兵：只能向前攻击
+        if (attacker->isRed()) {
+            return (aCol == kCol && aRow - kRow == 1) || (aRow == kRow && qAbs(aCol - kCol) == 1);
         } else {
-            blackScore += value;
-            // 黑方棋子位置加分（靠近对方底线加分）
-            value += stone->row() * 5;
+            return (aCol == kCol && kRow - aRow == 1) || (aRow == kRow && qAbs(aCol - kCol) == 1);
         }
+    default:
+        return false;
     }
-
-    return m_aiIsRed ? (redScore - blackScore) : (blackScore - redScore);
 }
 
-int AIGameBoard::getMinScore(int level, int curMin)
+bool AIGameBoard::hasImmediateCheckmateMove()
 {
-    if (level == 0) return score();
+    int kingId = m_aiIsRed ? 4 : 20; // 红方AI攻击黑将(4)，黑方AI攻击红帅(20)
 
-    QVector<Step*> steps;
-    getAllPossibleMove(steps);
-    int minInAllMaxScore = 300000;
-
-    while (steps.count()) {
-        Step* step = steps.last();
-        steps.removeLast();
-
-        fakeMove(step);
-        int maxScore = getMaxScore(level - 1, minInAllMaxScore);
-        unfakeMove(step);
-        delete step;
-
-        if (maxScore <= curMin) {
-            while (steps.count()) {
-                Step* step = steps.last();
-                steps.removeLast();
-                delete step;
+    // 检查所有AI方棋子是否能攻击对方将帅
+    for (int i = 0; i < 32; i++) {
+        Stone* stone = getStoneById(i);
+        if (stone && !stone->dead() && stone->isRed() == m_aiIsRed) {
+            if (canAttackKing(stone, kingId)) {
+                qDebug() << "发现将军机会! 棋子ID:" << i << "类型:" << stone->type() << "位置:(" << stone->col() << ","
+                         << stone->row() << ")";
+                return true;
             }
-            return maxScore;
         }
-
-        if (maxScore < minInAllMaxScore) { minInAllMaxScore = maxScore; }
     }
-    return minInAllMaxScore;
+    return false;
 }
 
-int AIGameBoard::getMaxScore(int level, int curMax)
+void AIGameBoard::performCheckmateMove()
 {
-    if (level == 0) return score();
+    int kingId = m_aiIsRed ? 4 : 20; // 确定攻击目标
 
-    QVector<Step*> steps;
-    getAllPossibleMove(steps);
-    int maxInAllMinScore = -300000;
+    // 查找所有可以将军的移动
+    for (int i = 0; i < 32; i++) {
+        Stone* stone = getStoneById(i);
+        if (stone && !stone->dead() && stone->isRed() == m_aiIsRed) {
+            if (canAttackKing(stone, kingId)) {
+                Stone* king = getStoneById(kingId);
 
-    while (steps.count()) {
-        Step* step = steps.last();
-        steps.removeLast();
+                // 执行将军移动
+                int fromCol = stone->col();
+                int fromRow = stone->row();
+                int toCol = king->col();
+                int toRow = king->row();
 
-        fakeMove(step);
-        int minScore = getMinScore(level - 1, maxInAllMinScore);
-        unfakeMove(step);
-        delete step;
+                emit checkWarning(!m_aiIsRed); // 对方被将军
 
-        if (minScore >= curMax) {
-            while (steps.count()) {
-                Step* step = steps.last();
-                steps.removeLast();
-                delete step;
+                qDebug() << "执行将军移动: 棋子" << i << "从(" << fromCol << "," << fromRow << ")"
+                         << "到(" << toCol << "," << toRow << ")";
+
+                int killId = getPieceId(toCol, toRow);
+                moveStone(fromCol, fromRow, toCol, toRow);
+                emit computerMoved(i, fromCol, fromRow, toCol, toRow, killId);
+                return;
             }
-            return minScore;
         }
-
-        if (minScore > maxInAllMinScore) { maxInAllMinScore = minScore; }
     }
-    return maxInAllMinScore;
-}
-
-void AIGameBoard::fakeMove(Step* step)
-{
-    if (step->killId() != -1) { getStoneById(step->killId())->setDead(true); }
-
-    Stone* movingStone = getStoneById(step->moveId());
-    movingStone->setRow(step->rowTo());
-    movingStone->setCol(step->colTo());
-
-    setRedTurn(!isRedTurn());
-}
-
-void AIGameBoard::unfakeMove(Step* step)
-{
-    if (step->killId() != -1) { getStoneById(step->killId())->setDead(false); }
-
-    Stone* movingStone = getStoneById(step->moveId());
-    movingStone->setRow(step->rowFrom());
-    movingStone->setCol(step->colFrom());
-
-    //使用基类的 setRedTurn 方法
-    setRedTurn(!isRedTurn());
 }
 
 // Step类实现

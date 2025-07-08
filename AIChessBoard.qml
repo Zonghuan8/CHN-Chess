@@ -16,18 +16,17 @@ Item {
          aiLevel: 1
      }
 
-     // 修改computerMove调用
-     Timer {
-         id: aiTimer
-         interval: 100
-         onTriggered: {
-             if (!chess.isGameOver() &&
-                 ((chess.isRedTurn && chess.aiIsRed) ||
-                  (!chess.isRedTurn && !chess.aiIsRed))) {
-                 chess.computerMove()
-             }
-         }
-     }
+    Timer {
+        id: aiTimer
+        interval: 100
+        onTriggered: {
+            if (!chess.isGameOver() &&
+                ((chess.isRedTurn && chess.aiIsRed) ||
+                 (!chess.isRedTurn && !chess.aiIsRed))) {
+                chess.computerMove()
+            }
+        }
+    }
 
     //移动动画组件
     Component {
@@ -487,18 +486,22 @@ Item {
                 visible: !modelData.dead //死亡棋子不可见
             }
         }
+
         TapHandler {
             property int selectedPieceId: -1
-            property int selectedRow: -1 //行坐标
-            property int selectedCol: -1 //列坐标
+            property int selectedRow: -1
+            property int selectedCol: -1
 
             onTapped: (event) => {
                 console.log("点击事件触发");
-                //如果游戏结束，不允许操作
+
+                // 游戏结束检查
                 if (victoryOverlay.visible) {
                     console.log("游戏已结束，忽略点击");
                     return;
                 }
+
+                // AI回合检查
                 var isAITurn = (chess.isRedTurn && chess.aiIsRed) || (!chess.isRedTurn && !chess.aiIsRed);
                 if (isAITurn) {
                     console.log("AI回合，忽略玩家点击");
@@ -510,113 +513,126 @@ Item {
                     return;
                 }
 
-                //计算点击位置
+                // 计算点击位置
                 var pos = chess.clickPosition(square, event.position.x, event.position.y);
-                var boardCol = pos.x - 1; //点击位置的列
-                var boardRow = pos.y - 1; //点击位置的行
+                var boardCol = pos.x - 1;
+                var boardRow = pos.y - 1;
 
                 console.log("点击位置:", `(${boardCol},${boardRow})`);
-                    // 清除所有棋子的选中状态
-                    for (var i = 0; i < chess.stones.length; i++) {
-                        var stone = chess.stones[i];
-                        if (stone.id !== -1) {
-                            stone.selected = false;
-                        }
-                    }
 
-                //判断点击位置是否有棋子
+                // 清除所有棋子的选中状态
+                for (var i = 0; i < chess.stones.length; i++) {
+                    var stone = chess.stones[i];
+                    if (stone && stone.id !== -1) {  // 添加空指针检查
+                        stone.selected = false;
+                    }
+                }
+
+                // 判断点击位置是否有棋子
                 var hasPiece = chess.isPiece(boardCol, boardRow);
                 var pieceId = hasPiece ? chess.getPieceId(boardCol, boardRow) : -1;
-                var piece = hasPiece ? chess.getStoneById(pieceId) : null;
+                var piece = hasPiece && pieceId !== -1 ? chess.getStoneById(pieceId) : null;  // 加强空指针检查
 
-                console.log("点击位置有棋子:", hasPiece, piece ? "ID:" + piece.id : "");
+                console.log("点击位置有棋子:", hasPiece, piece ? "ID:" + piece.id : "无棋子");
 
-                //1. 点击位置有棋子
-                if (hasPiece) {
-                //1.1 当前没有选中棋子
-                if (selectedPieceId === -1) {
-                    //检查是否轮到此方走棋(判断颜色)
-                    if ((piece.isRed && boardLogic.isRedTurn) || (!piece.isRed && !boardLogic.isRedTurn)) {
-                    //选中棋子
-                    selectedPieceId = pieceId;
-                    selectedCol = boardCol;
-                    selectedRow = boardRow;
-                    piece.selected = true;
-
-                    console.log("选中棋子:", pieceId, "位置:", `(${selectedCol},${selectedRow})`);
-                    }else {
-                        console.log("不是当前回合的棋子");
+                // 1. 点击位置有棋子
+                if (hasPiece && piece) {  // 确保piece不为null
+                    // 1.1 当前没有选中棋子
+                    if (selectedPieceId === -1) {
+                        // 检查是否轮到此方走棋
+                        if ((piece.isRed && chess.isRedTurn) || (!piece.isRed && !chess.isRedTurn)) {
+                            // 选中棋子
+                            selectedPieceId = pieceId;
+                            selectedCol = boardCol;
+                            selectedRow = boardRow;
+                            piece.selected = true;
+                            console.log("选中棋子:", pieceId, "位置:", `(${selectedCol},${selectedRow})`);
+                        } else {
+                            console.log("不是当前回合的棋子");
+                        }
                     }
-                }
-                //1.2 当前已有选中棋子
-                else {
-                //获取当前选中棋子对象
-                var selectedPiece = boardLogic.getStoneById(selectedPieceId);
+                    // 1.2 当前已有选中棋子
+                    else {
+                        var selectedPiece = chess.getStoneById(selectedPieceId);
 
-                //1.2.1 点击同一棋子：取消选中
-                if (selectedPieceId === pieceId) {
-                    selectedPieceId = -1;
-                    selectedRow = -1;
-                    selectedCol = -1;
-                    console.log("取消选中");
-                }
-                //1.2.2 点击己方其他棋子：切换选中
-                else if (piece.isRed === selectedPiece.isRed) {
-                // 检查轮次
-                if ((piece.isRed && boardLogic.isRedTurn) || (!piece.isRed && !boardLogic.isRedTurn)) {
-                    selectedPiece.selected = false; //取消前一个棋子的选中
-                    piece.selected = true; //选中新棋子
+                        // 确保selectedPiece存在
+                        if (!selectedPiece) {
+                            console.log("选中的棋子不存在，重置选择");
+                            selectedPieceId = -1;
+                            return;
+                        }
 
-                    selectedPieceId = pieceId;
-                    selectedCol = boardCol;
-                    selectedRow = boardRow;
-                    console.log("切换选中:", pieceId, "位置:", `(${selectedCol},${selectedRow})`);
-                }else {
-                    console.log("不是当前回合的棋子");
-                    }
-                }
-                //1.2.3 点击敌方棋子：尝试吃子
-                else{
-                    console.log("尝试吃子: 从(", selectedCol, selectedRow, ")到(", boardCol, boardRow, ")");
+                        // 1.2.1 点击同一棋子：取消选中
+                        if (selectedPieceId === pieceId) {
+                            selectedPieceId = -1;
+                            selectedRow = -1;
+                            selectedCol = -1;
+                            piece.selected = false;
+                            console.log("取消选中");
+                        }
+                        // 1.2.2 点击己方其他棋子：切换选中
+                        else if (piece.isRed === selectedPiece.isRed) {
+                            // 检查轮次
+                            if ((piece.isRed && chess.isRedTurn) || (!piece.isRed && !chess.isRedTurn)) {
+                                selectedPiece.selected = false;
+                                piece.selected = true;
+                                selectedPieceId = pieceId;
+                                selectedCol = boardCol;
+                                selectedRow = boardRow;
+                                console.log("切换选中:", pieceId, "位置:", `(${selectedCol},${selectedRow})`);
+                            } else {
+                                console.log("不是当前回合的棋子");
+                            }
+                        }
+                        // 1.2.3 点击敌方棋子：尝试吃子
+                        else {
+                            console.log("尝试吃子: 从(", selectedCol, selectedRow, ")到(", boardCol, boardRow, ")");
 
-                    //尝试移动棋子(吃子)
-                    if (boardLogic.moveStone(selectedCol, selectedRow, boardCol, boardRow)) {
-                    player.captureSound.play()
-                    console.log("吃子成功");
-                    selectedPieceId = -1; // 清除选中状态
+                            // 尝试移动棋子(吃子)
+                            if (chess.moveStone(selectedCol, selectedRow, boardCol, boardRow)) {
+                                player.captureSound.play();
+                                console.log("吃子成功");
+                                selectedPieceId = -1;
 
-                    // 检查是否需要AI移动
-                    if (!boardLogic.isGameOver() &&
-                        ((boardLogic.isRedTurn && boardLogic.aiIsRed) ||
-                        (!boardLogic.isRedTurn && !boardLogic.aiIsRed))) {
-                        // 延迟调用AI移动
-                         aiTimer.start();
-                    }
-                    }else{
-                        console.log("吃子失败，不符合规则");
+                                // 检查是否需要AI移动
+                                if (!chess.isGameOver() &&
+                                    ((chess.isRedTurn && chess.aiIsRed) ||
+                                     (!chess.isRedTurn && !chess.aiIsRed))) {
+                                    aiTimer.start();
+                                }
+                            } else {
+                                console.log("吃子失败，不符合规则");
                             }
                         }
                     }
                 }
-                //2.点击空白位置
+                // 2. 点击空白位置
                 else {
-                    //有选中棋子时尝试移动
+                    // 有选中棋子时尝试移动
                     if (selectedPieceId !== -1) {
-                    //尝试移动棋子
-                    if (boardLogic.moveStone(selectedCol, selectedRow, boardCol, boardRow)) {
-                        console.log("移动成功");
-                        player.moveSound.play()
-                        selectedPieceId = -1; //清除选中状态
-
-                        //检查是否需要AI移动
-                        if (!boardLogic.isGameOver() &&
-                            ((boardLogic.isRedTurn && boardLogic.aiIsRed) ||
-                            (!boardLogic.isRedTurn && !boardLogic.aiIsRed))) {
-                            //延迟调用AI移动
-                            aiTimer.start();
+                        var selectedPiece = chess.getStoneById(selectedPieceId);
+                        if (!selectedPiece) {
+                            console.log("选中的棋子不存在，重置选择");
+                            selectedPieceId = -1;
+                            return;
                         }
-                    }else{console.log("移动失败，不符合规则");}
-                    }else{
+
+                        // 尝试移动棋子
+                        if (chess.moveStone(selectedCol, selectedRow, boardCol, boardRow)) {
+                            console.log("移动成功");
+                            player.moveSound.play();
+                            selectedPieceId = -1;
+
+                            // 检查是否需要AI移动
+                            if (!chess.isGameOver() &&
+                                ((chess.isRedTurn && chess.aiIsRed) ||
+                                 (!chess.isRedTurn && !chess.aiIsRed))) {
+                                aiTimer.start();
+                            }
+                        } else {
+                            console.log("移动失败，不符合规则");
+                        }
+                    } else {
                         console.log("无选中棋子");
                     }
                 }

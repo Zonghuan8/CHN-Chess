@@ -1,11 +1,10 @@
+// aigameboard.h
 #pragma once
 #include "board.h"
 #include <QObject>
 #include <QTimer>
 #include <QVector>
 #include "EleeyeEngine.h"
-
-class Step;
 
 class AIGameBoard : public Board
 {
@@ -33,22 +32,18 @@ signals:
     void aiIsRedChanged();
     void aiLevelChanged();
     void computerMoved(int moveId, int fromCol, int fromRow, int toCol, int toRow, int killId);
+    void checkWarning(bool isRedCheck); // 新增将军信号
 
 private:
-    Step* getBestMove();
-    void getAllPossibleMove(QVector<Step*>& steps);
-    int getMinScore(int level, int curMin);
-    int getMaxScore(int level, int curMax);
-    int score();
-    void fakeMove(Step* step);
-    void unfakeMove(Step* step);
+    bool canAttackKing(Stone* attacker, int kingId);
+    bool hasImmediateCheckmateMove();
+    void performCheckmateMove();
 
     // FEN生成辅助函数
     QString pieceToFEN(int type, bool isRed) const;
-    QString rowToFEN(int row) const;
 
     bool m_aiIsRed = false;
-    int m_aiLevel = 3;
+    int m_aiLevel = 5;
     EleeyeEngine* m_engine; // 声明引擎成员
 };
 
