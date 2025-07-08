@@ -12,6 +12,7 @@ class NetworkBoard : public Board
     Q_PROPERTY(QString connectionStatus READ connectionStatus NOTIFY connectionStatusChanged)
     Q_PROPERTY(bool myColorIsRed READ myColorIsRed NOTIFY myColorIsRedChanged)
     Q_PROPERTY(bool myTurn READ myTurn NOTIFY myTurnChanged) // 添加这个属性
+    Q_PROPERTY(bool operationLocked READ operationLocked NOTIFY operationLockedChanged) // 新增操作锁定状态
     QML_ELEMENT
 
 public:
@@ -27,6 +28,7 @@ public:
     friend QDataStream &operator<<(QDataStream &out, const NetworkBoard *board);
     friend QDataStream &operator>>(QDataStream &in, NetworkBoard *board);
 
+    bool operationLocked() const { return m_operationLocked; }
     Q_INVOKABLE void createGame();
     Q_INVOKABLE void joinGame(const QString &address);
     Q_INVOKABLE void disconnectGame();
@@ -34,34 +36,46 @@ public:
     {
         m_myColorIsRed = isRed;
         emit myColorIsRedChanged();
-        emit myTurnChanged(); // 添加这一行
+        emit myTurnChanged();
     }
 
     bool isHost() const { return m_isHost; }
     QString connectionStatus() const { return m_connectionStatus; }
     bool myColorIsRed() const { return m_myColorIsRed; }
 
-    // 在public区域添加Q_INVOKABLE声明
     Q_INVOKABLE void sendMove(int fromCol, int fromRow, int toCol, int toRow);
     Q_INVOKABLE void sendMessage(const QString &message);
 
 signals:
+    void operationLockedChanged();
+
     void myTurnChanged();
     void isHostChanged();
     void connectionStatusChanged();
     void myColorIsRedChanged();
-    // 修改信号参数顺序以匹配棋盘逻辑
     void opponentMoveReceived(int fromCol, int fromRow, int toCol, int toRow);
     void messageReceived(const QString &message);
     void gameReady();
 
 private slots:
+    void lockOperations()
+    { // 锁定操作
+        m_operationLocked = true;
+        emit operationLockedChanged();
+    }
+
+    void unlockOperations()
+    { // 解锁操作
+        m_operationLocked = false;
+        emit operationLockedChanged();
+    }
     void onNewConnection();
     void onReadyRead();
     void onDisconnected();
     void onErrorOccurred(QAbstractSocket::SocketError error);
 
 private:
+    bool m_operationLocked = false; // 新增操作锁定状态
     void setConnectionStatus(const QString &status);
 
     QTcpServer *m_server;

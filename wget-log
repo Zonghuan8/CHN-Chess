@@ -1,0 +1,9 @@
+--2025-07-07 23:28:06--  https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+Loaded CA certificate '/etc/ssl/certs/ca-certificates.crt'
+Resolving github.com (github.com)... 20.205.243.166
+Connecting to github.com (github.com)|20.205.243.166|:443... connected.
+HTTP request sent, awaiting response... Read error (The TLS connection was non-properly terminated.) in headers.
+Retrying.
+
+--2025-07-07 23:29:38--  (try: 2)  https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+Connecting to github.com (github.com)|20.205.243.166|:443... connected.

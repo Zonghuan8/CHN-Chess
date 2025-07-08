@@ -13,8 +13,6 @@ NetworkBoard::NetworkBoard(QObject *parent)
 {
     connect(this, &Board::stonesChanged, this, [this]() {
         if (m_socket && m_socket->state() == QAbstractSocket::ConnectedState) {
-            // 发送当前棋盘状态给对手
-            // 这里可以优化为只发送变化的部分
         }
     });
 
@@ -151,7 +149,6 @@ void NetworkBoard::onNewConnection()
     emit gameReady();
 }
 
-// networkboard.cpp
 void NetworkBoard::onReadyRead()
 {
     if (!m_socket) return;
@@ -170,8 +167,12 @@ void NetworkBoard::onReadyRead()
 
             // 同步回合状态
             setRedTurn(receivedTurnState);
+
             // 执行移动
             moveStone(netFromCol, netFromRow, netToCol, netToRow);
+
+            // 解锁操作权限
+            unlockOperations();
         } else if (messageType == "CHAT") {
             QString chatMessage;
             in >> chatMessage;
@@ -195,7 +196,6 @@ void NetworkBoard::onErrorOccurred(QAbstractSocket::SocketError error)
     disconnectGame();
 }
 
-// NetworkBoard.cpp - sendMove 函数
 void NetworkBoard::sendMove(int fromCol, int fromRow, int toCol, int toRow)
 {
     // 添加状态断言
@@ -207,12 +207,25 @@ void NetworkBoard::sendMove(int fromCol, int fromRow, int toCol, int toRow)
     bool correctNewTurn = !isRedTurn();
     qDebug() << "[主机] 严格校验：移动前=" << isRedTurn() << "发送的回合状态=" << correctNewTurn;
 
+    // 锁定操作权限
+    lockOperations();
+
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out << QString("MOVE") << fromCol << fromRow << toCol << toRow << correctNewTurn;
     m_socket->write(block);
 
-    setRedTurn(correctNewTurn); // 立即切换
+    // 立即切换回合状态
+    setRedTurn(correctNewTurn);
+
+    // 启动超时检测（可选）
+    QTimer::singleShot(30000, this, [this]() {
+        if (m_operationLocked) {
+            qWarning() << "对手响应超时！";
+            unlockOperations();
+            setConnectionStatus("对手响应超时");
+        }
+    });
 }
 
 void NetworkBoard::sendMessage(const QString &message)

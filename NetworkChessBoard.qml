@@ -479,6 +479,130 @@ Item {
             }
         }
 
+        // TapHandler {
+        //     property int selectedPieceId: -1
+        //     property int selectedRow: -1
+        //     property int selectedCol: -1
+
+        //     onTapped: (event) => {
+        //         // ================= 调试信息输出 =================
+        //         console.log("-----------------------");
+        //         console.log("点击时回合状态:", networkChess.isRedTurn ? "红方回合" : "黑方回合");
+        //         console.log("我的颜色:", networkChess.myColorIsRed ? "红方" : "黑方");
+        //         console.log("当前是否可操作:", networkChess.myTurn ? "是" : "否");
+        //         console.log("连接状态:", networkChess.connectionStatus);
+
+        //         // ================= 操作权限校验 =================
+        //         if (!networkChess.myTurn) {
+        //             console.error("操作被拒绝：不是你的回合！");
+        //             return;
+        //         }
+
+        //         if (networkChess.connectionStatus === "未连接") {
+        //             console.error("操作被拒绝：未连接到对手");
+        //             return;
+        //         }
+
+        //         // ================= 获取点击位置 =================
+        //         var pos = networkChess.clickPosition(square, event.position.x, event.position.y);
+        //         var boardCol = pos.x - 1;
+        //         var boardRow = pos.y - 1;
+
+        //         console.log("点击坐标:", `(${boardCol},${boardRow})`);
+
+        //         // ================= 清除所有选中状态 =================
+        //         for (var i = 0; i < networkChess.stones.length; i++) {
+        //             networkChess.stones[i].selected = false;
+        //         }
+
+        //         // ================= 获取点击的棋子信息 =================
+        //         var hasPiece = networkChess.isPiece(boardCol, boardRow);
+        //         var pieceId = hasPiece ? networkChess.getPieceId(boardCol, boardRow) : -1;
+        //         var piece = hasPiece ? networkChess.getStoneById(pieceId) : null;
+
+        //         if (hasPiece) {
+        //             console.log("点击棋子 - ID:", pieceId,
+        //                        "类型:", piece.type,
+        //                        "颜色:", piece.isRed ? "红" : "黑",
+        //                        "死亡状态:", piece.dead);
+        //         }
+
+        //         // ================= 点击逻辑处理 =================
+        //         if (hasPiece) {
+        //             // 情况1：当前没有选中棋子
+        //             if (selectedPieceId === -1) {
+        //                 // 检查是否是自己颜色的棋子
+        //                 if ((piece.isRed && networkChess.myColorIsRed) ||
+        //                     (!piece.isRed && !networkChess.myColorIsRed)) {
+
+        //                     selectedPieceId = pieceId;
+        //                     selectedCol = boardCol;
+        //                     selectedRow = boardRow;
+        //                     piece.selected = true;
+
+        //                     console.log("成功选中棋子:", pieceId);
+        //                 } else {
+        //                     console.log("操作被拒绝：不能选中对方棋子");
+        //                 }
+        //             }
+        //             // 情况2：当前已有选中棋子
+        //             else {
+        //                 var selectedPiece = networkChess.getStoneById(selectedPieceId);
+
+        //                 // 情况2.1：点击同一棋子（取消选中）
+        //                 if (selectedPieceId === pieceId) {
+        //                     selectedPieceId = -1;
+        //                     console.log("取消选中当前棋子");
+        //                 }
+        //                 // 情况2.2：点击己方其他棋子（切换选中）
+        //                 else if (piece.isRed === selectedPiece.isRed) {
+        //                     selectedPiece.selected = false;
+        //                     piece.selected = true;
+        //                     selectedPieceId = pieceId;
+        //                     selectedCol = boardCol;
+        //                     selectedRow = boardRow;
+        //                     console.log("切换选中到新棋子:", pieceId);
+        //                 }
+        //                 // 情况2.3：点击敌方棋子（尝试吃子）
+        //                 else {
+        //                     console.log("尝试吃子: 从(", selectedCol, selectedRow, ")到(", boardCol, boardRow, ")");
+
+        //                     if (networkChess.moveStone(selectedCol, selectedRow, boardCol, boardRow)) {
+        //                         networkChess.sendMove(selectedCol, selectedRow, boardCol, boardRow);
+        //                         player.captureSound.play();
+        //                         selectedPieceId = -1;
+        //                         console.log("吃子成功");
+        //                     } else {
+        //                         console.log("吃子失败：不符合规则");
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //         // 点击空白位置（尝试移动）
+        //         else if (selectedPieceId !== -1) {
+        //             console.log("尝试移动: 从(", selectedCol, selectedRow, ")到(", boardCol, boardRow, ")");
+
+        //             if (networkChess.moveStone(selectedCol, selectedRow, boardCol, boardRow)) {
+        //                 networkChess.sendMove(selectedCol, selectedRow, boardCol, boardRow);
+        //                 player.moveSound.play();
+        //                 selectedPieceId = -1;
+        //                 console.log("移动成功");
+        //             } else {
+        //                 console.log("移动失败：不符合规则");
+        //             }
+        //         }
+        //     }
+
+        //     // ================= 选中状态可视化 =================
+        //     onSelectedPieceIdChanged: {
+        //         if (selectedPieceId !== -1) {
+        //             var piece = networkChess.getStoneById(selectedPieceId);
+        //             if (piece) {
+        //                 piece.selected = true;
+        //             }
+        //         }
+        //     }
+        // }
         TapHandler {
             property int selectedPieceId: -1
             property int selectedRow: -1
@@ -490,9 +614,15 @@ Item {
                 console.log("点击时回合状态:", networkChess.isRedTurn ? "红方回合" : "黑方回合");
                 console.log("我的颜色:", networkChess.myColorIsRed ? "红方" : "黑方");
                 console.log("当前是否可操作:", networkChess.myTurn ? "是" : "否");
+                console.log("操作锁定状态:", networkChess.operationLocked ? "已锁定" : "未锁定");
                 console.log("连接状态:", networkChess.connectionStatus);
 
                 // ================= 操作权限校验 =================
+                if (networkChess.operationLocked) {
+                    console.log("操作被锁定：等待对手走棋...");
+                    return;
+                }
+
                 if (!networkChess.myTurn) {
                     console.error("操作被拒绝：不是你的回合！");
                     return;
