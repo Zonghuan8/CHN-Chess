@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>中国象棋</Name>
+    <Version>1.0.0</Version>
+    <Title>中国象棋安装程序</Title>
+    <Publisher>rr</Publisher>
+    <StartMenuDir>中国象棋</StartMenuDir>
+    <TargetDir>@HomeDir@/CHN-Chess</TargetDir>
+</Installer>
